@@ -1,0 +1,329 @@
+using Godot;
+using System;
+using System.Collections.Generic;
+
+public partial class Lorum : Control
+{
+	private Bot _bot1;
+	private Bot _bot2;
+	private Bot _bot3;
+	private Player _player;
+	private List<Bot> bots;
+	private int startingCardValue = -1; //maradékos osztás 10
+	private List<Cell> cells = new List<Cell>();
+	//List<BackCard> bot1Cards = new List<BackCard>();
+	//List<BackCard> bot2Cards = new List<BackCard>();
+	//List<BackCard> bot3Cards = new List<BackCard>();
+	private StartingCardLabel startingValueLabel;
+	public static Pass passIcon;
+
+	private Button testbutton;
+	private List<CardHolderBase> _allPlayers;
+
+
+	private List<(int, Texture2D)> cardDatas = new List<(int, Texture2D)>();
+
+	private List<(int, string)> tmp = new List<(int, string)>
+	{
+
+		(1, "res://Assets/Cards/zold_also.png"),
+		(2, "res://Assets/Cards/zold_felso.png"),
+		(3, "res://Assets/Cards/zold_kiraly.png"),
+		(4, "res://Assets/Cards/zold_asz.png"),
+		(5, "res://Assets/Cards/zold_7.png"),
+		(6, "res://Assets/Cards/zold_8.png"),
+		(7, "res://Assets/Cards/zold_9.png"),
+		(8, "res://Assets/Cards/zold_10.png"),
+
+		(11, "res://Assets/Cards/piros_also.png"),
+		(12, "res://Assets/Cards/piros_felso.png"),
+		(13, "res://Assets/Cards/piros_kiraly.png"),
+		(14, "res://Assets/Cards/piros_asz.png"),
+		(15, "res://Assets/Cards/piros_7.png"),
+		(16, "res://Assets/Cards/piros_8.png"),
+		(17, "res://Assets/Cards/piros_9.png"),
+		(18, "res://Assets/Cards/piros_10.png"),
+
+		(21, "res://Assets/Cards/makk_also.png"),
+		(22, "res://Assets/Cards/makk_felso.png"),
+		(23, "res://Assets/Cards/makk_kiraly.png"),
+		(24, "res://Assets/Cards/makk_asz.png"),
+		(25, "res://Assets/Cards/makk_7.png"),
+		(26, "res://Assets/Cards/makk_8.png"),
+		(27, "res://Assets/Cards/makk_9.png"),
+		(28, "res://Assets/Cards/makk_10.png"),
+
+		(31, "res://Assets/Cards/tok_also.png"),
+		(32, "res://Assets/Cards/tok_felso.png"),
+		(33, "res://Assets/Cards/tok_kiraly.png"),
+		(34, "res://Assets/Cards/tok_asz.png"),
+		(35, "res://Assets/Cards/tok_7.png"),
+		(36, "res://Assets/Cards/tok_8.png"),
+		(37, "res://Assets/Cards/tok_9.png"),
+		(38, "res://Assets/Cards/tok_10.png")
+
+	};
+	//private List<Card> playerCards = new List<Card>();
+	private List<int> usedRandoms = new List<int>();
+
+
+	private PackedScene _pointLabelScene;
+	private List<RichTextLabel> _pointLabels = new List<RichTextLabel>();
+
+	//TODO a pass icon elvan csuszva kozepro la méretével mert bal felso sarok stb
+
+	/* 1. zold
+	*  2. piros
+	* 3. makk
+	* 4. tok
+	*
+	*/
+
+	public override void _Ready()
+	{
+
+		for (int i = 0; i < tmp.Count; i++)
+		{
+			int value = tmp[i].Item1;
+			Texture2D text = GD.Load<Texture2D>(tmp[i].Item2);
+			cardDatas.Add((value, text));
+		}
+
+
+
+		setupNodesFromScene();
+		setupPlayerNodes();
+		setupCellNodes();
+		//setupBotNodes();
+		createPlayers();
+		startGame();
+
+
+	}
+
+
+	private void setupNodesFromScene()
+	{
+		startingValueLabel = GetNode<StartingCardLabel>("Center/HBoxContainer/StartingCardLabel");
+		testbutton = GetNode<Button>("Button");
+		passIcon = GetNode<Pass>("PassIcon");
+		passIcon.PivotOffset = passIcon.Size * 0.5f;
+		_pointLabelScene = (PackedScene)GD.Load("res://Scenes/point_label.tscn");
+
+		for (int i = 0; i < 4; i++)
+		{
+			RichTextLabel pointLabel = (RichTextLabel)_pointLabelScene.Instantiate();
+			_pointLabels.Add(pointLabel);
+			this.AddChild(pointLabel);
+		}
+		BoxContainer box = GetNode<BoxContainer>("PLAYER");
+		_pointLabels[0].SetPosition(new Vector2(box.Size.X * 0.5f - _pointLabels[0].Size.X * 0.5f, box.GlobalPosition.Y - 80));
+		box = GetNode<BoxContainer>("BOT1");
+		_pointLabels[1].SetPosition(new Vector2(0, box.GlobalPosition.Y));
+		box = GetNode<BoxContainer>("BOT2");
+		_pointLabels[2].SetPosition(new Vector2(box.Size.X * 0.5f - _pointLabels[1].Size.X * 0.5f, box.Size.Y - Mathf.Abs(box.GlobalPosition.Y)));
+		box = GetNode<BoxContainer>("BOT3");
+		Vector2 size = GetViewport().GetVisibleRect().Size;
+		_pointLabels[3].SetPosition(new Vector2(size.X - _pointLabels[2].Size.X, box.GlobalPosition.Y));
+
+
+	}
+
+
+	private void setupPlayerNodes()
+	{
+		/*//PLAYER
+		HBoxContainer hbox = GetNode<HBoxContainer>("PLAYER/HBoxContainer1");
+		foreach (Card card in hbox.GetChildren())
+		{
+			playerCards.Add(card);
+		}
+		hbox = GetNode<HBoxContainer>("PLAYER/HBoxContainer2");
+		foreach (Card card in hbox.GetChildren())
+		{
+			playerCards.Add(card);
+		}
+		foreach (Card card in playerCards)
+		{
+			card.CardClicked += OnPlayerCardClicked;
+		}*/
+
+	}
+
+	private void setupCellNodes()
+	{
+		////// CELLÁK
+		HBoxContainer hbox = GetNode<HBoxContainer>("Center/HBoxContainer1");
+		foreach (Cell child in hbox.GetChildren())
+		{
+			cells.Add(child);
+		}
+		hbox = GetNode<HBoxContainer>("Center/HBoxContainer2");
+		foreach (Cell child in hbox.GetChildren())
+		{
+			cells.Add(child);
+		}
+
+	}
+	private void setupBotNodes()
+	{
+		/*BoxContainer box = GetNode<BoxContainer>("BOT1");
+		foreach (BackCard card in box.GetChildren())
+		{
+			bot1Cards.Add(card);
+		}
+
+		box = GetNode<BoxContainer>("BOT2");
+		foreach (BackCard card in box.GetChildren())
+		{
+			bot2Cards.Add(card);
+		}
+
+		box = GetNode<BoxContainer>("BOT3");
+		foreach (BackCard card in box.GetChildren())
+		{
+			bot3Cards.Add(card);
+		}		*/	
+
+
+	}
+
+
+	private void createPlayers()
+	{
+		CardContainer container0 = GetNode<CardContainer>("HScrollBar/HBoxContainer");
+		CardContainer container1 = GetNode<CardContainer>("BOT1");
+		CardContainer container2 = GetNode<CardContainer>("BOT2");
+		CardContainer container3 = GetNode<CardContainer>("BOT3");
+		int score = 20;
+		_player = new Player("player", score, _pointLabels[0], container0);
+		_player.disableCards();
+		_bot1 = new Bot("bot1", score, _pointLabels[1], container1);
+		_bot2 = new Bot("bot2", score, _pointLabels[2], container2);
+		_bot3 = new Bot("bot3", score, _pointLabels[3], container3);
+		bots = new List<Bot> { _bot1, _bot2, _bot3 };
+		_allPlayers = new List<CardHolderBase> { _player, _bot1, _bot2, _bot3 };
+		
+	}
+	private void OnPlayerCardClicked(Card card)
+	{
+		if (startingCardValue == -1)
+		{
+			_player.startRound(cells, ref startingCardValue, card);
+			startingValueLabel.setText(ref startingCardValue);
+
+			botsRounds();
+			return;
+		}
+		int cardCount = _player.normalRound(cells, startingCardValue, card);
+		if (cardCount >= 0)
+		{
+			if (cardCount == 0)
+			{
+				onWin(0);
+			}
+			else botsRounds();
+		}
+
+
+
+	}
+	private void onWin(int winnerid)
+	{
+
+		int sumPoint = 0;
+		for (int i = 0; i < 4; i++)
+		{
+			if (winnerid == i) continue;
+			sumPoint += _allPlayers[i].getCardsInHandCount();
+			_allPlayers[i].onLose();
+
+		}
+		_allPlayers[winnerid].onWin(sumPoint);
+
+
+	}
+	private async void botsRounds(int fromWho = -1)
+	{
+		fromWho++;
+		while (fromWho < 3)
+		{
+			await ToSignal(GetTree().CreateTimer(2f), "timeout");
+			GD.Print(fromWho + 1 + ". bot");
+			if (bots[fromWho].normalRound(cells, startingCardValue) == 0)
+			{
+				onWin(fromWho + 1);
+				return;
+			}
+			fromWho++;
+
+		}
+		await ToSignal(GetTree().CreateTimer(1.5f), "timeout");
+		playerRound();
+	}
+	private void playerRound()
+	{
+		GD.Print("player jon");
+		if (!_player.canPlaceCard(cells, startingCardValue))
+		{
+			GD.Print("Player passz");
+			botsRounds();
+		}
+		else _player.enableCards();
+	}
+
+
+
+	private async void startGame()
+	{
+		foreach (CardHolderBase player in _allPlayers)
+		{
+			player.deal(usedRandoms, cardDatas);
+		}
+		_player.disableCards();
+		
+		foreach (Card item in _player.getList())
+		{
+			GD.Print("siker");
+			item.CardClicked += OnPlayerCardClicked;
+		}
+
+		Random random = new Random();
+		int whoStarts = random.Next(0, 4);
+
+
+		await ToSignal(GetTree().CreateTimer(2f), "timeout");
+
+		if (whoStarts == 3)
+		{
+			GD.Print("player kezd");
+			_player.enableCards();
+		}
+		else
+		{
+			GD.Print(whoStarts + 1 + ". bot kezd");
+			bots[whoStarts].startRound(cells, ref startingCardValue);
+			startingValueLabel.setText(ref startingCardValue);
+			botsRounds(whoStarts);
+		}
+
+	}
+
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta)
+	{
+	}
+
+
+	public void onTestButtonPressed()
+	{
+		GD.Print("TEST PRESSED");
+		RichTextLabel pass = GetNode<RichTextLabel>("PointLabel");
+		VBoxContainer box = GetNode<VBoxContainer>("BOT1");
+		pass.SetPosition(new Vector2(0, box.GlobalPosition.Y));
+
+
+	}
+
+
+}
