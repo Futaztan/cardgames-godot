@@ -6,14 +6,7 @@ using System.Collections.Generic;
 public class Bot : CardHolderBase
 {
 
-	
-
-public Bot(string name, int score, RichTextLabel label, CardContainer container) : base(name, score, label, container){}
-
-	
-
-	
-
+	public Bot(string name, int score, RichTextLabel label, CardContainer container) : base(name, score, label, container) { }
 
 	public void startRound(List<Cell> cells, ref int startingCardValue)
 	{

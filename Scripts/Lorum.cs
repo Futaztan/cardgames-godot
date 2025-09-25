@@ -16,6 +16,7 @@ public partial class Lorum : Control
 
 	private Button testbutton;
 	private List<CardHolderBase> _allPlayers;
+	private int whoStarted = -1;
 
 
 	private List<(int, Texture2D)> cardDatas = new List<(int, Texture2D)>();
@@ -61,7 +62,7 @@ public partial class Lorum : Control
 
 	};
 
-	
+
 
 
 	private PackedScene _pointLabelScene;
@@ -111,14 +112,14 @@ public partial class Lorum : Control
 			this.AddChild(pointLabel);
 		}
 		Container box = GetNode<Container>("PLAYER");
-		_pointLabels[0].SetPosition(new Vector2(box.Size.X * 0.5f , box.GlobalPosition.Y - _pointLabels[0].Size.Y));
+		_pointLabels[0].SetPosition(new Vector2(box.Size.X * 0.5f, box.GlobalPosition.Y - _pointLabels[0].Size.Y));
 		box = GetNode<Container>("BOT1");
 		_pointLabels[1].SetPosition(new Vector2(0, box.GlobalPosition.Y - _pointLabels[1].Size.Y));
 		box = GetNode<Container>("BOT2");
 		_pointLabels[2].SetPosition(new Vector2(box.Size.X * 0.5f - _pointLabels[2].Size.X * 0.5f, box.Size.Y - Mathf.Abs(box.GlobalPosition.Y)));
 		box = GetNode<Container>("BOT3");
 		Vector2 size = GetViewport().GetVisibleRect().Size;
-		
+
 		_pointLabels[3].SetPosition(new Vector2(size.X - _pointLabels[3].Size.X, box.GlobalPosition.Y - _pointLabels[3].Size.Y));
 
 
@@ -140,7 +141,7 @@ public partial class Lorum : Control
 		}
 
 	}
-	
+
 
 
 	private void createPlayers()
@@ -157,7 +158,7 @@ public partial class Lorum : Control
 		_bot3 = new Bot("bot3", score, _pointLabels[3], container3);
 		bots = new List<Bot> { _bot1, _bot2, _bot3 };
 		_allPlayers = new List<CardHolderBase> { _player, _bot1, _bot2, _bot3 };
-		
+
 	}
 	private void OnPlayerCardClicked(Card card)
 	{
@@ -182,7 +183,7 @@ public partial class Lorum : Control
 
 
 	}
-	private  async void onWin(int winnerid)
+	private async void onWin(int winnerid)
 	{
 
 		int sumPoint = 0;
@@ -199,7 +200,7 @@ public partial class Lorum : Control
 
 	}
 
-	
+
 	private async void botsRounds(int fromWho = -1)
 	{
 		fromWho++;
@@ -247,30 +248,39 @@ public partial class Lorum : Control
 			player.deal(usedRandoms, cardDatas);
 		}
 		_player.disableCards();
-		
+
 		foreach (Card item in _player.getList())
 		{
 			GD.Print("siker");
 			item.CardClicked += OnPlayerCardClicked;
 		}
 
-		Random random = new Random();
-		int whoStarts = random.Next(0, 4);
-
+		int whoStarts;
+		if (whoStarted == -1)
+		{
+			Random random = new Random();
+			whoStarts = random.Next(0, 4);
+		}
+		else
+		{
+			whoStarts = whoStarted + 1;
+			if (whoStarts == 4) whoStarts = 0;
+		}
+		whoStarted = whoStarts;
 
 		await ToSignal(GetTree().CreateTimer(2f), "timeout");
 
-		if (whoStarts == 3)
+		if (whoStarts == 0)
 		{
 			GD.Print("player kezd");
 			_player.enableCards();
 		}
 		else
 		{
-			GD.Print(whoStarts + 1 + ". bot kezd");
-			bots[whoStarts].startRound(cells, ref startingCardValue);
+			GD.Print(whoStarts  + ". bot kezd");
+			bots[whoStarts-1].startRound(cells, ref startingCardValue);
 			startingValueLabel.setText(ref startingCardValue);
-			botsRounds(whoStarts);
+			botsRounds(whoStarts-1);
 		}
 
 	}
@@ -284,9 +294,7 @@ public partial class Lorum : Control
 	public void onTestButtonPressed()
 	{
 		GD.Print("TEST PRESSED");
-		RichTextLabel pass = GetNode<RichTextLabel>("PointLabel");
-		VBoxContainer box = GetNode<VBoxContainer>("BOT1");
-		pass.SetPosition(new Vector2(0, box.GlobalPosition.Y));
+	
 
 
 	}
