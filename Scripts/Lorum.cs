@@ -9,11 +9,8 @@ public partial class Lorum : Control
 	private Bot _bot3;
 	private Player _player;
 	private List<Bot> bots;
-	private int startingCardValue = -1; //maradékos osztás 10
+	private int startingCardValue; //maradékos osztás 10
 	private List<Cell> cells = new List<Cell>();
-	//List<BackCard> bot1Cards = new List<BackCard>();
-	//List<BackCard> bot2Cards = new List<BackCard>();
-	//List<BackCard> bot3Cards = new List<BackCard>();
 	private StartingCardLabel startingValueLabel;
 	public static Pass passIcon;
 
@@ -63,8 +60,8 @@ public partial class Lorum : Control
 		(38, "res://Assets/Cards/tok_10.png")
 
 	};
-	//private List<Card> playerCards = new List<Card>();
-	private List<int> usedRandoms = new List<int>();
+
+	
 
 
 	private PackedScene _pointLabelScene;
@@ -92,12 +89,9 @@ public partial class Lorum : Control
 
 
 		setupNodesFromScene();
-		setupPlayerNodes();
 		setupCellNodes();
-		//setupBotNodes();
 		createPlayers();
 		startGame();
-
 
 	}
 
@@ -116,39 +110,20 @@ public partial class Lorum : Control
 			_pointLabels.Add(pointLabel);
 			this.AddChild(pointLabel);
 		}
-		BoxContainer box = GetNode<BoxContainer>("PLAYER");
-		_pointLabels[0].SetPosition(new Vector2(box.Size.X * 0.5f - _pointLabels[0].Size.X * 0.5f, box.GlobalPosition.Y - 80));
-		box = GetNode<BoxContainer>("BOT1");
-		_pointLabels[1].SetPosition(new Vector2(0, box.GlobalPosition.Y));
-		box = GetNode<BoxContainer>("BOT2");
-		_pointLabels[2].SetPosition(new Vector2(box.Size.X * 0.5f - _pointLabels[1].Size.X * 0.5f, box.Size.Y - Mathf.Abs(box.GlobalPosition.Y)));
-		box = GetNode<BoxContainer>("BOT3");
+		Container box = GetNode<Container>("PLAYER");
+		_pointLabels[0].SetPosition(new Vector2(box.Size.X * 0.5f , box.GlobalPosition.Y - _pointLabels[0].Size.Y));
+		box = GetNode<Container>("BOT1");
+		_pointLabels[1].SetPosition(new Vector2(0, box.GlobalPosition.Y - _pointLabels[1].Size.Y));
+		box = GetNode<Container>("BOT2");
+		_pointLabels[2].SetPosition(new Vector2(box.Size.X * 0.5f - _pointLabels[2].Size.X * 0.5f, box.Size.Y - Mathf.Abs(box.GlobalPosition.Y)));
+		box = GetNode<Container>("BOT3");
 		Vector2 size = GetViewport().GetVisibleRect().Size;
-		_pointLabels[3].SetPosition(new Vector2(size.X - _pointLabels[2].Size.X, box.GlobalPosition.Y));
+		
+		_pointLabels[3].SetPosition(new Vector2(size.X - _pointLabels[3].Size.X, box.GlobalPosition.Y - _pointLabels[3].Size.Y));
 
 
 	}
 
-
-	private void setupPlayerNodes()
-	{
-		/*//PLAYER
-		HBoxContainer hbox = GetNode<HBoxContainer>("PLAYER/HBoxContainer1");
-		foreach (Card card in hbox.GetChildren())
-		{
-			playerCards.Add(card);
-		}
-		hbox = GetNode<HBoxContainer>("PLAYER/HBoxContainer2");
-		foreach (Card card in hbox.GetChildren())
-		{
-			playerCards.Add(card);
-		}
-		foreach (Card card in playerCards)
-		{
-			card.CardClicked += OnPlayerCardClicked;
-		}*/
-
-	}
 
 	private void setupCellNodes()
 	{
@@ -165,33 +140,12 @@ public partial class Lorum : Control
 		}
 
 	}
-	private void setupBotNodes()
-	{
-		/*BoxContainer box = GetNode<BoxContainer>("BOT1");
-		foreach (BackCard card in box.GetChildren())
-		{
-			bot1Cards.Add(card);
-		}
-
-		box = GetNode<BoxContainer>("BOT2");
-		foreach (BackCard card in box.GetChildren())
-		{
-			bot2Cards.Add(card);
-		}
-
-		box = GetNode<BoxContainer>("BOT3");
-		foreach (BackCard card in box.GetChildren())
-		{
-			bot3Cards.Add(card);
-		}		*/	
-
-
-	}
+	
 
 
 	private void createPlayers()
 	{
-		CardContainer container0 = GetNode<CardContainer>("HScrollBar/HBoxContainer");
+		CardContainer container0 = GetNode<CardContainer>("PLAYER/HBoxContainer");
 		CardContainer container1 = GetNode<CardContainer>("BOT1");
 		CardContainer container2 = GetNode<CardContainer>("BOT2");
 		CardContainer container3 = GetNode<CardContainer>("BOT3");
@@ -228,7 +182,7 @@ public partial class Lorum : Control
 
 
 	}
-	private void onWin(int winnerid)
+	private  async void onWin(int winnerid)
 	{
 
 		int sumPoint = 0;
@@ -240,9 +194,12 @@ public partial class Lorum : Control
 
 		}
 		_allPlayers[winnerid].onWin(sumPoint);
-
+		await ToSignal(GetTree().CreateTimer(3f), "timeout");
+		startGame();
 
 	}
+
+	
 	private async void botsRounds(int fromWho = -1)
 	{
 		fromWho++;
@@ -276,8 +233,17 @@ public partial class Lorum : Control
 
 	private async void startGame()
 	{
+
+		List<int> usedRandoms = new List<int>();
+		startingCardValue = -1;
+		foreach (Cell item in cells)
+		{
+			item.resetCell();
+		}
+
 		foreach (CardHolderBase player in _allPlayers)
 		{
+			player.resetState();
 			player.deal(usedRandoms, cardDatas);
 		}
 		_player.disableCards();

@@ -17,10 +17,6 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -13.0
-offset_top = -18.0
-offset_right = -14.0
-offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_k2qv6")
@@ -30,8 +26,6 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 16.0
-offset_bottom = 18.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_dmndd")
@@ -97,6 +91,7 @@ texture = ExtResource("5_06m0v")
 expand_mode = 5
 stretch_mode = 6
 script = ExtResource("6_j5fe1")
+originalTexture = ExtResource("5_06m0v")
 metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
 
 [node name="Cell2" type="TextureRect" parent="Center/HBoxContainer1"]
@@ -105,6 +100,7 @@ texture = ExtResource("5_06m0v")
 expand_mode = 3
 stretch_mode = 6
 script = ExtResource("6_j5fe1")
+originalTexture = ExtResource("5_06m0v")
 metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Center"]
@@ -118,6 +114,7 @@ texture = ExtResource("5_06m0v")
 expand_mode = 5
 stretch_mode = 6
 script = ExtResource("6_j5fe1")
+originalTexture = ExtResource("5_06m0v")
 metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
 
 [node name="Cell4" type="TextureRect" parent="Center/HBoxContainer2"]
@@ -126,6 +123,7 @@ texture = ExtResource("5_06m0v")
 expand_mode = 3
 stretch_mode = 6
 script = ExtResource("6_j5fe1")
+originalTexture = ExtResource("5_06m0v")
 metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
 
 [node name="BOT1" type="VBoxContainer" parent="."]
@@ -266,58 +264,7 @@ layout_mode = 2
 visible = false
 layout_mode = 2
 
-[node name="PLAYER" type="VBoxContainer" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -2.0
-offset_top = 367.0
-offset_right = 28.0
-offset_bottom = 771.0
-grow_horizontal = 2
-grow_vertical = 0
-alignment = 1
-
-[node name="HBoxContainer1" type="HBoxContainer" parent="PLAYER"]
-layout_mode = 2
-alignment = 1
-
-[node name="card_control" parent="PLAYER/HBoxContainer1" instance=ExtResource("9_k8733")]
-layout_mode = 2
-
-[node name="card_control2" parent="PLAYER/HBoxContainer1" instance=ExtResource("9_k8733")]
-layout_mode = 2
-
-[node name="card_control3" parent="PLAYER/HBoxContainer1" instance=ExtResource("9_k8733")]
-layout_mode = 2
-
-[node name="card_control4" parent="PLAYER/HBoxContainer1" instance=ExtResource("9_k8733")]
-layout_mode = 2
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="PLAYER"]
-layout_mode = 2
-alignment = 1
-
-[node name="card_control" parent="PLAYER/HBoxContainer2" instance=ExtResource("9_k8733")]
-layout_mode = 2
-
-[node name="card_control2" parent="PLAYER/HBoxContainer2" instance=ExtResource("9_k8733")]
-layout_mode = 2
-
-[node name="card_control3" parent="PLAYER/HBoxContainer2" instance=ExtResource("9_k8733")]
-layout_mode = 2
-
-[node name="card_control4" parent="PLAYER/HBoxContainer2" instance=ExtResource("9_k8733")]
-layout_mode = 2
-
-[node name="PassIcon" parent="." instance=ExtResource("3_k2qv6")]
-visible = false
-layout_mode = 0
-
-[node name="HScrollBar" type="ScrollContainer" parent="."]
+[node name="PLAYER" type="ScrollContainer" parent="."]
 clip_contents = false
 layout_mode = 1
 anchors_preset = 12
@@ -334,7 +281,7 @@ follow_focus = true
 horizontal_scroll_mode = 3
 vertical_scroll_mode = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HScrollBar"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PLAYER"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -342,5 +289,9 @@ theme_override_constants/separation = 10
 alignment = 1
 script = ExtResource("7_45on0")
 CardScene = ExtResource("9_k8733")
+
+[node name="PassIcon" parent="." instance=ExtResource("3_k2qv6")]
+visible = false
+layout_mode = 0
 
 [connection signal="pressed" from="Button" to="." method="onTestButtonPressed"]

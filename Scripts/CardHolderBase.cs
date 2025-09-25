@@ -25,7 +25,7 @@ public abstract partial class CardHolderBase
 	public CardHolderBase(string name, int score, RichTextLabel label, CardContainer container) { _name = name; _label = label; Score = score; cardContainer = container; }
 
 
-	public CardHolderBase(List<CardBase> cards, string name, int score, RichTextLabel label) { _cardNodes = cards; _name = name; _label = label; Score = score; }
+	
 
 	private void UpdateLabel()
 	{
@@ -55,6 +55,14 @@ public abstract partial class CardHolderBase
 	{
 		Score -= getCardsInHandCount();
 	}
+	public void resetState()
+	{
+		_cardNodes = new List<CardBase>();
+		foreach (CardBase item in cardContainer.GetChildren())
+		{
+			item.QueueFree();
+		}
+	}
 
 	public void deal(List<int> used, List<(int, Texture2D)> cardData)
 	{
@@ -75,6 +83,6 @@ public abstract partial class CardHolderBase
 			_cardNodes[i].setDatas(cardData[rnd].Item1, cardData[rnd].Item2);
 
 		}
-		
+
 	}
 }

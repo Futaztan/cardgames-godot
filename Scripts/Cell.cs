@@ -1,11 +1,12 @@
 using Godot;
-using System;
-using System.Collections.Generic;
+
 
 [GlobalClass]
 public partial class Cell : TextureRect
 {
 	private int value = -1;
+	[Export]
+	private Texture2D originalTexture;
 
 	public void setDatas(Card card)
 	{
@@ -18,6 +19,12 @@ public partial class Cell : TextureRect
 		value = _value;
 		Texture = _text;
 
+	}
+	public void resetCell()
+	{
+		value = -1;
+		Texture = originalTexture;
+		
 	}
 	public int getValue() { return value; }
 	

@@ -1,12 +1,10 @@
 using Godot;
-using System;
 using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
+
 
 public partial class Player : CardHolderBase
 {
 
-	//public Player(List<Card> cards, string name, int score, RichTextLabel label) : base(cards.ConvertAll(c => (CardBase)c), name,score,label) { }
 	public Player(string name, int score, RichTextLabel label, CardContainer container) : base(name, score, label, container) { disableCards(); }
 
 
