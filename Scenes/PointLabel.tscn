@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://r6lsr54m66g8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w756j"]
+bg_color = Color(0.402144, 0.807265, 0.456115, 1)
+draw_center = false
+
+[node name="PointLabel" type="RichTextLabel"]
+offset_right = 114.0
+offset_bottom = 23.0
+theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/bold_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_w756j")
+bbcode_enabled = true
+text = "TESZT: X pont
+asd
+asd
+asd"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -8,7 +8,7 @@ public partial class Cell : TextureRect
 	[Export]
 	private Texture2D originalTexture;
 
-	public void setDatas(Card card)
+	public void setDatas(PlayerCard card)
 	{
 		value = card.getValue();
 		Texture = card.getTexture();

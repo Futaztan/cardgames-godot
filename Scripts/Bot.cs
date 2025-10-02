@@ -75,9 +75,9 @@ public class Bot : CardHolderBase
 		Vector2 pos;
 		switch (_name)
 		{
-			case "bot1": pos = box.GlobalPosition + new Vector2(box.Size.X, box.Size.Y * 0.5f); break;
-			case "bot2": pos = box.GlobalPosition + new Vector2(box.Size.X * 0.5f, box.Size.Y); break;
-			case "bot3": pos = box.GlobalPosition + new Vector2(0, box.Size.Y * 0.5f); break;
+			case "bot1": pos = box.GlobalPosition + new Vector2(box.Size.X, box.Size.Y * 0.5f - Lorum.passIcon.Size.Y*0.5f); break;
+			case "bot2": pos = box.GlobalPosition + new Vector2(box.Size.X * 0.5f - Lorum.passIcon.Size.Y*0.5f, box.Size.Y); break;
+			case "bot3": pos = box.GlobalPosition + new Vector2(0, box.Size.Y * 0.5f - Lorum.passIcon.Size.Y*0.5f); break;
 			default: throw new Exception();
 
 		}

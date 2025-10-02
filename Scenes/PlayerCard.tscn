@@ -1,14 +1,14 @@
 [gd_scene load_steps=3 format=3 uid="uid://b2ipa76x4ms5a"]
 
 [ext_resource type="Texture2D" uid="uid://dehvp7i2eh3yn" path="res://Assets/Other/border.png" id="1_uy1px"]
-[ext_resource type="Script" uid="uid://b63usmscmn1wc" path="res://Scripts/Card.cs" id="1_wf8id"]
+[ext_resource type="Script" uid="uid://b63usmscmn1wc" path="res://Scripts/PlayerCard.cs" id="1_wf8id"]
 
 [node name="PlayerCard" type="Control"]
-custom_minimum_size = Vector2(140, 200)
+custom_minimum_size = Vector2(171, 275)
 layout_mode = 3
 anchors_preset = 0
-offset_right = 140.0
-offset_bottom = 200.0
+offset_right = 171.0
+offset_bottom = 275.0
 script = ExtResource("1_wf8id")
 metadata/_custom_type_script = "uid://b63usmscmn1wc"
 
@@ -16,6 +16,7 @@ metadata/_custom_type_script = "uid://b63usmscmn1wc"
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+scale = Vector2(1.2, 1.2)
 texture = ExtResource("1_uy1px")
 
 [connection signal="gui_input" from="." to="." method="onPlayerCardClicked"]

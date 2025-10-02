@@ -6,14 +6,14 @@ using System.Collections.Generic;
 public partial class StartingCardLabel : RichTextLabel
 {
 
-	private List<String> _imagePaths = new List<string>
+	private List<string> _imagePaths = new List<string>
 	{
 		"res://Assets/Icons/zold-icon@small.png",
 		"res://Assets/Icons/piros-icon@small.png",
 		"res://Assets/Icons/makk-icon@small.png",
 		"res://Assets/Icons/tok-icon@small.png"
 	};
-	private List<String> _values = new List<string>
+	private List<string> _values = new List<string>
 	{
 		"ALSÓ",
 		"FELSŐ",
@@ -30,7 +30,7 @@ public partial class StartingCardLabel : RichTextLabel
 		startingCardValue = startingCardValue % 10;
 		string image = "[img]" + _imagePaths[path] + "[/img]";
 		string txt = _values[startingCardValue - 1];
-		this.Text = image + " " + txt;
+		this.Text = "KEZDŐ LAP\n" +image + " " + txt;
 	}
 
 	private int whichCell(int value)

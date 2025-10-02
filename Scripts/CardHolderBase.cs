@@ -9,27 +9,38 @@ public abstract partial class CardHolderBase
 	private int _score = 0;
 	private CardContainer cardContainer;
 
-	private int Score
-	{
-		get => _score;
-		set
-		{
-			_score = value;
-			UpdateLabel();
-		}
-	}
-
+	
 	private RichTextLabel _label;
-
-
-	public CardHolderBase(string name, int score, RichTextLabel label, CardContainer container) { _name = name; _label = label; Score = score; cardContainer = container; }
-
-
 	
 
-	private void UpdateLabel()
+
+	public CardHolderBase(string name, int score, RichTextLabel label, CardContainer container)
+	{ _name = name; _label = label; _score = score; cardContainer = container; 	UpdateLabel();}
+
+
+
+
+	private void UpdateLabelWithDiff(int diff)
 	{
-		_label.Text = _name + "\n" + Score + " pont";
+		
+		string color;
+		string diffText;
+		if (diff < 0)
+		{
+			color = "red";
+			diffText = diff.ToString();
+		}
+		else
+		{
+			color = "green";
+			diffText = "-" + diff.ToString();
+		}
+		_label.Text = "[b]" + _name + "\n" + _score + " pont \n [color=" + color + "]" + diffText + "[/color] [/b]";
+		//_label.Text = "[b]" + _name + "\n" + Score + " pont [/b]";
+	}
+	public void UpdateLabel()
+	{
+		_label.Text = "[b]" + _name + "\n" + _score + " pont [/b]";
 	}
 	protected int whichCell(int value)
 	{
@@ -49,11 +60,15 @@ public abstract partial class CardHolderBase
 	public void onWin(int winsum)
 	{
 		GD.Print(_name + " nyert!");
-		Score += winsum;
+		_score += winsum;
+		UpdateLabelWithDiff(winsum);
+		//Score += winsum;
 	}
 	public void onLose()
 	{
-		Score -= getCardsInHandCount();
+		_score -= getCardsInHandCount();
+		UpdateLabelWithDiff(-getCardsInHandCount());
+		//Score -= getCardsInHandCount();
 	}
 	public void resetState()
 	{

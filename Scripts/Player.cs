@@ -15,7 +15,7 @@ public partial class Player : CardHolderBase
 		return _cardNodes;
 	}
 
-	public void startRound(List<Cell> cells, ref int startingCardValue, Card clickedCard)
+	public void startRound(List<Cell> cells, ref int startingCardValue, PlayerCard clickedCard)
 	{
 		disableCards();
 		int value = clickedCard.getValue();
@@ -32,14 +32,14 @@ public partial class Player : CardHolderBase
 	}
 	internal void enableCards()
 	{
-		foreach (Card card in _cardNodes) { card.enableCard(); }
+		foreach (PlayerCard card in _cardNodes) { card.enableCard(); }
 	}
 	internal void disableCards()
 	{
-		foreach (Card card in _cardNodes) { card.disableCard(); }
+		foreach (PlayerCard card in _cardNodes) { card.disableCard(); }
 	}
 
-	public int normalRound(List<Cell> cells, int startingCardValue, Card clickedCard)
+	public int normalRound(List<Cell> cells, int startingCardValue, PlayerCard clickedCard)
 	{
 
 
@@ -69,7 +69,7 @@ public partial class Player : CardHolderBase
 	{
 		for (int i = 0; i < _cardNodes.Count; i++)
 		{
-			Card card = (Card)_cardNodes[i];
+			PlayerCard card = (PlayerCard)_cardNodes[i];
 			int value = card.getValue();
 			Cell cell = cells[whichCell(value)];
 
@@ -82,7 +82,7 @@ public partial class Player : CardHolderBase
 	private void passTurn()
 	{
 		Container box = (Container)_cardNodes[0].GetParent().GetParent();
-		Vector2 pos = box.GlobalPosition + new Vector2(box.Size.X * 0.5f, 0);
+		Vector2 pos = box.GlobalPosition + new Vector2(box.Size.X * 0.5f - Lorum.passIcon.Size.Y*0.5f, 0);
 		Lorum.passIcon.moveTo(pos);
 	}
 

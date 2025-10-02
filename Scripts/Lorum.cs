@@ -17,6 +17,8 @@ public partial class Lorum : Control
 	private Button testbutton;
 	private List<CardHolderBase> _allPlayers;
 	private int whoStarted = -1;
+	private int _score;
+	private int _roundsUntilEnd;
 
 
 	private List<(int, Texture2D)> cardDatas = new List<(int, Texture2D)>();
@@ -68,7 +70,7 @@ public partial class Lorum : Control
 	private PackedScene _pointLabelScene;
 	private List<RichTextLabel> _pointLabels = new List<RichTextLabel>();
 
-	//TODO a pass icon elvan csuszva kozepro la méretével mert bal felso sarok stb
+	//TODO animacio kozbeni kartya meret, button
 
 	/* 1. zold
 	*  2. piros
@@ -76,6 +78,14 @@ public partial class Lorum : Control
 	* 4. tok
 	*
 	*/
+
+
+	//ha roundsuntilend = -1 akkor amíg el nem fogynak a pontok
+	public void init(int score, int roundsUntilEnd)
+	{
+		_score = score;
+		_roundsUntilEnd = roundsUntilEnd;
+	}
 
 	public override void _Ready()
 	{
@@ -103,7 +113,7 @@ public partial class Lorum : Control
 		testbutton = GetNode<Button>("Button");
 		passIcon = GetNode<Pass>("PassIcon");
 		passIcon.PivotOffset = passIcon.Size * 0.5f;
-		_pointLabelScene = (PackedScene)GD.Load("res://Scenes/point_label.tscn");
+		_pointLabelScene = (PackedScene)GD.Load("res://Scenes/PointLabel.tscn");
 
 		for (int i = 0; i < 4; i++)
 		{
@@ -150,17 +160,17 @@ public partial class Lorum : Control
 		CardContainer container1 = GetNode<CardContainer>("BOT1");
 		CardContainer container2 = GetNode<CardContainer>("BOT2");
 		CardContainer container3 = GetNode<CardContainer>("BOT3");
-		int score = 20;
-		_player = new Player("player", score, _pointLabels[0], container0);
+	
+		_player = new Player("player", _score, _pointLabels[0], container0);
 		_player.disableCards();
-		_bot1 = new Bot("bot1", score, _pointLabels[1], container1);
-		_bot2 = new Bot("bot2", score, _pointLabels[2], container2);
-		_bot3 = new Bot("bot3", score, _pointLabels[3], container3);
+		_bot1 = new Bot("bot1", _score, _pointLabels[1], container1);
+		_bot2 = new Bot("bot2", _score, _pointLabels[2], container2);
+		_bot3 = new Bot("bot3", _score, _pointLabels[3], container3);
 		bots = new List<Bot> { _bot1, _bot2, _bot3 };
 		_allPlayers = new List<CardHolderBase> { _player, _bot1, _bot2, _bot3 };
 
 	}
-	private void OnPlayerCardClicked(Card card)
+	private void OnPlayerCardClicked(PlayerCard card)
 	{
 		if (startingCardValue == -1)
 		{
@@ -183,7 +193,15 @@ public partial class Lorum : Control
 
 
 	}
-	private async void onWin(int winnerid)
+	public void onNewRoundButtonPressed()
+	{
+		foreach (CardHolderBase item in _allPlayers)
+		{
+			item.UpdateLabel();
+		}
+		startGame();
+	}
+	private void onWin(int winnerid)
 	{
 
 		int sumPoint = 0;
@@ -195,8 +213,7 @@ public partial class Lorum : Control
 
 		}
 		_allPlayers[winnerid].onWin(sumPoint);
-		await ToSignal(GetTree().CreateTimer(3f), "timeout");
-		startGame();
+		
 
 	}
 
@@ -249,7 +266,7 @@ public partial class Lorum : Control
 		}
 		_player.disableCards();
 
-		foreach (Card item in _player.getList())
+		foreach (PlayerCard item in _player.getList())
 		{
 			GD.Print("siker");
 			item.CardClicked += OnPlayerCardClicked;
