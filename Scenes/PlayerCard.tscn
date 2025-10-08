@@ -4,19 +4,19 @@
 [ext_resource type="Script" uid="uid://b63usmscmn1wc" path="res://Scripts/PlayerCard.cs" id="1_wf8id"]
 
 [node name="PlayerCard" type="Control"]
-custom_minimum_size = Vector2(171, 275)
+custom_minimum_size = Vector2(160, 264)
 layout_mode = 3
 anchors_preset = 0
-offset_right = 171.0
-offset_bottom = 275.0
+offset_right = 160.0
+offset_bottom = 264.0
 script = ExtResource("1_wf8id")
 metadata/_custom_type_script = "uid://b63usmscmn1wc"
 
 [node name="FrontFace" type="TextureRect" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-scale = Vector2(1.2, 1.2)
+offset_right = 140.0
+offset_bottom = 231.0
+scale = Vector2(1.15, 1.15)
 texture = ExtResource("1_uy1px")
 
 [connection signal="gui_input" from="." to="." method="onPlayerCardClicked"]

@@ -15,6 +15,7 @@ public partial class Lorum : Control
 	public static Pass passIcon;
 
 	private Button testbutton;
+	private Button newRoundButton;
 	private List<CardHolderBase> _allPlayers;
 	private int whoStarted = -1;
 	private int _score;
@@ -70,7 +71,7 @@ public partial class Lorum : Control
 	private PackedScene _pointLabelScene;
 	private List<RichTextLabel> _pointLabels = new List<RichTextLabel>();
 
-	//TODO animacio kozbeni kartya meret, button
+	//TODO diflabelek utan elbaszodik a label meret és nagyobb lesz, rendezni a kapott kartyakat
 
 	/* 1. zold
 	*  2. piros
@@ -103,6 +104,7 @@ public partial class Lorum : Control
 		setupCellNodes();
 		createPlayers();
 		startGame();
+		
 
 	}
 
@@ -111,6 +113,7 @@ public partial class Lorum : Control
 	{
 		startingValueLabel = GetNode<StartingCardLabel>("Center/HBoxContainer/StartingCardLabel");
 		testbutton = GetNode<Button>("Button");
+		newRoundButton = GetNode<Button>("NewRoundButton");
 		passIcon = GetNode<Pass>("PassIcon");
 		passIcon.PivotOffset = passIcon.Size * 0.5f;
 		_pointLabelScene = (PackedScene)GD.Load("res://Scenes/PointLabel.tscn");
@@ -122,12 +125,23 @@ public partial class Lorum : Control
 			this.AddChild(pointLabel);
 		}
 		Container box = GetNode<Container>("PLAYER");
-		_pointLabels[0].SetPosition(new Vector2(box.Size.X * 0.5f, box.GlobalPosition.Y - _pointLabels[0].Size.Y));
+		_pointLabels[0].Text = "[b]" + "PLAYER" + "\n" + _score + " pont [/b]";
+		_pointLabels[0].Size = _pointLabels[0].GetMinimumSize();
+		_pointLabels[0].SetPosition(new Vector2(0, box.GlobalPosition.Y - _pointLabels[0].Size.Y - _pointLabels[0].Size.Y *0.5F));
+
 		box = GetNode<Container>("BOT1");
+		_pointLabels[1].Text = "[b]" + "BOT1" + "\n" + _score + " pont [/b]";
+		_pointLabels[1].Size = _pointLabels[1].GetMinimumSize();
 		_pointLabels[1].SetPosition(new Vector2(0, box.GlobalPosition.Y - _pointLabels[1].Size.Y));
+
 		box = GetNode<Container>("BOT2");
+		_pointLabels[2].Text = "[b]" + "BOT2" + "\n" + _score + " pont [/b]";
+		_pointLabels[2].Size = _pointLabels[2].GetMinimumSize();
 		_pointLabels[2].SetPosition(new Vector2(box.Size.X * 0.5f - _pointLabels[2].Size.X * 0.5f, box.Size.Y - Mathf.Abs(box.GlobalPosition.Y)));
+
 		box = GetNode<Container>("BOT3");
+		_pointLabels[3].Text = "[b]" + "BOT3" + "\n" + _score + " pont [/b]";
+		_pointLabels[3].Size = _pointLabels[3].GetMinimumSize();
 		Vector2 size = GetViewport().GetVisibleRect().Size;
 
 		_pointLabels[3].SetPosition(new Vector2(size.X - _pointLabels[3].Size.X, box.GlobalPosition.Y - _pointLabels[3].Size.Y));
@@ -195,6 +209,7 @@ public partial class Lorum : Control
 	}
 	public void onNewRoundButtonPressed()
 	{
+		ToggleNewRoundButton(false);
 		foreach (CardHolderBase item in _allPlayers)
 		{
 			item.UpdateLabel();
@@ -213,8 +228,13 @@ public partial class Lorum : Control
 
 		}
 		_allPlayers[winnerid].onWin(sumPoint);
+		ToggleNewRoundButton(true);
 		
 
+	}
+	private void ToggleNewRoundButton(bool enabled)
+	{
+		newRoundButton.Visible = enabled;
 	}
 
 
@@ -223,7 +243,7 @@ public partial class Lorum : Control
 		fromWho++;
 		while (fromWho < 3)
 		{
-			await ToSignal(GetTree().CreateTimer(2f), "timeout");
+			await ToSignal(GetTree().CreateTimer(1.4f), "timeout");
 			GD.Print(fromWho + 1 + ". bot");
 			if (bots[fromWho].normalRound(cells, startingCardValue) == 0)
 			{
@@ -233,7 +253,7 @@ public partial class Lorum : Control
 			fromWho++;
 
 		}
-		await ToSignal(GetTree().CreateTimer(1.5f), "timeout");
+		await ToSignal(GetTree().CreateTimer(1.2f), "timeout");
 		playerRound();
 	}
 	private void playerRound()
@@ -285,7 +305,7 @@ public partial class Lorum : Control
 		}
 		whoStarted = whoStarts;
 
-		await ToSignal(GetTree().CreateTimer(2f), "timeout");
+		await ToSignal(GetTree().CreateTimer(1f), "timeout");
 
 		if (whoStarts == 0)
 		{

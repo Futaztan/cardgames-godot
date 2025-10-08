@@ -1,19 +1,9 @@
 using Godot;
 using System;
 
-
-
-
-
-
 [GlobalClass]
 public partial class BackCard : CardBase
 {
-
-
-
-
-
 
     private TextureRect _backFace;
 
@@ -21,15 +11,9 @@ public partial class BackCard : CardBase
 
     public override void _Ready()
     {
-
         _backFace = GetNode<TextureRect>("BackFace");
-
         _frontFace = GetNode<TextureRect>("FrontFace");
-
-
         this.PivotOffset = this.Size * 0.5f;
-
-
         Scale = Vector2.One;
     }
 
@@ -38,7 +22,7 @@ public partial class BackCard : CardBase
 
 
         Vector2 targetGlobalPos = targetCell.GlobalPosition;
-        // Vector2 targetSize = targetCell.Size;
+        //Vector2 targetSize = targetCell.Size;
 
         float half = FlipDuration * 0.5f;
 
@@ -49,50 +33,26 @@ public partial class BackCard : CardBase
             _backFace.Visible = true;
         }
 
-
-        // Tween létrehozása
+    
         var tween = CreateTween();
         tween.SetTrans(Tween.TransitionType.Cubic);
         tween.SetEase(Tween.EaseType.InOut);
 
+        //Vector2 scaleFactor = targetCell.Size / _backFace.Size;
+        //Vector2 center = targetGlobalPos + targetCell.Size * 0.5f;
 
-        Vector2 scaleFactor = targetCell.Size / _backFace.Size;
-        Vector2 center = targetGlobalPos + targetCell.Size * 0.5f;
-
-
-        //  tween.TweenProperty(this, "rotation", Mathf.Pi / 2, MoveDuration);
-
-  
-
-
-        // Skálázás 0-ra és párhuzamos mozgás
         tween.TweenProperty(this, "scale:x", 0f, half);
         tween.TweenCallback(Callable.From(() => SwapFace()));
         tween.TweenProperty(this, "global_position", targetGlobalPos, MoveDuration);
         tween.Parallel().TweenProperty(this, "scale:x", 1f, half);
 
-        // Várjuk meg a fenti műveletek befejezését, mielőtt a következő lépésre lépnénk.
-
-        // Vissza skálázás 1-re
-
-        //tween.Parallel().TweenProperty(_backFace, "scale", scaleFactor, MoveDuration);
-
-
-
-
-
         if (onDone != null)
             tween.Finished += () => onDone();
-
-
 
     }
 
     private void SwapFace()
     {
-        //showingFront = !showingFront;
-        //if (showingFront) face.Texture = FrontTe
-
         _backFace.Visible = false;
         _frontFace.Visible = true;
     }

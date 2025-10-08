@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
+
 using Godot;
 
 public abstract partial class CardBase : Control
 {
-    [Export] public float FlipDuration { get; set; } = 0.6f;   // Teljes fordulási idő
-    [Export] public float MoveDuration { get; set; } = 0.7f;   // Mozgás ideje
+    [Export] public float FlipDuration { get; set; } = 0.5f;   // Teljes fordulási idő
+    [Export] public float MoveDuration { get; set; } = 0.5f;   // Mozgás ideje
     protected int _value = -1;
     protected TextureRect _frontFace;
 

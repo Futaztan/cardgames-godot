@@ -33,13 +33,17 @@ public abstract partial class CardHolderBase
 		else
 		{
 			color = "green";
-			diffText = "-" + diff.ToString();
+			diffText = "+" + diff.ToString();
 		}
 		_label.Text = "[b]" + _name + "\n" + _score + " pont \n [color=" + color + "]" + diffText + "[/color] [/b]";
 		//_label.Text = "[b]" + _name + "\n" + Score + " pont [/b]";
 	}
 	public void UpdateLabel()
 	{
+		 var stylebox = new StyleBoxFlat();
+        stylebox.BgColor = new Color(0.2f, 0.2f, 0.8f, 1.0f); // kék háttér
+		_label.AddThemeStyleboxOverride("normal", stylebox);
+		_label.Size = _label.GetMinimumSize();
 		_label.Text = "[b]" + _name + "\n" + _score + " pont [/b]";
 	}
 	protected int whichCell(int value)

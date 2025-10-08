@@ -85,7 +85,7 @@ alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="Cell1" type="TextureRect" parent="Center/HBoxContainer1"]
-custom_minimum_size = Vector2(160, 150)
+custom_minimum_size = Vector2(160, 264)
 layout_mode = 2
 texture = ExtResource("5_3ucx4")
 expand_mode = 5
@@ -95,6 +95,7 @@ originalTexture = ExtResource("5_3ucx4")
 metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
 
 [node name="Cell2" type="TextureRect" parent="Center/HBoxContainer1"]
+custom_minimum_size = Vector2(160, 264)
 layout_mode = 2
 texture = ExtResource("5_3ucx4")
 expand_mode = 3
@@ -108,7 +109,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="Cell3" type="TextureRect" parent="Center/HBoxContainer2"]
-custom_minimum_size = Vector2(160, 150)
+custom_minimum_size = Vector2(160, 264)
 layout_mode = 2
 texture = ExtResource("5_3ucx4")
 expand_mode = 5
@@ -118,6 +119,7 @@ originalTexture = ExtResource("5_3ucx4")
 metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
 
 [node name="Cell4" type="TextureRect" parent="Center/HBoxContainer2"]
+custom_minimum_size = Vector2(160, 264)
 layout_mode = 2
 texture = ExtResource("5_3ucx4")
 expand_mode = 3
@@ -295,19 +297,21 @@ visible = false
 layout_mode = 0
 
 [node name="NewRoundButton" type="Button" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -144.0
-offset_top = -380.0
-offset_right = 145.0
-offset_bottom = -349.0
+offset_left = -148.5
+offset_top = -400.0
+offset_right = 148.5
+offset_bottom = -346.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "ASDASDASDADADADADADADSADAD"
+theme_override_font_sizes/font_size = 33
+text = "Indulhat az új kör!"
 
 [connection signal="pressed" from="Button" to="." method="onTestButtonPressed"]
 [connection signal="pressed" from="NewRoundButton" to="." method="onNewRoundButtonPressed"]

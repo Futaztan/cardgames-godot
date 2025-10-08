@@ -26,6 +26,7 @@ expand_mode = 3
 
 [node name="FrontFace" type="TextureRect" parent="."]
 visible = false
+custom_minimum_size = Vector2(160, 264)
 layout_mode = 0
 offset_right = 140.0
 offset_bottom = 231.0

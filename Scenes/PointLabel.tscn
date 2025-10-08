@@ -11,11 +11,11 @@ theme_override_font_sizes/normal_font_size = 20
 theme_override_font_sizes/bold_font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxFlat_w756j")
 bbcode_enabled = true
-text = "TESZT: X pont
-asd
-asd
-asd"
+text = "
+
+"
 fit_content = true
 scroll_active = false
+autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
