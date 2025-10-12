@@ -17,7 +17,8 @@ public abstract partial class CardHolderBase
 	public CardHolderBase(string name, int score, RichTextLabel label, CardContainer container)
 	{ _name = name; _label = label; _score = score; cardContainer = container; 	UpdateLabel();}
 
-
+	public int getScore() { return _score; }
+	public string getName() { return _name; }
 
 
 	private void UpdateLabelWithDiff(int diff)
