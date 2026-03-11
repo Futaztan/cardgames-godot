@@ -283,7 +283,7 @@ public partial class Lorum : Control
 	}
 	private bool isOver()
 	{
-		return true;
+		
 		if (_roundsUntilEnd == -1)
 		{
 			foreach (CardHolderBase item in _allPlayers)
