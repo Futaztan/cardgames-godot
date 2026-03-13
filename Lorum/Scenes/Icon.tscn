@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://7gxo4w6eff62"]
+
+[ext_resource type="Texture2D" uid="uid://dje0lvgcpls4m" path="res://Assets/Icons/makk-icon@small.png" id="1_s2b8t"]
+
+[node name="TextureRect" type="TextureRect"]
+texture = ExtResource("1_s2b8t")

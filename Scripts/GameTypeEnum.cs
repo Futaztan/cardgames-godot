@@ -1,7 +1,7 @@
 
 public enum GameTypeEnum
 {
-    LORUM,
-    TEST1,
-    TEST2
+	LORUM,
+	TEST1,
+	TEST2
 }
