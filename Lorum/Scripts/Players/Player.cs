@@ -1,7 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 
-
+namespace lorum;
 public partial class Player : CardHolderBase
 {
 

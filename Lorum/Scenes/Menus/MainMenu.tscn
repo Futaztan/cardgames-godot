@@ -44,7 +44,8 @@ text = "LORUM"
 [node name="Button2" type="Button" parent="ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
-text = "MAsik"
+text = "Zsírozás
+"
 
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/Button" to="." method="onLorumButtonPressed"]
-[connection signal="pressed" from="ScrollContainer/VBoxContainer/Button2" to="." method="onLorumButtonPressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/Button2" to="." method="onZsirButtonPressed"]

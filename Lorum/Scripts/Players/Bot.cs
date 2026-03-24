@@ -2,6 +2,9 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
+namespace lorum
+{
+    
 
 public class Bot : CardHolderBase
 {
@@ -92,4 +95,5 @@ public class Bot : CardHolderBase
 
 
 
+}
 }

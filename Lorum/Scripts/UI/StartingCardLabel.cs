@@ -33,9 +33,9 @@ public partial class StartingCardLabel : RichTextLabel
 		this.Text = "KEZDŐ LAP\n" +image + " " + txt;
 	}
 	public void removeText()
-    {
-        this.Text = "";
-    }
+	{
+		this.Text = "";
+	}
 
 	private int whichCell(int value)
 	{

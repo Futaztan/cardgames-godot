@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+namespace lorum;
 public partial class GameMenu : Control
 {
 	//private Lorum gameInstance;

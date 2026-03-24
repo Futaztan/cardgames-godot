@@ -3,6 +3,10 @@ using System;
 using Godot;
 using System.Linq;
 
+namespace lorum
+{
+    
+
 public abstract partial class CardHolderBase
 {
 	public List<CardBase> _cardNodes = new List<CardBase>();
@@ -124,4 +128,5 @@ public abstract partial class CardHolderBase
 		}*/
 
 	}
+}
 }

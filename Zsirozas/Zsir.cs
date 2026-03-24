@@ -1,29 +1,37 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
-namespace lorum;
-public partial class Lorum : Control
+
+namespace zsir;
+
+public partial class Zsir : Control
 {
 	private Bot _bot1;
 	private Bot _bot2;
 	private Bot _bot3;
 	private Player _player;
-	private List<Bot> bots;
-	private int startingCardValue; //maradékos osztás 10
-	private List<Cell> cells = new List<Cell>();
-	private StartingCardLabel startingValueLabel;
-	public static Pass passIcon;
-
+	private List<Bot> _bots;
+	private int _startingCardValue; //maradékos osztás 10
+	private List<Cell> _cells = new List<Cell>();
+	private StartingCardLabel _startingValueLabel;
 	private Button testbutton;
-
 	private List<CardHolderBase> _allPlayers;
-	private int whoStarted = -1;
+	private int _whoStarted = -1;
+	private CardHolderBase StartingPlayer
+	{
+		get
+		{
+			return _allPlayers[_whoStarted];
+		}
+
+	}
 	private int _score;
-	private int _roundsUntilEnd;
+	private List<CardBase> cardsInArea = new List<CardBase>();
 
-
-	private List<(int, Texture2D)> cardDatas = new List<(int, Texture2D)>();
+	public static readonly List<(int, Texture2D)> CardDatas = new List<(int, Texture2D)>();
 
 	private List<(int, string)> cardValuesPaths = new List<(int, string)>
 	{
@@ -67,11 +75,6 @@ public partial class Lorum : Control
 	};
 
 
-
-
-	private PackedScene _pointLabelScene;
-	private List<RichTextLabel> _pointLabels = new List<RichTextLabel>();
-
 	//TODO diflabelek utan elbaszodik a label meret és nagyobb lesz,  ??? nem talaltam meg megint ezt
 
 
@@ -84,70 +87,32 @@ public partial class Lorum : Control
 
 
 	//ha roundsuntilend = 0, majd -1 akkor amíg el nem fogynak a pontok
-	public void init(int score, int roundsUntilEnd)
+	public void init()
 	{
-		_score = score;
-		_roundsUntilEnd = roundsUntilEnd;
-		if (_roundsUntilEnd == 0) _roundsUntilEnd--;
+
 	}
 
 	public override void _Ready()
 	{
-
+		CardDatas.Clear();
 		for (int i = 0; i < cardValuesPaths.Count; i++)
 		{
 			int value = cardValuesPaths[i].Item1;
 			Texture2D text = GD.Load<Texture2D>(cardValuesPaths[i].Item2);
-			cardDatas.Add((value, text));
+			CardDatas.Add((value, text));
 		}
-
-
 
 		setupNodesFromScene();
 		setupCellNodes();
 		createPlayers();
 		startGame();
-
-
 	}
 
 
 	private void setupNodesFromScene()
 	{
-		startingValueLabel = GetNode<StartingCardLabel>("Center/HBoxContainer/StartingCardLabel");
+		_startingValueLabel = GetNode<StartingCardLabel>("Center/HBoxContainer/StartingCardLabel");
 		testbutton = GetNode<Button>("Button");
-
-		passIcon = GetNode<Pass>("PassIcon");
-		passIcon.PivotOffset = passIcon.Size * 0.5f;
-		_pointLabelScene = (PackedScene)GD.Load("res://Lorum/Scenes/PointLabel.tscn");
-
-		for (int i = 0; i < 4; i++)
-		{
-			RichTextLabel pointLabel = (RichTextLabel)_pointLabelScene.Instantiate();
-			_pointLabels.Add(pointLabel);
-			this.AddChild(pointLabel);
-		}
-		Container box = GetNode<Container>("PLAYER");
-		_pointLabels[0].Text = "[b]" + "PLAYER" + "\n" + _score + " pont [/b]";
-		_pointLabels[0].Size = _pointLabels[0].GetMinimumSize();
-		_pointLabels[0].SetPosition(new Vector2(0, box.GlobalPosition.Y - _pointLabels[0].Size.Y - _pointLabels[0].Size.Y * 0.5F));
-
-		box = GetNode<Container>("BOT1");
-		_pointLabels[1].Text = "[b]" + "BOT1" + "\n" + _score + " pont [/b]";
-		_pointLabels[1].Size = _pointLabels[1].GetMinimumSize();
-		_pointLabels[1].SetPosition(new Vector2(0, box.GlobalPosition.Y - _pointLabels[1].Size.Y));
-
-		box = GetNode<Container>("BOT2");
-		_pointLabels[2].Text = "[b]" + "BOT2" + "\n" + _score + " pont [/b]";
-		_pointLabels[2].Size = _pointLabels[2].GetMinimumSize();
-		_pointLabels[2].SetPosition(new Vector2(box.Size.X * 0.5f - _pointLabels[2].Size.X * 0.5f, box.Size.Y - Mathf.Abs(box.GlobalPosition.Y)));
-
-		box = GetNode<Container>("BOT3");
-		_pointLabels[3].Text = "[b]" + "BOT3" + "\n" + _score + " pont [/b]";
-		_pointLabels[3].Size = _pointLabels[3].GetMinimumSize();
-		Vector2 size = GetViewport().GetVisibleRect().Size;
-
-		_pointLabels[3].SetPosition(new Vector2(size.X - _pointLabels[3].Size.X, box.GlobalPosition.Y - _pointLabels[3].Size.Y));
 
 
 	}
@@ -159,18 +124,15 @@ public partial class Lorum : Control
 		HBoxContainer hbox = GetNode<HBoxContainer>("Center/HBoxContainer1");
 		foreach (Cell child in hbox.GetChildren())
 		{
-			cells.Add(child);
+			_cells.Add(child);
 		}
 		hbox = GetNode<HBoxContainer>("Center/HBoxContainer2");
 		foreach (Cell child in hbox.GetChildren())
 		{
-			cells.Add(child);
+			_cells.Add(child);
 		}
 
 	}
-
-
-
 
 	private void createPlayers()
 	{
@@ -178,38 +140,36 @@ public partial class Lorum : Control
 		CardContainer container1 = GetNode<CardContainer>("BOT1");
 		CardContainer container2 = GetNode<CardContainer>("BOT2");
 		CardContainer container3 = GetNode<CardContainer>("BOT3");
+		Cell gameArea = GetNode<Cell>("Center/HBoxContainer2/GameArea");
 
-		_player = new Player("player", _score, _pointLabels[0], container0);
-		_player.disableCards();
-		_bot1 = new Bot("bot1", _score, _pointLabels[1], container1);
-		_bot2 = new Bot("bot2", _score, _pointLabels[2], container2);
-		_bot3 = new Bot("bot3", _score, _pointLabels[3], container3);
-		bots = new List<Bot> { _bot1, _bot2, _bot3 };
+		_player = new Player("player", 0, _score, container0, gameArea);
+
+		_bot1 = new Bot("bot1", 1, _score, container1, gameArea);
+		_bot2 = new Bot("bot2", 2, _score, container2, gameArea);
+		_bot3 = new Bot("bot3", 3, _score, container3, gameArea);
+		_bots = new List<Bot> { _bot1, _bot2, _bot3 };
 		_allPlayers = new List<CardHolderBase> { _player, _bot1, _bot2, _bot3 };
 
 	}
 	private void OnPlayerCardClicked(PlayerCard card)
 	{
-		if (startingCardValue == -1)
-		{
-			_player.startRound(cells, ref startingCardValue, card);
-			startingValueLabel.setText(ref startingCardValue);
 
+		if (_startingCardValue == -1)
+		{
+			_player.startRound(_cells, ref _startingCardValue, card);
+			_startingValueLabel.setText(ref _startingCardValue);
+			cardsInArea.Add(card);
 			botsRounds();
+
 			return;
 		}
-		int cardCount = _player.normalRound(cells, startingCardValue, card);
-		if (cardCount >= 0)
+		
+		else
 		{
-			if (cardCount == 0)
-			{
-				onWin(0);
-			}
-			else botsRounds();
+			cardsInArea.Add(card);
+			_player.normalRound(_cells, _startingCardValue, card);
+			botsRounds();
 		}
-
-
-
 	}
 	public void onNewRoundButtonPressed()
 	{
@@ -219,10 +179,6 @@ public partial class Lorum : Control
 		VBoxContainer statCenter = GetNode<VBoxContainer>("StatCenter");
 		center.Show();
 		statCenter.Hide();
-		foreach (CardHolderBase item in _allPlayers)
-		{
-			item.UpdateLabel();
-		}
 		startGame();
 	}
 
@@ -238,7 +194,7 @@ public partial class Lorum : Control
 			_allPlayers[i].onLose();
 
 		}
-		_allPlayers[winnerid].onWin(sumPoint);
+		_allPlayers[winnerid].onWin();
 
 		if (isOver())
 		{
@@ -283,27 +239,8 @@ public partial class Lorum : Control
 	}
 	private bool isOver()
 	{
-		
-		if (_roundsUntilEnd == -1)
-		{
-			foreach (CardHolderBase item in _allPlayers)
-			{
-				if (item.getScore() <= 0)
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-		else
-		{
-			_roundsUntilEnd--;
-			if (_roundsUntilEnd == 0)
-			{
-				return true;
-			}
-			return false;
-		}
+
+		return false;
 	}
 	private void ToggleNewRoundButton(bool enabled)
 	{
@@ -316,6 +253,78 @@ public partial class Lorum : Control
 		exitButton.Visible = enabled;
 	}
 
+	private void roundEnd()
+	{
+		CardHolderBase roundWinner = null;
+		GD.Print("WHO STARTED: " + _whoStarted);
+		var starterCardValue = cardsInArea.First().getValue();
+		for (int i = 0; i < cardsInArea.Count; i++)
+		{
+			CardBase card = cardsInArea[i];
+			if (isSameType(card.getValue(), starterCardValue) || isVII(card.getValue()))
+			{
+				GD.Print("kezdolap: " + starterCardValue + " megfelel: " + card.getValue());
+				GD.Print("WHO STARTED SZAMOLAS: " + (_whoStarted + i) % 4);
+				roundWinner = _allPlayers[(_whoStarted + i) % 4];
+			}
+		}
+		roundWinner.takenCards.AddRange(cardsInArea);
+		cardsInArea.Clear();
+		GD.Print("NYERTES: " + roundWinner.getName());
+		roundNew(roundWinner);
+
+	}
+	private void roundNew(CardHolderBase starts)
+	{
+		_startingValueLabel.removeText();
+		_startingCardValue = -1;
+
+		foreach (Cell item in _cells)
+		{
+			item.resetCell();
+		}
+
+		foreach (var p in _allPlayers)
+		{
+			p.newRoundDeal();
+		}
+
+		foreach (PlayerCard item in _player.getList())
+		{
+
+			item.CardClicked -= OnPlayerCardClicked;
+			item.CardClicked += OnPlayerCardClicked;
+		}
+		_player.disableCards();
+		_whoStarted = starts.Id;
+		if (starts is Player player)
+		{
+			GD.Print("player kezd");
+			player.enableCards();
+		}
+		else if (starts is Bot bot)
+		{
+
+			GD.Print(bot.Name + " kezd");
+			CardBase selectedCard = bot.startRound(ref _startingCardValue);
+			cardsInArea.Add(selectedCard);
+			_startingValueLabel.setText(ref _startingCardValue);
+			botsRounds(bot.Id - 1);
+		}
+
+	}
+
+	private bool isSameType(int value, int startingCardValue)
+	{
+		return (value % 10) == (startingCardValue % 10);
+
+	}
+	private bool isVII(int value)
+	{
+		if (value % 10 == 5) return true;
+		else return false;
+	}
+
 
 	private async void botsRounds(int fromWho = -1)
 	{
@@ -323,27 +332,27 @@ public partial class Lorum : Control
 		while (fromWho < 3)
 		{
 			await ToSignal(GetTree().CreateTimer(1.4f), "timeout");
-			GD.Print(fromWho + 1 + ". bot");
-			if (bots[fromWho].normalRound(cells, startingCardValue) == 0)
+			if (StartingPlayer.Equals(_bots[fromWho]))
 			{
-				onWin(fromWho + 1);
+				roundEnd();
 				return;
 			}
+			GD.Print(fromWho + 1 + ". bot");
+
+			cardsInArea.Add(_bots[fromWho].normalRound(_startingCardValue));
 			fromWho++;
 
 		}
 		await ToSignal(GetTree().CreateTimer(1.2f), "timeout");
-		playerRound();
+		if(StartingPlayer.Equals(_player))
+			roundEnd();
+		else playerRound();
 	}
 	private void playerRound()
 	{
 		GD.Print("player jon");
-		if (!_player.canPlaceCard(cells, startingCardValue))
-		{
-			GD.Print("Player passz");
-			botsRounds();
-		}
-		else _player.enableCards();
+
+		_player.enableCards();
 	}
 
 
@@ -351,18 +360,19 @@ public partial class Lorum : Control
 	private async void startGame()
 	{
 
-		List<int> usedRandoms = new List<int>();
-		startingValueLabel.removeText();
-		startingCardValue = -1;
-		foreach (Cell item in cells)
+
+		_startingValueLabel.removeText();
+		_startingCardValue = -1;
+		foreach (Cell item in _cells)
 		{
 			item.resetCell();
 		}
 
+
 		foreach (CardHolderBase player in _allPlayers)
 		{
 			player.resetState();
-			player.deal(usedRandoms, cardDatas);
+			player.deal();
 		}
 		_player.disableCards();
 
@@ -372,32 +382,26 @@ public partial class Lorum : Control
 			item.CardClicked += OnPlayerCardClicked;
 		}
 
-		int whoStarts;
-		if (whoStarted == -1)
-		{
-			Random random = new Random();
-			whoStarts = random.Next(0, 4);
-		}
-		else
-		{
-			whoStarts = whoStarted + 1;
-			if (whoStarts == 4) whoStarts = 0;
-		}
-		whoStarted = whoStarts;
+
+		Random random = new Random();
+		_whoStarted = random.Next(0, 4);
+		_whoStarted=0;
+
 
 		await ToSignal(GetTree().CreateTimer(1f), "timeout");
 
-		if (whoStarts == 0)
+		if (_whoStarted == 0)
 		{
 			GD.Print("player kezd");
 			_player.enableCards();
 		}
 		else
 		{
-			GD.Print(whoStarts + ". bot kezd");
-			bots[whoStarts - 1].startRound(cells, ref startingCardValue);
-			startingValueLabel.setText(ref startingCardValue);
-			botsRounds(whoStarts - 1);
+			GD.Print(_whoStarted + ". bot kezd");
+			CardBase selectedCard = _bots[_whoStarted - 1].startRound(ref _startingCardValue);
+			cardsInArea.Add(selectedCard);
+			_startingValueLabel.setText(ref _startingCardValue);
+			botsRounds(_whoStarted - 1);
 		}
 
 	}

@@ -1,7 +1,9 @@
 using Godot;
 using System;
 
+namespace lorum;
 [GlobalClass]
+
 public partial class Pass : TextureRect
 {
 

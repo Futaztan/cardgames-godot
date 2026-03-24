@@ -1,0 +1,287 @@
+[gd_scene load_steps=12 format=3 uid="uid://b716s0gf2mdb6"]
+
+[ext_resource type="Script" uid="uid://b46c2u1ifs1fs" path="res://Zsirozas/Zsir.cs" id="1_c2jhi"]
+[ext_resource type="Texture2D" uid="uid://c8m2xjn5wbqec" path="res://Assets/Other/background.png" id="2_5csyj"]
+[ext_resource type="Script" uid="uid://dq7ddyi8olsad" path="res://Lorum/Scripts/UI/TestButton.cs" id="3_g6p63"]
+[ext_resource type="Script" uid="uid://c6ij705l8dihu" path="res://Lorum/Scripts/UI/StartingCardLabel.cs" id="4_7ymh8"]
+[ext_resource type="Texture2D" uid="uid://ds0hxesnfrjra" path="res://Assets/Cards/back.png" id="5_d47dr"]
+[ext_resource type="Texture2D" uid="uid://dehvp7i2eh3yn" path="res://Assets/Other/border.png" id="5_hoofe"]
+[ext_resource type="Script" uid="uid://cx6ld5tp8qh52" path="res://Lorum/Scripts/UI/Cell.cs" id="6_b3bc4"]
+[ext_resource type="Script" uid="uid://ch4xiqg7yxp8y" path="res://Lorum/Scripts/UI/CardContainer.cs" id="7_6vt5t"]
+[ext_resource type="PackedScene" uid="uid://51u33bf5tmm5" path="res://Lorum/Scenes/BackCard_Rotated.tscn" id="8_52yk3"]
+[ext_resource type="PackedScene" uid="uid://do2ui3awxrx8q" path="res://Lorum/Scenes/BackCard.tscn" id="9_gxf5a"]
+[ext_resource type="PackedScene" uid="uid://b2ipa76x4ms5a" path="res://Lorum/Scenes/PlayerCard.tscn" id="10_2xth3"]
+
+[node name="Zsir" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_c2jhi")
+
+[node name="BackGround" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_5csyj")
+metadata/_edit_lock_ = true
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -221.0
+offset_top = -35.0
+offset_right = -73.0
+offset_bottom = 32.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "TETS BUTTON"
+flat = true
+script = ExtResource("3_g6p63")
+
+[node name="StatCenter" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -221.5
+offset_top = -353.5
+offset_right = 221.5
+offset_bottom = 139.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="WinLabel" type="RichTextLabel" parent="StatCenter"]
+custom_minimum_size = Vector2(100, 500)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 40
+bbcode_enabled = true
+text = "TESZT
+"
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Center" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -221.5
+offset_top = -353.5
+offset_right = 221.5
+offset_bottom = 139.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Center"]
+layout_mode = 2
+alignment = 1
+
+[node name="StartingCardLabel" type="RichTextLabel" parent="Center/HBoxContainer"]
+custom_minimum_size = Vector2(300, 20)
+layout_mode = 2
+bbcode_enabled = true
+text = "TESZT"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("4_7ymh8")
+metadata/_custom_type_script = "uid://c6ij705l8dihu"
+
+[node name="HBoxContainer1" type="HBoxContainer" parent="Center"]
+layout_mode = 2
+alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="CardDeck" type="TextureRect" parent="Center/HBoxContainer1"]
+custom_minimum_size = Vector2(150, 220)
+layout_mode = 2
+texture = ExtResource("5_d47dr")
+expand_mode = 3
+script = ExtResource("6_b3bc4")
+originalTexture = ExtResource("5_hoofe")
+metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
+
+[node name="Button" type="Button" parent="Center/HBoxContainer1/CardDeck"]
+layout_mode = 0
+offset_left = 139.388
+offset_top = -170.619
+offset_right = 147.388
+offset_bottom = -162.619
+text = "asdqwdwadawd"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Center"]
+layout_mode = 2
+alignment = 1
+
+[node name="GameArea" type="TextureRect" parent="Center/HBoxContainer2"]
+custom_minimum_size = Vector2(160, 264)
+layout_mode = 2
+texture = ExtResource("5_hoofe")
+expand_mode = 5
+stretch_mode = 6
+script = ExtResource("6_b3bc4")
+originalTexture = ExtResource("5_hoofe")
+metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
+
+[node name="BOT1" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = -30.0
+offset_top = 300.0
+offset_right = 45.0
+offset_bottom = -714.0
+grow_vertical = 2
+alignment = 1
+script = ExtResource("7_6vt5t")
+CardScene = ExtResource("8_52yk3")
+
+[node name="Back_Card_Rotated" parent="BOT1" instance=ExtResource("8_52yk3")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated2" parent="BOT1" instance=ExtResource("8_52yk3")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated3" parent="BOT1" instance=ExtResource("8_52yk3")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated4" parent="BOT1" instance=ExtResource("8_52yk3")]
+visible = false
+layout_mode = 2
+
+[node name="BOT2" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -75.0
+offset_bottom = 80.0
+grow_horizontal = 2
+alignment = 1
+script = ExtResource("7_6vt5t")
+CardScene = ExtResource("9_gxf5a")
+metadata/_custom_type_script = "uid://ch4xiqg7yxp8y"
+
+[node name="Back_Card" parent="BOT2" instance=ExtResource("9_gxf5a")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card2" parent="BOT2" instance=ExtResource("9_gxf5a")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card3" parent="BOT2" instance=ExtResource("9_gxf5a")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card4" parent="BOT2" instance=ExtResource("9_gxf5a")]
+visible = false
+layout_mode = 2
+
+[node name="BOT3" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -74.0
+offset_top = 300.0
+offset_right = 1.0
+offset_bottom = -714.0
+grow_horizontal = 0
+grow_vertical = 2
+pivot_offset = Vector2(75, 0)
+alignment = 1
+script = ExtResource("7_6vt5t")
+CardScene = ExtResource("8_52yk3")
+
+[node name="Back_Card_Rotated" parent="BOT3" instance=ExtResource("8_52yk3")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated2" parent="BOT3" instance=ExtResource("8_52yk3")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated3" parent="BOT3" instance=ExtResource("8_52yk3")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated4" parent="BOT3" instance=ExtResource("8_52yk3")]
+visible = false
+layout_mode = 2
+
+[node name="PLAYER" type="ScrollContainer" parent="."]
+clip_contents = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 37.0
+offset_top = -313.0
+offset_right = -29.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 0
+follow_focus = true
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PLAYER"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 10
+alignment = 1
+script = ExtResource("7_6vt5t")
+CardScene = ExtResource("10_2xth3")
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -400.0
+offset_bottom = -346.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="ExitButton" type="Button" parent="ButtonsContainer"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 33
+text = "Kilépés a menübe"
+
+[node name="NewRoundButton" type="Button" parent="ButtonsContainer"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 33
+text = "Indulhat az új kör!"
+
+[connection signal="pressed" from="Button" to="." method="onTestButtonPressed"]
+[connection signal="pressed" from="ButtonsContainer/ExitButton" to="." method="onExitButtonPressed"]
+[connection signal="pressed" from="ButtonsContainer/NewRoundButton" to="." method="onNewRoundButtonPressed"]
