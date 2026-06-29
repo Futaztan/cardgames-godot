@@ -4,52 +4,54 @@ using System.Collections.Generic;
 
 namespace zsir;
 
-public partial class Player : CardHolderBase
+public partial class Player : EntityBase
 {
-	public Player(string name,int id, int score, CardContainer container, Cell area) : base(name,id, score, container, area) { disableCards(); }
+	public Player(string name,int id, CardContainer container, Cell area) : base(name,id, container, area) { DisableCards(); }
 
-
-
-
-	public List<CardBase> getList()
+	public void StartRound(List<Cell> cells, ref int startingCardValue, PlayerCard clickedCard)
 	{
-		return _cardNodes;
-	}
-
-	public void startRound(List<Cell> cells, ref int startingCardValue, PlayerCard clickedCard)
-	{
-		disableCards();
+		DisableCards();
 		int value = clickedCard.getValue();
 		Texture2D texture = clickedCard.getTexture();
 
 
-		clickedCard.Animate(_name, gameArea, () =>
+		clickedCard.Animate(Name, GameArea, () =>
 			{
-				gameArea.setDatas(value, texture);
-				_cardNodes.Remove(clickedCard);
+				GameArea.setDatas(value, texture);
+				CardsInHands.Remove(clickedCard);
 				clickedCard.QueueFree();
 			});
 		startingCardValue = value;
 	}
-	internal void enableCards()
+	public void EnableCards()
 	{
-		foreach (PlayerCard card in _cardNodes) { card.enableCard(); }
+		foreach (PlayerCard card in CardsInHands) { card.enableCard(); }
 	}
-	internal void disableCards()
+	public void DisableCards()
 	{
-		foreach (PlayerCard card in _cardNodes) { card.disableCard(); }
+		foreach (PlayerCard card in CardsInHands) { card.disableCard(); }
 	}
 
-	public void normalRound(List<Cell> cells, int startingCardValue, PlayerCard clickedCard)
+	public bool IsHavePlayableCard(int startValue)
+	{
+		foreach (var card in CardsInHands)
+		{
+			if(IsSameType(card.getValue(),startValue) || IsVII(card.getValue())) return true;
+		}
+
+		return false;
+	}
+
+	public void NormalRound(List<Cell> cells, int startingCardValue, PlayerCard clickedCard)
 	{
 		int value = clickedCard.getValue();
 		Texture2D texture = clickedCard.getTexture();
 
-		disableCards();
-		clickedCard.Animate(_name, gameArea, () =>
+		DisableCards();
+		clickedCard.Animate(Name, GameArea, () =>
 		{
-			gameArea.setDatas(value, texture);
-			_cardNodes.Remove(clickedCard);
+			GameArea.setDatas(value, texture);
+			CardsInHands.Remove(clickedCard);
 			clickedCard.QueueFree();
 		});
 	}
