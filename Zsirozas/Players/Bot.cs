@@ -6,7 +6,7 @@ namespace zsir;
 
 public partial class Bot : EntityBase
 {
-    public Bot(string name, int id, CardContainer container, Cell area) : base(name, id, container, area)
+    public Bot(string name, int id, CardContainer container) : base(name, id, container)
     {
     }
 
@@ -22,9 +22,9 @@ public partial class Bot : EntityBase
         BackCard playedCard = (BackCard)CardsInHands[whichCard];
 
 
-        playedCard.Animate(Name, GameArea, () =>
+        playedCard.Animate(Name, Zsir.GameAreaCell, () =>
         {
-            GameArea.setDatas(value, texture);
+            Zsir.GameAreaCell.setDatas(value, texture);
             CardsInHands.Remove(playedCard);
             playedCard.deleteCard();
         });
@@ -47,9 +47,9 @@ public partial class Bot : EntityBase
                 BackCard playedCard = (BackCard)CardsInHands[i];
 
 
-                playedCard.Animate(Name, GameArea, () =>
+                playedCard.Animate(Name, Zsir.GameAreaCell, () =>
                 {
-                    GameArea.setDatas(value, texture);
+                    Zsir.GameAreaCell.setDatas(value, texture);
                     CardsInHands.Remove(playedCard);
                     playedCard.deleteCard();
                 });
@@ -68,9 +68,9 @@ public partial class Bot : EntityBase
             int val = CardsInHands[randomi].getValue();
             Texture2D text = CardsInHands[randomi].getTexture();
 
-            selectedCard.Animate(Name, GameArea, () =>
+            selectedCard.Animate(Name,  Zsir.GameAreaCell, () =>
             {
-                GameArea.setDatas(val, text);
+                Zsir.GameAreaCell.setDatas(val, text);
                 CardsInHands.Remove(selectedCard);
                 selectedCard.deleteCard();
             });

@@ -11,6 +11,7 @@ public partial class Lorum : Control
 	private Player _player;
 	private List<Bot> bots;
 	private int startingCardValue; //maradékos osztás 10
+	private int StartingCardValueMod => startingCardValue % 10;
 	private List<Cell> cells = new List<Cell>();
 	private StartingCardLabel startingValueLabel;
 	public static Pass passIcon;
@@ -193,7 +194,7 @@ public partial class Lorum : Control
 		if (startingCardValue == -1)
 		{
 			_player.startRound(cells, ref startingCardValue, card);
-			startingValueLabel.setText(ref startingCardValue);
+			startingValueLabel.setText(startingCardValue);
 
 			botsRounds();
 			return;
@@ -396,7 +397,7 @@ public partial class Lorum : Control
 		{
 			GD.Print(whoStarts + ". bot kezd");
 			bots[whoStarts - 1].startRound(cells, ref startingCardValue);
-			startingValueLabel.setText(ref startingCardValue);
+			startingValueLabel.setText(startingCardValue);
 			botsRounds(whoStarts - 1);
 		}
 

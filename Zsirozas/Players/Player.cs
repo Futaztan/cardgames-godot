@@ -6,18 +6,18 @@ namespace zsir;
 
 public partial class Player : EntityBase
 {
-	public Player(string name,int id, CardContainer container, Cell area) : base(name,id, container, area) { DisableCards(); }
+	public Player(string name,int id, CardContainer container) : base(name,id, container) { DisableCards(); }
 
-	public void StartRound(List<Cell> cells, ref int startingCardValue, PlayerCard clickedCard)
+	public void StartRound( ref int startingCardValue, PlayerCard clickedCard)
 	{
 		DisableCards();
 		int value = clickedCard.getValue();
 		Texture2D texture = clickedCard.getTexture();
 
 
-		clickedCard.Animate(Name, GameArea, () =>
+		clickedCard.Animate(Name,  Zsir.GameAreaCell, () =>
 			{
-				GameArea.setDatas(value, texture);
+				Zsir.GameAreaCell.setDatas(value, texture);
 				CardsInHands.Remove(clickedCard);
 				clickedCard.QueueFree();
 			});
@@ -42,15 +42,15 @@ public partial class Player : EntityBase
 		return false;
 	}
 
-	public void NormalRound(List<Cell> cells, int startingCardValue, PlayerCard clickedCard)
+	public void NormalRound(PlayerCard clickedCard)
 	{
 		int value = clickedCard.getValue();
 		Texture2D texture = clickedCard.getTexture();
 
 		DisableCards();
-		clickedCard.Animate(Name, GameArea, () =>
+		clickedCard.Animate(Name,  Zsir.GameAreaCell, () =>
 		{
-			GameArea.setDatas(value, texture);
+			Zsir.GameAreaCell.setDatas(value, texture);
 			CardsInHands.Remove(clickedCard);
 			clickedCard.QueueFree();
 		});

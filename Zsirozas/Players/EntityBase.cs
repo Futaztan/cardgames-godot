@@ -7,10 +7,11 @@ namespace zsir;
 
 public partial class EntityBase : Node
 {
-    public List<CardBase> CardsInHands = new();
+    public List<CardBase> CardsInHands {get; private set;} = new();
     public int Id { get; }
     public new string Name { get; }
     public List<CardBase> CollectedCards = new List<CardBase>();
+    private CardContainer _cardContainer;
 
     public int Score
     {
@@ -29,18 +30,16 @@ public partial class EntityBase : Node
         }
     }
 
-    private CardContainer _cardContainer;
-    protected Cell GameArea;
-   
+  
 
 
-    protected EntityBase(string name, int id, CardContainer container, Cell area)
+    protected EntityBase(string name, int id, CardContainer container)
     {
         Name = name;
         Id = id;
 
         _cardContainer = container;
-        GameArea = area;
+      
     }
 
 
@@ -48,10 +47,10 @@ public partial class EntityBase : Node
     {
         return (value % 10) == (startingCardValue % 10);
     }
+
     protected bool IsVII(int value)
     {
-        if (value % 10 == 5) return true;
-        return false;
+        return (value % 10 == 5);
     }
 
 
@@ -63,20 +62,26 @@ public partial class EntityBase : Node
         {
             item.QueueFree();
         }
-        
-  
     }
 
-    public void NewRoundDeal(ZsirGameLogic gameLogic)
+    public void NewRoundDeal(ZsirGameLogic gameLogic,int maxCardNumForPlayer)
     {
-        int rnd = gameLogic.DrawCardIndex();
-        if (rnd == -1) return; // Ha elfogytak a lapok
+        int missingCards = 4 - CardsInHands.Count;
+        
+        int cardsToPull = Math.Min(maxCardNumForPlayer, missingCards);
 
-        CardBase newcard = (CardBase)_cardContainer.CardScene.Instantiate();
-        _cardContainer.AddChild(newcard);
-        CardsInHands.Add(newcard);
-        CardsInHands.Last().setDatas(CardDatabase.CardDatas[rnd].Item1, CardDatabase.CardDatas[rnd].Item2);
-        if(CardsInHands.Count < 4) NewRoundDeal(gameLogic);
+        for (int i = 0; i < cardsToPull; i++)
+        {
+            int rnd = gameLogic.DrawCardIndex();
+            if (rnd == -1) throw new Exception(); // Ha elfogytak a lapok
+
+            CardBase newcard = (CardBase)_cardContainer.CardScene.Instantiate();
+            _cardContainer.AddChild(newcard);
+            CardsInHands.Add(newcard);
+            CardsInHands.Last().setDatas(CardDatabase.CardDatas[rnd].Item1, CardDatabase.CardDatas[rnd].Item2);
+        }
+
+        //if (CardsInHands.Count < 4) NewRoundDeal(gameLogic);
     }
 
     public void NewGameDeal(ZsirGameLogic gameLogic)
@@ -103,6 +108,5 @@ public partial class EntityBase : Node
             GD.Print(item.getValue() + " " + item.getTexture());
             _cardContainer.AddChild(item);
         }
-        
     }
 }

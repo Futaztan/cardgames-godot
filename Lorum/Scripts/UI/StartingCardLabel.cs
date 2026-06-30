@@ -24,12 +24,11 @@ public partial class StartingCardLabel : RichTextLabel
 		"IX",
 		"X"
 	};
-	public void setText(ref int startingCardValue)
+	public void setText(int startingCardValue)
 	{
 		int path = whichCell(startingCardValue);
-		startingCardValue = startingCardValue % 10;
 		string image = "[img]" + _imagePaths[path] + "[/img]";
-		string txt = _values[startingCardValue - 1];
+		string txt = _values[(startingCardValue%10) - 1];
 		this.Text = "KEZDŐ LAP\n" +image + " " + txt;
 	}
 	public void removeText()
