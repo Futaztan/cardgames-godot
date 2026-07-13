@@ -29,9 +29,7 @@ public partial class EntityBase : Node
             return score;
         }
     }
-
-  
-
+    
 
     protected EntityBase(string name, int id, CardContainer container)
     {

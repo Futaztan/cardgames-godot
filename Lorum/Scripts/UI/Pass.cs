@@ -9,7 +9,7 @@ public partial class Pass : TextureRect
 
 	public void moveTo(Vector2 pos)
 	{
-		Lorum.passIcon.SetPosition(pos);
+		Lorum.PassIcon.SetPosition(pos);
 		this.Visible = true;
 		animate();
 		//this.Visible = false;

@@ -107,9 +107,8 @@ public class ZsirGameLogic
         CardsInArea.Add(card);
         if (StartingCardValue == -1)
         {
-            int startingValue = StartingCardValue;
-            HumanPlayer.StartRound(ref startingValue, card);
-            StartingCardValue = startingValue;
+            StartingCardValue =  HumanPlayer.StartRound(card);
+        
             OnRoundStarted?.Invoke(StartingCardValue);
         }
         else

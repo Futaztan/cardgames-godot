@@ -8,7 +8,7 @@ public partial class Player : EntityBase
 {
 	public Player(string name,int id, CardContainer container) : base(name,id, container) { DisableCards(); }
 
-	public void StartRound( ref int startingCardValue, PlayerCard clickedCard)
+	public int StartRound( PlayerCard clickedCard)
 	{
 		DisableCards();
 		int value = clickedCard.getValue();
@@ -21,7 +21,7 @@ public partial class Player : EntityBase
 				CardsInHands.Remove(clickedCard);
 				clickedCard.QueueFree();
 			});
-		startingCardValue = value;
+		return value;
 	}
 	public void EnableCards()
 	{
