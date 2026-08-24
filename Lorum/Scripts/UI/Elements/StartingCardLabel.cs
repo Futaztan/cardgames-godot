@@ -1,8 +1,9 @@
-using Godot;
 using System;
 using System.Collections.Generic;
+using cardgames.Lorum.Scripts.Players;
+using Godot;
 
-[GlobalClass]
+namespace cardgames.Lorum.Scripts.UI.Elements;
 public partial class StartingCardLabel : RichTextLabel
 {
 
@@ -29,7 +30,7 @@ public partial class StartingCardLabel : RichTextLabel
 		int path = whichCell(startingCardValue);
 		string image = "[img]" + _imagePaths[path] + "[/img]";
 		string txt = _values[(startingCardValue%10) - 1];
-		this.Text = "KEZDŐ LAP\n" +image + " " + txt;
+		this.Text = image + " " + txt;
 	}
 	public void removeText()
 	{

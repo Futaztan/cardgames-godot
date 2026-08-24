@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using cardgames.Zsirozas;
+using cardgames.Zsirozas.Players;
 using Godot;
 
 namespace zsir;
@@ -12,21 +14,32 @@ public class ZsirGameLogic
     public List<Bot> Bots { get; private set; } = new();
     public Player HumanPlayer { get; private set; }
     public List<CardBase> CardsInArea { get; } = new();
+    private Dealer _dealer;
+
+    private int _roundLength = 0;
 
     public int WhoStarted { get; set; } = -1;
     public int StartingCardValueMod => StartingCardValue % 10;
-    public int StartingCardValue { get; set; } = -1;
+    public static int StartingCardValue { get; set; } = -1;
 
     public EntityBase StartingPlayer => AllPlayers[WhoStarted];
-    private List<int> _usedCardIndexes = new List<int>();
-    private int DeckCardCount => 32 - _usedCardIndexes.Count;
+    
 
-    public event Action<int> OnRoundStarted; // Ki kezd, mi a kezdő érték
+    public event Action<EntityBase, int> OnRoundStarted; // Ki kezd, mi a kezdő érték
     public event Action<EntityBase, CardBase> OnCardPlayed; // Ki rakott kártyát
     public event Action OnReset; // Ki rakott kártyát
-    public event Action<EntityBase> OnRoundEnded; // Ki vitte el a kört
+    public event Func<EntityBase, Task> OnRoundEnded; // Ki vitte el a kört
     public event Action<EntityBase, int> OnGameOver; // Győztes, Játékos helyezése
     public event Action OnPlayerTurnStarted; // Amikor a humán játékos következik
+
+    public ZsirGameLogic(Player player, List<Bot> bots)
+    {
+        HumanPlayer = player;
+        Bots = bots;
+        AllPlayers = new List<EntityBase> { player };
+        AllPlayers.AddRange(bots);
+        _dealer = new Dealer(AllPlayers);
+    }
 
     public EntityBase RoundWinner
     {
@@ -49,47 +62,17 @@ public class ZsirGameLogic
             return roundWinner;
         }
     }
-
-    public int DrawCardIndex()
+    public async void StartNewGame()
     {
-        if (_usedCardIndexes.Count >= 32) return -1; // Elfogyott a pakli
-        Random random = new();
-        int rnd = random.Next(0, 32);
-        while (_usedCardIndexes.Contains(rnd))
-        {
-            rnd = random.Next(0, 32);
-        }
-
-        _usedCardIndexes.Add(rnd);
-        return rnd;
-    }
-
-    public void SetupPlayers(Player player, List<Bot> bots)
-    {
-        HumanPlayer = player;
-        Bots = bots;
-        AllPlayers = new List<EntityBase> { player };
-        AllPlayers.AddRange(bots);
-    }
-
-    public void StartNewGame()
-    {
-        _usedCardIndexes.Clear();
-        ResetRoundState();
-
-        foreach (EntityBase player in AllPlayers)
-        {
-            player.ResetState();
-            player.NewGameDeal(this);
-        }
-
+        ResetGameState();
         OnReset?.Invoke();
-
+        AllPlayers.ForEach(player => player.ResetState());
+        await _dealer.DealCardsToPlayers(4);
+        HumanPlayer.DisableCards();
         WhoStarted = new Random().Next(0, 4);
         // WhoStarted = 1;
-
+        //Task.Delay(1300);
         GD.Print(StartingPlayer.Name + " kezd");
-
         if (WhoStarted == 0)
         {
             //OnRoundStarted?.Invoke(HumanPlayer, StartingCardValue);
@@ -105,15 +88,16 @@ public class ZsirGameLogic
     public void PlayHumanCard(PlayerCard card)
     {
         CardsInArea.Add(card);
+        _roundLength++;
         if (StartingCardValue == -1)
         {
-            StartingCardValue =  HumanPlayer.StartRound(card);
+            StartingCardValue =  HumanPlayer.PlayRound(card);
         
-            OnRoundStarted?.Invoke(StartingCardValue);
+            OnRoundStarted?.Invoke(HumanPlayer, StartingCardValue);
         }
         else
         {
-            HumanPlayer.NormalRound(card);
+            HumanPlayer.PlayRound(card);
         }
 
         NextPlayerLoop(0);
@@ -130,36 +114,37 @@ public class ZsirGameLogic
             if (StartingPlayer.Equals(Bots[botIdx]))
             {
                 if (RoundWinner.Equals(StartingPlayer))
-                    RoundEnd();
+                    await RoundEnd();
                 else
                 {
                     var card = PlayBotCard(botIdx, false);
-                    if (card is null) RoundEnd();
-                    else NextPlayerLoop(Bots[botIdx].Id);
+                    if (card is null) await RoundEnd();
+                    else await NextPlayerLoop(Bots[botIdx].Id);
                 }
 
                 return;
             }
-
-
             PlayBotCard(botIdx, true);
-
             botIdx++;
         }
 
         await Task.Delay(1400);
         if (StartingPlayer.Equals(HumanPlayer) &&
-            (!HumanPlayer.IsHavePlayableCard(StartingCardValue) || RoundWinner.Equals(HumanPlayer)))
+            (!HumanPlayer.DoHavePlayableCard() || RoundWinner.Equals(HumanPlayer)))
         {
-            RoundEnd();
+            await RoundEnd();
         }
         else OnPlayerTurnStarted?.Invoke();
     }
 
-    public void RoundEnd()
+    public async Task RoundEnd()
     {
         RoundWinner.CollectedCards.AddRange(CardsInArea);
         GD.Print("kör nyertes: " + RoundWinner.Name);
+        if (OnRoundEnded != null)
+        {
+             await OnRoundEnded(RoundWinner);
+        }
         if (IsGameOver())
         {
             var (winner, position) = GetGameResult();
@@ -168,15 +153,16 @@ public class ZsirGameLogic
         else StartNewRound(RoundWinner);
     }
 
-    private void StartNewRound(EntityBase starterEntity)
+    private async void StartNewRound(EntityBase starterEntity)
     {
-        ResetRoundState();
-        int maxCardNumForPlayer = DeckCardCount / 4;
-        foreach (var p in AllPlayers) p.NewRoundDeal(this, maxCardNumForPlayer);
-
+      
         OnReset?.Invoke();
+        await _dealer.DealCardsToPlayers(_roundLength);
+        ResetRoundState();
+        HumanPlayer.DisableCards();
+        //foreach (var p in AllPlayers) p.NewRoundDeal(this, maxCardNumForPlayer);
         WhoStarted = starterEntity.Id;
-        if (starterEntity is Player)
+        if (starterEntity is cardgames.Zsirozas.Players.Player)
         {
             OnPlayerTurnStarted?.Invoke();
         }
@@ -197,7 +183,7 @@ public class ZsirGameLogic
             CardsInArea.Add(selectedCard);
 
             StartingCardValue = startingValue;
-            OnRoundStarted?.Invoke(StartingCardValue);
+            OnRoundStarted?.Invoke(Bots[botIdx], StartingCardValue);
             return selectedCard;
         }
         else
@@ -217,12 +203,13 @@ public class ZsirGameLogic
     public void ResetRoundState()
     {
         StartingCardValue = -1;
+        _roundLength = 0;
         CardsInArea.Clear();
     }
 
     public void ResetGameState()
     {
-        _usedCardIndexes.Clear();
+        _dealer.Reset();
         ResetRoundState();
     }
 

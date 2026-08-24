@@ -1,7 +1,6 @@
 using Godot;
-using System;
 
-namespace lorum;
+namespace cardgames.Lorum.Scripts.UI;
 [GlobalClass]
 
 public partial class Pass : TextureRect

@@ -1,16 +1,15 @@
-[gd_scene load_steps=12 format=3 uid="uid://3aq5ia7a6f64"]
+[gd_scene load_steps=11 format=3 uid="uid://3aq5ia7a6f64"]
 
-[ext_resource type="Script" uid="uid://b40kp5xrwfdjo" path="res://Lorum/Scripts/UI/Menus/Lorum.cs" id="1_hncss"]
-[ext_resource type="Texture2D" uid="uid://c8m2xjn5wbqec" path="res://Assets/Other/background.png" id="2_250ya"]
-[ext_resource type="Script" uid="uid://dq7ddyi8olsad" path="res://Lorum/Scripts/UI/TestButton.cs" id="3_cq4wh"]
-[ext_resource type="Script" uid="uid://c6ij705l8dihu" path="res://Lorum/Scripts/UI/StartingCardLabel.cs" id="4_rkm5x"]
-[ext_resource type="Texture2D" uid="uid://dehvp7i2eh3yn" path="res://Assets/Other/border.png" id="5_7f2td"]
-[ext_resource type="Script" uid="uid://cx6ld5tp8qh52" path="res://Lorum/Scripts/UI/Cell.cs" id="6_swsdj"]
-[ext_resource type="Script" uid="uid://ch4xiqg7yxp8y" path="res://Lorum/Scripts/UI/CardContainer.cs" id="7_uyjhh"]
-[ext_resource type="PackedScene" uid="uid://51u33bf5tmm5" path="res://Lorum/Scenes/BackCard_Rotated.tscn" id="8_udrva"]
-[ext_resource type="PackedScene" uid="uid://do2ui3awxrx8q" path="res://Lorum/Scenes/BackCard.tscn" id="9_ihx3a"]
-[ext_resource type="PackedScene" uid="uid://b2ipa76x4ms5a" path="res://Lorum/Scenes/PlayerCard.tscn" id="10_1boov"]
-[ext_resource type="PackedScene" uid="uid://c2qptobp872eb" path="res://Lorum/Scenes/Pass.tscn" id="11_usykt"]
+[ext_resource type="Script" uid="uid://b40kp5xrwfdjo" path="res://Lorum/Scripts/Lorum.cs" id="1_hncss"]
+[ext_resource type="Texture2D" uid="uid://d1grrihuqrf7f" path="res://Assets/Other/background.jpeg" id="2_j2a3j"]
+[ext_resource type="Script" uid="uid://dq7ddyi8olsad" path="res://Lorum/Scripts/UI/Elements/TestButton.cs" id="3_cq4wh"]
+[ext_resource type="Script" uid="uid://c6ij705l8dihu" path="res://Lorum/Scripts/UI/Elements/StartingCardLabel.cs" id="4_rkm5x"]
+[ext_resource type="Script" uid="uid://cx6ld5tp8qh52" path="res://Lorum/Scripts/UI/Elements/Cell.cs" id="6_swsdj"]
+[ext_resource type="Script" uid="uid://ch4xiqg7yxp8y" path="res://Lorum/Scripts/UI/Elements/CardContainer.cs" id="7_uyjhh"]
+[ext_resource type="PackedScene" uid="uid://51u33bf5tmm5" path="res://Lorum/Scenes/Cards/BackCard_Rotated.tscn" id="8_udrva"]
+[ext_resource type="PackedScene" uid="uid://do2ui3awxrx8q" path="res://Lorum/Scenes/Cards/BackCard.tscn" id="9_ihx3a"]
+[ext_resource type="PackedScene" uid="uid://b2ipa76x4ms5a" path="res://Lorum/Scenes/Cards/PlayerCard.tscn" id="10_1boov"]
+[ext_resource type="PackedScene" uid="uid://c2qptobp872eb" path="res://Lorum/Scenes/Utils/Pass.tscn" id="11_usykt"]
 
 [node name="Lorum" type="Control"]
 layout_mode = 3
@@ -28,7 +27,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_250ya")
+texture = ExtResource("2_j2a3j")
+expand_mode = 1
 metadata/_edit_lock_ = true
 
 [node name="Button" type="Button" parent="."]
@@ -114,21 +114,17 @@ metadata/_edit_lock_ = true
 [node name="Cell1" type="TextureRect" parent="Center/HBoxContainer1"]
 custom_minimum_size = Vector2(160, 264)
 layout_mode = 2
-texture = ExtResource("5_7f2td")
 expand_mode = 5
 stretch_mode = 6
 script = ExtResource("6_swsdj")
-originalTexture = ExtResource("5_7f2td")
 metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
 
 [node name="Cell2" type="TextureRect" parent="Center/HBoxContainer1"]
 custom_minimum_size = Vector2(160, 264)
 layout_mode = 2
-texture = ExtResource("5_7f2td")
 expand_mode = 3
 stretch_mode = 6
 script = ExtResource("6_swsdj")
-originalTexture = ExtResource("5_7f2td")
 metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Center"]
@@ -138,21 +134,17 @@ alignment = 1
 [node name="Cell3" type="TextureRect" parent="Center/HBoxContainer2"]
 custom_minimum_size = Vector2(160, 264)
 layout_mode = 2
-texture = ExtResource("5_7f2td")
 expand_mode = 5
 stretch_mode = 6
 script = ExtResource("6_swsdj")
-originalTexture = ExtResource("5_7f2td")
 metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
 
 [node name="Cell4" type="TextureRect" parent="Center/HBoxContainer2"]
 custom_minimum_size = Vector2(160, 264)
 layout_mode = 2
-texture = ExtResource("5_7f2td")
 expand_mode = 3
 stretch_mode = 6
 script = ExtResource("6_swsdj")
-originalTexture = ExtResource("5_7f2td")
 metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
 
 [node name="BOT1" type="VBoxContainer" parent="."]
@@ -312,7 +304,7 @@ vertical_scroll_mode = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PLAYER"]
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 3
 size_flags_vertical = 4
 theme_override_constants/separation = 10
 alignment = 1
@@ -347,6 +339,6 @@ text = "Indulhat az új kör!"
 visible = false
 layout_mode = 0
 
-[connection signal="pressed" from="Button" to="." method="onTestButtonPressed"]
-[connection signal="pressed" from="ButtonsContainer/ExitButton" to="." method="onExitButtonPressed"]
-[connection signal="pressed" from="ButtonsContainer/NewRoundButton" to="." method="onNewRoundButtonPressed"]
+[connection signal="pressed" from="Button" to="." method="OnTestButtonPressed"]
+[connection signal="pressed" from="ButtonsContainer/ExitButton" to="." method="OnExitButtonPressed"]
+[connection signal="pressed" from="ButtonsContainer/NewRoundButton" to="." method="OnNewRoundButtonPressed"]

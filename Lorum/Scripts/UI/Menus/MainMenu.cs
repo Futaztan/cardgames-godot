@@ -8,7 +8,7 @@ public partial class MainMenu : Control
 	{
 		//GetTree().ChangeSceneToFile("res://Scenes/lorum.tscn");
 		var menuResource = (PackedScene)ResourceLoader.Load("res://Lorum/Scenes/Menus/GameMenu.tscn");
-		var menuInstance = menuResource.Instantiate<GameMenu>();
+		var menuInstance = menuResource.Instantiate<cardgames.Lorum.Scripts.UI.Menus.GameMenu>();
 		//GetTree().Root.AddChild(menuInstance);
 		GetTree().ChangeSceneToFile("res://Lorum/Scenes/Menus/GameMenu.tscn");
 		//menuInstance.init(GameTypeEnum.LORUM);

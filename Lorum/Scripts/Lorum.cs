@@ -1,11 +1,11 @@
-using Godot;
-using System;
 using System.Collections.Generic;
-using cardgames.Lorum.Scripts;
 using cardgames.Lorum.Scripts.Cards;
 using cardgames.Lorum.Scripts.Players;
+using cardgames.Lorum.Scripts.UI;
+using cardgames.Lorum.Scripts.UI.Elements;
+using Godot;
 
-namespace lorum;
+namespace cardgames.Lorum.Scripts;
 
 public partial class Lorum : Control
 {
@@ -18,7 +18,7 @@ public partial class Lorum : Control
     private List<RichTextLabel> _pointLabels = new List<RichTextLabel>();
 
     //TODO diflabelek utan elbaszodik a label meret és nagyobb lesz,  ??? nem talaltam meg megint ezt
-
+    //TODO szépités
 
     /* 1. zold
      *  2. piros
@@ -82,7 +82,7 @@ public partial class Lorum : Control
 
         PassIcon = GetNode<Pass>("PassIcon");
         PassIcon.PivotOffset = PassIcon.Size * 0.5f;
-        _pointLabelScene = (PackedScene)GD.Load("res://Lorum/Scenes/PointLabel.tscn");
+        _pointLabelScene = (PackedScene)GD.Load("res://Lorum/Scenes/Utils/PointLabel.tscn");
 
         for (int i = 0; i < 4; i++)
         {
@@ -237,14 +237,14 @@ public partial class Lorum : Control
     public override void _Process(double delta)
     {
     }
-    public void onTestButtonPressed()
+    private void OnTestButtonPressed()
     {
         GD.Print("TEST PRESSED");
 
         QueueFree();
     }
 
-    public void OnExitButtonPressed()
+    private void OnExitButtonPressed()
     {
         GD.Print("EXIT");
         ToggleExitButton(false);

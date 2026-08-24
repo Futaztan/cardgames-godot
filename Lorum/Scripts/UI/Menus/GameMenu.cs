@@ -1,7 +1,6 @@
 using Godot;
-using System;
 
-namespace lorum;
+namespace cardgames.Lorum.Scripts.UI.Menus;
 public partial class GameMenu : Control
 {
 	//private Lorum gameInstance;
@@ -69,7 +68,7 @@ public partial class GameMenu : Control
 	public void OnStartButtonPressed()
 	{
 		PackedScene gameScene = (PackedScene)ResourceLoader.Load("res://Lorum/Scenes/Menus/Lorum.tscn");
-		Lorum gameInstance = gameScene.Instantiate<Lorum>();
+		Scripts.Lorum gameInstance = gameScene.Instantiate<Scripts.Lorum>();
 		int score = (int)GetNode<SpinBox>("PopupPanel/VBoxContainer/SpinBox").Value;
 		int index = GetNode<OptionButton>("PopupPanel/VBoxContainer/OptionButton").Selected;
 		gameInstance.init(score, index);
@@ -78,7 +77,7 @@ public partial class GameMenu : Control
 	}
 	public void OnExitButtonPressed()
     {
-        GetTree().ChangeSceneToFile("res://Lorum/Scenes/Menus/MainMenu.tscn");
+        GetTree().ChangeSceneToFile("res://Menu/MainMenu.tscn");
     }
 
 	public void OnOptionButtonPressed()

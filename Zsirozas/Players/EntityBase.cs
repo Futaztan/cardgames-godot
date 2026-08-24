@@ -5,13 +5,18 @@ using System.Linq;
 
 namespace zsir;
 
-public partial class EntityBase : Node
+public class EntityBase 
 {
-    public List<CardBase> CardsInHands {get; private set;} = new();
+    public List<CardBase> CardsInHands { get; private set; } = new();
     public int Id { get; }
-    public new string Name { get; }
+    public string Name { get; }
     public List<CardBase> CollectedCards = new List<CardBase>();
     private CardContainer _cardContainer;
+
+    public CardContainer CardContainer => _cardContainer;
+
+    private AudioStreamPlayer _soundPlayer;
+    private AudioStream _cardPlaceSound;
 
     public int Score
     {
@@ -29,17 +34,26 @@ public partial class EntityBase : Node
             return score;
         }
     }
-    
+
 
     protected EntityBase(string name, int id, CardContainer container)
     {
         Name = name;
         Id = id;
-
         _cardContainer = container;
-      
+        _cardPlaceSound = GD.Load<AudioStream>("res://Assets/Sound/card_placed.mp3");
+        
+        _soundPlayer = new AudioStreamPlayer();
+        _soundPlayer.Stream = _cardPlaceSound;
+        _cardContainer.AddChild(_soundPlayer);    
     }
 
+    protected void PlayCardSound()
+    {
+        if (_soundPlayer == null || _cardPlaceSound == null) return;
+        _soundPlayer.PitchScale = (float)GD.RandRange(0.95, 1.05);
+        _soundPlayer.Play();
+    }
 
     protected bool IsSameType(int value, int startingCardValue)
     {
@@ -56,42 +70,20 @@ public partial class EntityBase : Node
     {
         CardsInHands.Clear();
         CollectedCards.Clear();
-        foreach (CardBase item in _cardContainer.GetChildren())
+        foreach (CardBase item in _cardContainer.GetChildren().OfType<CardBase>())
         {
             item.QueueFree();
         }
     }
 
-    public void NewRoundDeal(ZsirGameLogic gameLogic,int maxCardNumForPlayer)
+    public void NewCardToHand(int random)
     {
-        int missingCards = 4 - CardsInHands.Count;
-        
-        int cardsToPull = Math.Min(maxCardNumForPlayer, missingCards);
-
-        for (int i = 0; i < cardsToPull; i++)
-        {
-            int rnd = gameLogic.DrawCardIndex();
-            if (rnd == -1) throw new Exception(); // Ha elfogytak a lapok
-
-            CardBase newcard = (CardBase)_cardContainer.CardScene.Instantiate();
-            _cardContainer.AddChild(newcard);
-            CardsInHands.Add(newcard);
-            CardsInHands.Last().setDatas(CardDatabase.CardDatas[rnd].Item1, CardDatabase.CardDatas[rnd].Item2);
-        }
-
-        //if (CardsInHands.Count < 4) NewRoundDeal(gameLogic);
-    }
-
-    public void NewGameDeal(ZsirGameLogic gameLogic)
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            CardBase newcard = (CardBase)_cardContainer.CardScene.Instantiate();
-            _cardContainer.AddChild(newcard);
-            CardsInHands.Add(newcard);
-            int rnd = gameLogic.DrawCardIndex();
-            CardsInHands[i].setDatas(CardDatabase.CardDatas[rnd].Item1, CardDatabase.CardDatas[rnd].Item2);
-        }
+        CardBase newcard = (CardBase)_cardContainer.CardScene.Instantiate();
+        _cardContainer.AddChild(newcard);
+        CardsInHands.Add(newcard);
+        // int rnd = gameLogic.DrawCardIndex();
+        CardsInHands.Last()
+            .setDatas(CardDatabase.CardDatas[random].Item1, CardDatabase.CardDatas[random].Item2); //TODO BUGOS E
 
         GD.Print("-------------");
         GD.Print(Name);

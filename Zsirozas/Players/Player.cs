@@ -1,58 +1,78 @@
-using Godot;
-using System;
 using System.Collections.Generic;
+using Godot;
+using zsir;
 
-namespace zsir;
+namespace cardgames.Zsirozas.Players;
 
-public partial class Player : EntityBase
+public class Player : EntityBase
 {
-	public Player(string name,int id, CardContainer container) : base(name,id, container) { DisableCards(); }
+    public Player(string name, int id, CardContainer container) : base(name, id, container)
+    {
+        DisableCards();
+    }
 
-	public int StartRound( PlayerCard clickedCard)
-	{
-		DisableCards();
-		int value = clickedCard.getValue();
-		Texture2D texture = clickedCard.getTexture();
+    public int PlayRound(PlayerCard clickedCard)
+    {
+        int value = clickedCard.getValue();
+        Texture2D texture = clickedCard.getTexture();
+        DisableCards();
+        PlayCardSound();
+        clickedCard.Animate(Name, Zsir.GameAreaCell, () =>
+        {
+            Zsir.GameAreaCell.setDatas(value, texture);
+            CardsInHands.Remove(clickedCard);
+            clickedCard.QueueFree();
+        });
+        return value;
+    }
+    /*public void NormalRound(PlayerCard clickedCard)
+    {
+        int value = clickedCard.getValue();
+        Texture2D texture = clickedCard.getTexture();
 
+        DisableCards();
+        clickedCard.Animate(Name, Zsir.GameAreaCell, () =>
+        {
+            Zsir.GameAreaCell.setDatas(value, texture);
+            CardsInHands.Remove(clickedCard);
+            clickedCard.QueueFree();
+        });
+    }*/
 
-		clickedCard.Animate(Name,  Zsir.GameAreaCell, () =>
-			{
-				Zsir.GameAreaCell.setDatas(value, texture);
-				CardsInHands.Remove(clickedCard);
-				clickedCard.QueueFree();
-			});
-		return value;
-	}
-	public void EnableCards()
-	{
-		foreach (PlayerCard card in CardsInHands) { card.enableCard(); }
-	}
-	public void DisableCards()
-	{
-		foreach (PlayerCard card in CardsInHands) { card.disableCard(); }
-	}
+    public void EnableAllCards()
+    {
+        foreach (PlayerCard card in CardsInHands)
+        {
+            card.enableCard();
+        }
+    }
 
-	public bool IsHavePlayableCard(int startValue)
-	{
-		foreach (var card in CardsInHands)
-		{
-			if(IsSameType(card.getValue(),startValue) || IsVII(card.getValue())) return true;
-		}
+    public void DisableCards()
+    {
+        foreach (PlayerCard card in CardsInHands)
+        {
+            card.disableCard();
+        }
+    }
 
-		return false;
-	}
+    public bool DoHavePlayableCard()
+    {
+        foreach (var card in CardsInHands)
+        {
+            if (IsSameType(card.getValue(), ZsirGameLogic.StartingCardValue) || IsVII(card.getValue())) return true;
+        }
 
-	public void NormalRound(PlayerCard clickedCard)
-	{
-		int value = clickedCard.getValue();
-		Texture2D texture = clickedCard.getTexture();
+        return false;
+    }
 
-		DisableCards();
-		clickedCard.Animate(Name,  Zsir.GameAreaCell, () =>
-		{
-			Zsir.GameAreaCell.setDatas(value, texture);
-			CardsInHands.Remove(clickedCard);
-			clickedCard.QueueFree();
-		});
-	}
+    public void EnablePlayableCards()
+    {
+        foreach (PlayerCard card in CardsInHands)
+        {
+            if (IsSameType(card.getValue(), ZsirGameLogic.StartingCardValue) || IsVII(card.getValue()))
+                card.enableCard();
+        }
+    }
+
+  
 }

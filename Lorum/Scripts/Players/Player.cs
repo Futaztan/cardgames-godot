@@ -1,9 +1,7 @@
-using Godot;
 using System.Collections.Generic;
-using cardgames.Lorum.Scripts;
-using cardgames.Lorum.Scripts.Players;
+using Godot;
 
-namespace lorum;
+namespace cardgames.Lorum.Scripts.Players;
 
 public partial class Player : EntityBase
 {

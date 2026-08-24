@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://jjf568swjvqo"]
 
 [ext_resource type="Script" uid="uid://6gxjsw32q4k6" path="res://Lorum/Scripts/UI/Menus/GameMenu.cs" id="1_aob7j"]
-[ext_resource type="Texture2D" uid="uid://c8m2xjn5wbqec" path="res://Assets/Other/background.png" id="2_0dgne"]
+[ext_resource type="Texture2D" uid="uid://d1grrihuqrf7f" path="res://Assets/Other/background.jpeg" id="2_aob7j"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sj0hj"]
 content_margin_left = 12.0
@@ -41,7 +41,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_0dgne")
+texture = ExtResource("2_aob7j")
+expand_mode = 1
 metadata/_edit_lock_ = true
 
 [node name="TitleLabel" type="RichTextLabel" parent="."]

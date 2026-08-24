@@ -1,10 +1,10 @@
-using Godot;
 using System;
-using System.Collections.Generic;
+using Godot;
+using zsir;
 
-namespace zsir;
+namespace cardgames.Zsirozas.Players;
 
-public partial class Bot : EntityBase
+public class Bot : EntityBase
 {
     public Bot(string name, int id, CardContainer container) : base(name, id, container)
     {
@@ -21,7 +21,7 @@ public partial class Bot : EntityBase
 
         BackCard playedCard = (BackCard)CardsInHands[whichCard];
 
-
+        PlayCardSound();
         playedCard.Animate(Name, Zsir.GameAreaCell, () =>
         {
             Zsir.GameAreaCell.setDatas(value, texture);
@@ -46,7 +46,7 @@ public partial class Bot : EntityBase
             {
                 BackCard playedCard = (BackCard)CardsInHands[i];
 
-
+                PlayCardSound();
                 playedCard.Animate(Name, Zsir.GameAreaCell, () =>
                 {
                     Zsir.GameAreaCell.setDatas(value, texture);
@@ -67,7 +67,7 @@ public partial class Bot : EntityBase
             BackCard selectedCard = (BackCard)CardsInHands[randomi];
             int val = CardsInHands[randomi].getValue();
             Texture2D text = CardsInHands[randomi].getTexture();
-
+            PlayCardSound();
             selectedCard.Animate(Name,  Zsir.GameAreaCell, () =>
             {
                 Zsir.GameAreaCell.setDatas(val, text);
