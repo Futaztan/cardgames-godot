@@ -1,7 +1,7 @@
 using Godot;
 using System;
 using System.Reflection.Metadata;
-
+/*
 public class Settings
 {
 	private GameTypeEnum gameType;
@@ -45,3 +45,4 @@ public class Settings
 		}
 	}
 }
+*/

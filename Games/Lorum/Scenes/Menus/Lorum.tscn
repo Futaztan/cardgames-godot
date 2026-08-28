@@ -1,0 +1,377 @@
+[gd_scene load_steps=17 format=3 uid="uid://3aq5ia7a6f64"]
+
+[ext_resource type="Script" uid="uid://b40kp5xrwfdjo" path="res://Games/Lorum/Scripts/Lorum.cs" id="1_hncss"]
+[ext_resource type="PackedScene" uid="uid://r6lsr54m66g8" path="res://Games/Lorum/Scenes/Utils/PointLabel.tscn" id="2_84vkp"]
+[ext_resource type="Texture2D" uid="uid://d1grrihuqrf7f" path="res://Assets/Other/background.jpeg" id="2_j2a3j"]
+[ext_resource type="PackedScene" uid="uid://bbr7bo160uoqf" path="res://Menu/MainMenu.tscn" id="3_hmj8e"]
+[ext_resource type="Script" uid="uid://c6ij705l8dihu" path="res://Games/Lorum/Scripts/UI/Elements/StartingCardLabel.cs" id="4_rkm5x"]
+[ext_resource type="FontFile" uid="uid://dutoijljh2rk0" path="res://Assets/Fonts/Montserrat-Regular.ttf" id="5_lcmnm"]
+[ext_resource type="Script" uid="uid://cx6ld5tp8qh52" path="res://Games/Lorum/Scripts/UI/Elements/Cell.cs" id="6_swsdj"]
+[ext_resource type="Script" uid="uid://ch4xiqg7yxp8y" path="res://Games/Lorum/Scripts/UI/Elements/CardContainer.cs" id="7_uyjhh"]
+[ext_resource type="PackedScene" uid="uid://51u33bf5tmm5" path="res://Games/Lorum/Scenes/Cards/BackCard_Rotated.tscn" id="8_udrva"]
+[ext_resource type="PackedScene" uid="uid://do2ui3awxrx8q" path="res://Games/Lorum/Scenes/Cards/BackCard.tscn" id="9_ihx3a"]
+[ext_resource type="PackedScene" uid="uid://b2ipa76x4ms5a" path="res://Games/Lorum/Scenes/Cards/PlayerCard.tscn" id="10_1boov"]
+[ext_resource type="Texture2D" uid="uid://ds0hxesnfrjra" path="res://Assets/Cards/back.png" id="11_ge1fm"]
+[ext_resource type="PackedScene" uid="uid://c2qptobp872eb" path="res://Games/Lorum/Scenes/Utils/Pass.tscn" id="11_usykt"]
+[ext_resource type="StyleBox" uid="uid://k28ubpjt1mv5" path="res://Assets/Themes/button_hover.tres" id="12_hdhpy"]
+[ext_resource type="StyleBox" uid="uid://ccbwuqog67eph" path="res://Assets/Themes/button_pressed.tres" id="13_7c4o1"]
+[ext_resource type="StyleBox" uid="uid://isefq5hdrpkw" path="res://Assets/Themes/button_normal.tres" id="14_j50xc"]
+
+[node name="Lorum" type="Control" node_paths=PackedStringArray("StartingValueLabel", "PassIcon")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hncss")
+StartingValueLabel = NodePath("CenterVBox/StartingInfoHBox/StartingCardLabel")
+PassIcon = NodePath("PassIcon")
+PointLabelScene = ExtResource("2_84vkp")
+MainMenuScene = ExtResource("3_hmj8e")
+
+[node name="BackGround" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_j2a3j")
+expand_mode = 1
+metadata/_edit_lock_ = true
+
+[node name="StatCenterVBox" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -221.5
+offset_top = -353.5
+offset_right = 221.5
+offset_bottom = 139.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="WinLabel" type="RichTextLabel" parent="StatCenterVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 500)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 40
+bbcode_enabled = true
+text = "TESZT
+"
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterVBox" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -221.5
+offset_top = -353.5
+offset_right = 221.5
+offset_bottom = 139.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="StartingInfoHBox" type="HBoxContainer" parent="CenterVBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="StartingCardLabel" type="RichTextLabel" parent="CenterVBox/StartingInfoHBox"]
+custom_minimum_size = Vector2(300, 20)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("5_lcmnm")
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+text = "KEZDOLAP"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("4_rkm5x")
+metadata/_custom_type_script = "uid://c6ij705l8dihu"
+
+[node name="GameAreaTopHBox" type="HBoxContainer" parent="CenterVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="Cell1" type="TextureRect" parent="CenterVBox/GameAreaTopHBox"]
+custom_minimum_size = Vector2(160, 264)
+layout_mode = 2
+expand_mode = 5
+stretch_mode = 6
+script = ExtResource("6_swsdj")
+metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
+
+[node name="Cell2" type="TextureRect" parent="CenterVBox/GameAreaTopHBox"]
+custom_minimum_size = Vector2(160, 264)
+layout_mode = 2
+expand_mode = 3
+stretch_mode = 6
+script = ExtResource("6_swsdj")
+metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
+
+[node name="GameAreaBottomHBox" type="HBoxContainer" parent="CenterVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+alignment = 1
+
+[node name="Cell3" type="TextureRect" parent="CenterVBox/GameAreaBottomHBox"]
+custom_minimum_size = Vector2(160, 264)
+layout_mode = 2
+expand_mode = 5
+stretch_mode = 6
+script = ExtResource("6_swsdj")
+metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
+
+[node name="Cell4" type="TextureRect" parent="CenterVBox/GameAreaBottomHBox"]
+custom_minimum_size = Vector2(160, 264)
+layout_mode = 2
+expand_mode = 3
+stretch_mode = 6
+script = ExtResource("6_swsdj")
+metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
+
+[node name="Bot1Container" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = -30.0
+offset_top = 300.0
+offset_right = 45.0
+offset_bottom = -714.0
+grow_vertical = 2
+alignment = 1
+script = ExtResource("7_uyjhh")
+CardScene = ExtResource("8_udrva")
+
+[node name="Back_Card_Rotated" parent="Bot1Container" instance=ExtResource("8_udrva")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated2" parent="Bot1Container" instance=ExtResource("8_udrva")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated3" parent="Bot1Container" instance=ExtResource("8_udrva")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated4" parent="Bot1Container" instance=ExtResource("8_udrva")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated5" parent="Bot1Container" instance=ExtResource("8_udrva")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated6" parent="Bot1Container" instance=ExtResource("8_udrva")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated7" parent="Bot1Container" instance=ExtResource("8_udrva")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated8" parent="Bot1Container" instance=ExtResource("8_udrva")]
+visible = false
+layout_mode = 2
+
+[node name="Bot2Container" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -75.0
+offset_bottom = 80.0
+grow_horizontal = 2
+alignment = 1
+script = ExtResource("7_uyjhh")
+CardScene = ExtResource("9_ihx3a")
+metadata/_custom_type_script = "uid://ch4xiqg7yxp8y"
+
+[node name="Back_Card" parent="Bot2Container" instance=ExtResource("9_ihx3a")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card2" parent="Bot2Container" instance=ExtResource("9_ihx3a")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card3" parent="Bot2Container" instance=ExtResource("9_ihx3a")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card4" parent="Bot2Container" instance=ExtResource("9_ihx3a")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card5" parent="Bot2Container" instance=ExtResource("9_ihx3a")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card6" parent="Bot2Container" instance=ExtResource("9_ihx3a")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card7" parent="Bot2Container" instance=ExtResource("9_ihx3a")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card8" parent="Bot2Container" instance=ExtResource("9_ihx3a")]
+visible = false
+layout_mode = 2
+
+[node name="Bot3Container" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -74.0
+offset_top = 300.0
+offset_right = 1.0
+offset_bottom = -714.0
+grow_horizontal = 0
+grow_vertical = 2
+pivot_offset = Vector2(75, 0)
+alignment = 1
+script = ExtResource("7_uyjhh")
+CardScene = ExtResource("8_udrva")
+
+[node name="Back_Card_Rotated" parent="Bot3Container" instance=ExtResource("8_udrva")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated2" parent="Bot3Container" instance=ExtResource("8_udrva")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated3" parent="Bot3Container" instance=ExtResource("8_udrva")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated4" parent="Bot3Container" instance=ExtResource("8_udrva")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated5" parent="Bot3Container" instance=ExtResource("8_udrva")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated6" parent="Bot3Container" instance=ExtResource("8_udrva")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated7" parent="Bot3Container" instance=ExtResource("8_udrva")]
+visible = false
+layout_mode = 2
+
+[node name="Back_Card_Rotated8" parent="Bot3Container" instance=ExtResource("8_udrva")]
+visible = false
+layout_mode = 2
+
+[node name="PlayerScrollContainer" type="ScrollContainer" parent="."]
+unique_name_in_owner = true
+clip_contents = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 37.0
+offset_top = -313.0
+offset_right = -29.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 0
+follow_focus = true
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
+
+[node name="PlayerHBox" type="HBoxContainer" parent="PlayerScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 10
+alignment = 1
+script = ExtResource("7_uyjhh")
+CardScene = ExtResource("10_1boov")
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -400.0
+offset_bottom = -346.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="ExitButton" type="Button" parent="ButtonsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_lcmnm")
+theme_override_font_sizes/font_size = 33
+theme_override_styles/hover = ExtResource("12_hdhpy")
+theme_override_styles/pressed = ExtResource("13_7c4o1")
+theme_override_styles/normal = ExtResource("14_j50xc")
+text = "Kilépés a menübe"
+
+[node name="NewRoundButton" type="Button" parent="ButtonsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_lcmnm")
+theme_override_font_sizes/font_size = 33
+theme_override_styles/hover = ExtResource("12_hdhpy")
+theme_override_styles/pressed = ExtResource("13_7c4o1")
+theme_override_styles/normal = ExtResource("14_j50xc")
+text = "Indulhat az új kör!"
+
+[node name="PassIcon" parent="." instance=ExtResource("11_usykt")]
+visible = false
+layout_mode = 0
+
+[node name="CardDeck" type="TextureRect" parent="."]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(160, 264)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_ge1fm")
+expand_mode = 4
+
+[connection signal="pressed" from="ButtonsContainer/ExitButton" to="." method="OnExitButtonPressed"]
+[connection signal="pressed" from="ButtonsContainer/NewRoundButton" to="." method="OnNewRoundButtonPressed"]
