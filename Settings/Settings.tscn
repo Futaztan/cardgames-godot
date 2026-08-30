@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://p7m01wx43dj1"]
+[gd_scene load_steps=12 format=3 uid="uid://p7m01wx43dj1"]
 
 [ext_resource type="Script" uid="uid://pj3ajg608pty" path="res://Settings/Scripts/Settings.cs" id="1_5p68s"]
 [ext_resource type="Texture2D" uid="uid://d1grrihuqrf7f" path="res://Assets/Other/background.jpeg" id="1_w44vd"]
@@ -13,6 +13,10 @@
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_okdie"]
 color = Color(1, 1, 1, 1)
 thickness = 2
+
+[sub_resource type="Theme" id="Theme_carl2"]
+default_font = ExtResource("2_b4apk")
+default_font_size = 24
 
 [node name="Settings" type="Control" node_paths=PackedStringArray("Global_Name", "Lorum_Points", "Lorum_GameLength")]
 layout_mode = 3
@@ -63,6 +67,8 @@ text = "Név"
 
 [node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_b4apk")
+theme_override_font_sizes/font_size = 24
 text = "Játékos"
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
@@ -90,7 +96,8 @@ text = "Pontok"
 [node name="SpinBox" type="SpinBox" parent="VBoxContainer"]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
-min_value = 10.0
+theme = SubResource("Theme_carl2")
+min_value = 1.0
 value = 10.0
 rounded = true
 
@@ -104,7 +111,8 @@ text = "Játék hossza"
 
 [node name="OptionButton" type="OptionButton" parent="VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
+theme_override_fonts/font = ExtResource("2_b4apk")
+theme_override_font_sizes/font_size = 24
 item_count = 4
 popup/item_0/text = "Amíg elfogy valakinek a pontja"
 popup/item_0/id = 0

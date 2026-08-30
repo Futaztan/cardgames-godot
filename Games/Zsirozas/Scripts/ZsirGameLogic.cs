@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using cardgames.Games.Zsirozas;
-using cardgames.Zsirozas.Players;
+using cardgames.Games.Zsirozas.Scripts.Cards;
+using cardgames.Games.Zsirozas.Scripts.Players;
 using Godot;
 using zsir;
 
-namespace cardgames.Zsirozas;
+namespace cardgames.Games.Zsirozas.Scripts;
 
 public class ZsirGameLogic
 {
@@ -18,6 +18,7 @@ public class ZsirGameLogic
     private Dealer _dealer;
 
     private int _roundLength = 0;
+    private const int WaitMillisAfterCardPlace = 400;
 
     private int WhoStarted { get; set; } = -1;
     public int StartingCardValueMod => StartingCardValue % 10;
@@ -63,7 +64,7 @@ public class ZsirGameLogic
             return roundWinner;
         }
     }
-    public async void StartNewGame()
+    public async Task StartNewGame()
     {
         ResetGameState();
         OnReset?.Invoke();
@@ -81,24 +82,26 @@ public class ZsirGameLogic
         }
         else
         {
-            PlayBotCard(WhoStarted - 1, true);
+            await PlayBotCard(WhoStarted - 1, true);
             NextPlayerLoop(WhoStarted);
         }
     }
 
-    public void PlayHumanCard(PlayerCard card)
+    public async Task PlayHumanCard(PlayerCard card)
     {
         CardsInArea.Add(card);
         _roundLength++;
         if (StartingCardValue == -1)
         {
-            StartingCardValue =  HumanPlayer.PlayRound(card);
+            StartingCardValue = await HumanPlayer.PlayRound(card);
         
             OnRoundStarted?.Invoke(HumanPlayer, StartingCardValue);
+            await Task.Delay(WaitMillisAfterCardPlace);
         }
         else
         {
-            HumanPlayer.PlayRound(card);
+            await HumanPlayer.PlayRound(card);
+            await Task.Delay(WaitMillisAfterCardPlace);
         }
 
         NextPlayerLoop(0);
@@ -111,25 +114,25 @@ public class ZsirGameLogic
 
         while (botIdx < 3)
         {
-            await Task.Delay(1400);
+            //await Task.Delay(1400);
             if (StartingPlayer.Equals(Bots[botIdx]))
             {
                 if (RoundWinner.Equals(StartingPlayer))
                     await RoundEnd();
                 else
                 {
-                    var card = PlayBotCard(botIdx, false);
-                    if (card is null) await RoundEnd();
+                    var card = await PlayBotCard(botIdx, false);
+                    if (card == null) await RoundEnd();
                     else await NextPlayerLoop(Bots[botIdx].Id);
                 }
 
                 return;
             }
-            PlayBotCard(botIdx, true);
+            await PlayBotCard(botIdx, true);
             botIdx++;
         }
 
-        await Task.Delay(1400);
+        //await Task.Delay(1400);
         if (StartingPlayer.Equals(HumanPlayer) &&
             (!HumanPlayer.DoHavePlayableCard() || RoundWinner.Equals(HumanPlayer)))
         {
@@ -169,34 +172,35 @@ public class ZsirGameLogic
         }
         else if (starterEntity is Bot bot)
         {
-            PlayBotCard(starterEntity.Id - 1, true);
+            await PlayBotCard(starterEntity.Id - 1, true);
             NextPlayerLoop(WhoStarted);
         }
     }
 
-    private CardBase PlayBotCard(int botIdx, bool mustPlay)
+    private async Task<CardBase> PlayBotCard(int botIdx, bool mustPlay)
     {
         if (StartingCardValue == -1)
         {
-            int startingValue = StartingCardValue;
-
-            CardBase selectedCard = Bots[botIdx].StartRound(ref startingValue);
-            CardsInArea.Add(selectedCard);
-
-            StartingCardValue = startingValue;
+            //CardBase selectedCard = await Bots[botIdx].StartRound();
+            CardBase selectedCard = Bots[botIdx].SelectPlayedCard(-1);
+            StartingCardValue = selectedCard.getValue();
             OnRoundStarted?.Invoke(Bots[botIdx], StartingCardValue);
+            CardsInArea.Add(selectedCard);
+            await Bots[botIdx].PlayCard(selectedCard);
+            //await Task.Delay(WaitMillisAfterCardPlace);
             return selectedCard;
         }
         else
         {
-            var botCard = Bots[botIdx].NormalRound(StartingCardValue, mustPlay);
+            CardBase botCard = await Bots[botIdx].NormalRound(StartingCardValue, mustPlay);
             if (botCard != null)
             {
                 GD.Print(Bots[botIdx].Name + " jön");
                 CardsInArea.Add(botCard);
-                OnCardPlayed?.Invoke(Bots[botIdx], botCard);
+                await Bots[botIdx].PlayCard(botCard);
+                //OnCardPlayed?.Invoke(Bots[botIdx], botCard); nincs hasznba jelenleg
             }
-
+            //await Task.Delay(WaitMillisAfterCardPlace);
             return botCard;
         }
     }

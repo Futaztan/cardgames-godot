@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using cardgames.Games.Lorum.Scripts.Cards;
 using cardgames.Lorum.Scripts.UI;
 using Godot;
 
@@ -17,19 +19,20 @@ public class Player : EntityBase
         return CardNodes;
     }
 
-    public int StartRound(PlayerCard clickedCard)
+    public async Task<int> StartRound(PlayerCard clickedCard)
     {
         DisableCards();
         int value = clickedCard.getValue();
         Texture2D texture = clickedCard.getTexture();
-        Cell cell = Games.Lorum.Scripts.Lorum.CenterCells[WhichCell(value)];
+        Cell cell = Lorum.CenterCells[WhichCell(value)];
         PlayCardSound();
-        clickedCard.Animate(_name, cell, () =>
-        {
-            cell.setDatas(value, texture);
-            CardNodes.Remove(clickedCard);
-            clickedCard.QueueFree();
-        });
+        Tween tween = clickedCard.Animate(_name, cell);
+        
+        await cell.ToSignal(tween, Tween.SignalName.Finished);
+        cell.setDatas(value, texture);
+        CardNodes.Remove(clickedCard);
+        await Task.Delay(WaitMillisAfterCardPlace);
+        clickedCard.deleteCard();
         return value;
     }
 
@@ -37,61 +40,48 @@ public class Player : EntityBase
     {
         foreach (PlayerCard card in CardNodes)
         {
-            card.enableCard();
+            card.EnableCard();
         }
     }
 
-    public void DisableCards()
+    public void DisableCards(PlayerCard exceptWithOutColor = null)
     {
         foreach (PlayerCard card in CardNodes)
         {
-            card.disableCard();
+            if (card.Equals(exceptWithOutColor))
+            {
+                card.DisableCard(false);
+            }
+            else card.DisableCard(true);
         }
     }
 
-    public int NormalRound(PlayerCard clickedCard)
+    public async Task<int> NormalRound(PlayerCard clickedCard)
     {
         int value = clickedCard.getValue();
         Texture2D texture = clickedCard.getTexture();
-        Cell cell = Games.Lorum.Scripts.Lorum.CenterCells[WhichCell(value)];
+        Cell cell = Lorum.CenterCells[WhichCell(value)];
 
         if (IsPlaceable(value, cell))
         {
-            DisableCards();
+            DisableCards(clickedCard);
             PlayCardSound();
-            clickedCard.Animate(_name, cell, () =>
-            {
-                cell.setDatas(value, texture);
-                CardNodes.Remove(clickedCard);
-                clickedCard.QueueFree();
-            });
-
-
+            Tween tween = clickedCard.Animate(_name, cell);
+            await cell.ToSignal(tween, Tween.SignalName.Finished);
+            cell.setDatas(value, texture);
+            CardNodes.Remove(clickedCard);
+            await Task.Delay(WaitMillisAfterCardPlace);
+            clickedCard.deleteCard();
             return CardNodes.Count - 1;
         }
 
         return -1;
     }
 
-    public bool CanPlaceCard()
-    {
-        for (int i = 0; i < CardNodes.Count; i++)
-        {
-            PlayerCard card = (PlayerCard)CardNodes[i];
-            int value = card.getValue();
-            Cell cell = Games.Lorum.Scripts.Lorum.CenterCells[WhichCell(value)];
-
-            if (IsPlaceable(value, cell)) return true;
-        }
-
-        PassTurn();
-        return false;
-    }
-
-    private void PassTurn()
+    public override async Task PassTurn()
     {
         Container box = (Container)CardNodes[0].GetParent().GetParent();
         Vector2 pos = box.GlobalPosition + new Vector2(box.Size.X * 0.5f - _passIcon.Size.Y * 0.5f, 0);
-        _passIcon.moveTo(pos);
+        await _passIcon.MoveTo(pos);
     }
 }

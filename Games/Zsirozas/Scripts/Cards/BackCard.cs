@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-namespace cardgames.Games.Lorum.Scripts.Cards;
+namespace cardgames.Games.Zsirozas.Scripts.Cards;
 public partial class BackCard : CardBase
 {
 
@@ -17,11 +17,11 @@ public partial class BackCard : CardBase
 		Scale = Vector2.One;
 	}
 
-	public override Tween Animate(string name, Cell targetCel)
+	public override Tween Animate(string name, Cell targetCell)
 	{
 
 
-		Vector2 targetGlobalPos = targetCel.GlobalPosition;
+		Vector2 targetGlobalPos = targetCell.GlobalPosition;
 		//Vector2 targetSize = targetCell.Size;
 
 		float half = FlipDuration * 0.5f;
@@ -54,20 +54,4 @@ public partial class BackCard : CardBase
 		_backFace.Visible = false;
 		_frontFace.Visible = true;
 	}
-
-
-
-	/* public override void _GuiInput(InputEvent @event)
-	 {
-		 if (@event is InputEventMouseButton mouseEvent &&
-			 mouseEvent.Pressed &&
-			 mouseEvent.ButtonIndex == MouseButton.Left)
-		 {
-			 // Példa: bal kattintásra mozduljon át ide és közben forduljon
-			 Vector2 target = new Vector2(600, 200);
-			 FlipAndMove(target);
-		 }
-	 }*/
-
-
 }

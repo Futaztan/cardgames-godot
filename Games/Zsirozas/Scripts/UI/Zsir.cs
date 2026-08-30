@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using cardgames.Zsirozas.Players;
+using cardgames.Games.Zsirozas.Scripts;
+using cardgames.Games.Zsirozas.Scripts.Cards;
+using cardgames.Games.Zsirozas.Scripts.Players;
 using Godot;
 using zsir;
 
@@ -14,10 +16,7 @@ public partial class Zsir : Control
 	private Button _passButton;
 
 	private ZsirGameLogic _gameLogic;
-
-
-	//TODO diflabelek utan elbaszodik a label meret és nagyobb lesz,  ??? nem talaltam meg megint ezt
-	//TODO: LORUMBA A BEKÖTÉSEK SZAROK NAGY BETU MIATT VALSZEG
+	
 
 	/* 1. zold
 	 *  2. piros
@@ -100,14 +99,13 @@ public partial class Zsir : Control
 	private void OnPlayerCardClicked(PlayerCard card)
 	{
 		_passButton.Visible = false;
-		_gameLogic.HumanPlayer.DisableCards();
+		_gameLogic.HumanPlayer.DisableCards(card);
 		_gameLogic.PlayHumanCard(card);
 	}
 
-	public void OnNewRoundButtonPressed()
+	private void OnNewRoundButtonPressed()
 	{
-		ToggleNewRoundButton(false);
-		ToggleExitButton(false);
+		ToggleButtonContainer(false);
 		VBoxContainer center = GetNode<VBoxContainer>("Center");
 		var gameResults = GetNode<Control>("GameResults");
 		center.Show();
@@ -128,8 +126,7 @@ public partial class Zsir : Control
 		}
 		center.Hide();
 		gameResults.Show();
-		ToggleNewRoundButton(true);
-		ToggleExitButton(true);
+		ToggleButtonContainer(true);
 	}
 
 	private void AddRowToGrid(int position, string name, int score)
@@ -160,12 +157,12 @@ public partial class Zsir : Control
 	}
 
 
-	private void OnLogicRoundStarted(EntityBase startinPlayer, int startingValue)
+	private void OnLogicRoundStarted(EntityBase startingPlayer, int startingValue)
 	{
 		if (startingValue == -1)
 			_startingValueLabel.removeText();
 		else
-			_startingValueLabel.setText(startinPlayer, startingValue);
+			_startingValueLabel.setText(startingPlayer, startingValue);
 	}
 
 	private async void OnLogicReset()
@@ -188,14 +185,10 @@ public partial class Zsir : Control
 	public override void _Process(double delta)
 	{
 	}
+	
 
-
-
-
-	private void ToggleNewRoundButton(bool enabled) =>
-		GetNode<Button>("ButtonsContainer/NewRoundButton").Visible = enabled;
-
-	private void ToggleExitButton(bool enabled) => GetNode<Button>("ButtonsContainer/ExitButton").Visible = enabled;
+	private void ToggleButtonContainer(bool enabled) => GetNode<HBoxContainer>("%ButtonsContainer").Visible = enabled;
+	
 	private void OnExitButtonPressed() => GetTree().ChangeSceneToFile("res://Lorum/Scenes/Menus/GameMenu.tscn");
 
 	private void OnPassButtonPressed()

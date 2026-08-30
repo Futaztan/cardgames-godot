@@ -2,6 +2,8 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using cardgames.Games.Zsirozas.Scripts.Cards;
 using cardgames.Zsirozas;
 
 namespace zsir;
@@ -13,7 +15,7 @@ public class EntityBase
     public string Name { get; }
     public List<CardBase> CollectedCards = new List<CardBase>();
     private CardContainer _cardContainer;
-
+    protected const int WaitMillisAfterCardPlace = 400;
     public CardContainer CardContainer => _cardContainer;
 
     private AudioStreamPlayer _soundPlayer;
@@ -84,7 +86,7 @@ public class EntityBase
         CardsInHands.Add(newcard);
         // int rnd = gameLogic.DrawCardIndex();
         CardsInHands.Last()
-            .setDatas(CardDatabase.CardDatas[random].Item1, CardDatabase.CardDatas[random].Item2); //TODO BUGOS E
+            .setDatas(CardDatabase.CardDatas[random].Item1, CardDatabase.CardDatas[random].Item2);
 
         GD.Print("-------------");
         GD.Print(Name);
@@ -99,5 +101,17 @@ public class EntityBase
             GD.Print(item.getValue() + " " + item.getTexture());
             _cardContainer.AddChild(item);
         }
+    }
+    
+    public async Task PlayCard(CardBase playedCard)
+    {
+  
+        PlayCardSound();
+        Tween tween = playedCard.Animate(Name,  Zsir.GameAreaCell);
+        await Zsir.GameAreaCell.ToSignal(tween, Tween.SignalName.Finished);
+        Zsir.GameAreaCell.setDatas(playedCard.getValue(), playedCard.getTexture());
+        CardsInHands.Remove(playedCard);
+        playedCard.deleteCard();
+        await Task.Delay(WaitMillisAfterCardPlace);
     }
 }

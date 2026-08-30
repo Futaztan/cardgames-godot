@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://bslds25pbk3ag"]
+
+[ext_resource type="Script" uid="uid://nw2apb5y7ixt" path="res://Games/Zsirozas/Scripts/Cards/PlayerCard.cs" id="1_ivor3"]
+[ext_resource type="Texture2D" uid="uid://dehvp7i2eh3yn" path="res://Assets/Other/border.png" id="2_iv1cr"]
+
+[node name="PlayerCard" type="Control"]
+custom_minimum_size = Vector2(160, 264)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 160.0
+offset_bottom = 264.0
+script = ExtResource("1_ivor3")
+metadata/_custom_type_script = "uid://b63usmscmn1wc"
+
+[node name="FrontFace" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 140.0
+offset_bottom = 231.0
+scale = Vector2(1.15, 1.15)
+texture = ExtResource("2_iv1cr")
+
+[connection signal="gui_input" from="." to="." method="onPlayerCardClicked"]

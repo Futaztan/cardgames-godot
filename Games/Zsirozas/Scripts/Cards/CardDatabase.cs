@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 
-namespace cardgames.Zsirozas;
+namespace cardgames.Games.Zsirozas.Scripts.Cards;
 
 public static class CardDatabase
 {

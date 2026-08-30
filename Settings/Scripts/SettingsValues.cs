@@ -1,3 +1,3 @@
 namespace cardgames.Settings.Scripts;
 
-public record SettingsValues(string GlobalName, int LorumPoints, int LorumLengthIndex);
+public record SettingsValues(string GlobalName, int LorumPoints, int LorumLength);

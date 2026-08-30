@@ -1,11 +1,13 @@
-[gd_scene load_steps=17 format=3 uid="uid://3aq5ia7a6f64"]
+[gd_scene load_steps=19 format=3 uid="uid://3aq5ia7a6f64"]
 
 [ext_resource type="Script" uid="uid://b40kp5xrwfdjo" path="res://Games/Lorum/Scripts/Lorum.cs" id="1_hncss"]
 [ext_resource type="PackedScene" uid="uid://r6lsr54m66g8" path="res://Games/Lorum/Scenes/Utils/PointLabel.tscn" id="2_84vkp"]
 [ext_resource type="Texture2D" uid="uid://d1grrihuqrf7f" path="res://Assets/Other/background.jpeg" id="2_j2a3j"]
 [ext_resource type="PackedScene" uid="uid://bbr7bo160uoqf" path="res://Menu/MainMenu.tscn" id="3_hmj8e"]
 [ext_resource type="Script" uid="uid://c6ij705l8dihu" path="res://Games/Lorum/Scripts/UI/Elements/StartingCardLabel.cs" id="4_rkm5x"]
+[ext_resource type="Texture2D" uid="uid://cfq7gxasclfv6" path="res://Assets/Icons/zold-icon@small.png" id="5_7c4o1"]
 [ext_resource type="FontFile" uid="uid://dutoijljh2rk0" path="res://Assets/Fonts/Montserrat-Regular.ttf" id="5_lcmnm"]
+[ext_resource type="FontFile" uid="uid://drly01v2pi4he" path="res://Assets/Fonts/Montserrat-Bold.ttf" id="6_j50xc"]
 [ext_resource type="Script" uid="uid://cx6ld5tp8qh52" path="res://Games/Lorum/Scripts/UI/Elements/Cell.cs" id="6_swsdj"]
 [ext_resource type="Script" uid="uid://ch4xiqg7yxp8y" path="res://Games/Lorum/Scripts/UI/Elements/CardContainer.cs" id="7_uyjhh"]
 [ext_resource type="PackedScene" uid="uid://51u33bf5tmm5" path="res://Games/Lorum/Scenes/Cards/BackCard_Rotated.tscn" id="8_udrva"]
@@ -25,7 +27,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_hncss")
-StartingValueLabel = NodePath("CenterVBox/StartingInfoHBox/StartingCardLabel")
+StartingValueLabel = NodePath("Center/StartingInfoHBox/StartingCardLabel")
 PassIcon = NodePath("PassIcon")
 PointLabelScene = ExtResource("2_84vkp")
 MainMenuScene = ExtResource("3_hmj8e")
@@ -40,6 +42,73 @@ grow_vertical = 2
 texture = ExtResource("2_j2a3j")
 expand_mode = 1
 metadata/_edit_lock_ = true
+
+[node name="GameResults" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopIcon" type="TextureRect" parent="GameResults"]
+custom_minimum_size = Vector2(169, 224)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -84.0
+offset_right = 85.0
+offset_bottom = 224.0
+grow_horizontal = 2
+texture = ExtResource("5_7c4o1")
+
+[node name="StatCenter" type="VBoxContainer" parent="GameResults"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -268.5
+offset_top = -353.5
+offset_right = 268.5
+offset_bottom = 139.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="GameResults/StatCenter"]
+layout_mode = 2
+theme_override_constants/h_separation = 100
+theme_override_constants/v_separation = 25
+columns = 3
+
+[node name="Placement" type="Label" parent="GameResults/StatCenter/GridContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_j50xc")
+theme_override_font_sizes/font_size = 32
+text = "HELYEZÉS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Name" type="Label" parent="GameResults/StatCenter/GridContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_j50xc")
+theme_override_font_sizes/font_size = 32
+text = "NÉV"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Score" type="Label" parent="GameResults/StatCenter/GridContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_j50xc")
+theme_override_font_sizes/font_size = 32
+text = "PONT"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="StatCenterVBox" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
@@ -70,7 +139,7 @@ scroll_active = false
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CenterVBox" type="VBoxContainer" parent="."]
+[node name="Center" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -86,11 +155,11 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="StartingInfoHBox" type="HBoxContainer" parent="CenterVBox"]
+[node name="StartingInfoHBox" type="HBoxContainer" parent="Center"]
 layout_mode = 2
 alignment = 1
 
-[node name="StartingCardLabel" type="RichTextLabel" parent="CenterVBox/StartingInfoHBox"]
+[node name="StartingCardLabel" type="RichTextLabel" parent="Center/StartingInfoHBox"]
 custom_minimum_size = Vector2(300, 20)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("5_lcmnm")
@@ -104,13 +173,13 @@ vertical_alignment = 1
 script = ExtResource("4_rkm5x")
 metadata/_custom_type_script = "uid://c6ij705l8dihu"
 
-[node name="GameAreaTopHBox" type="HBoxContainer" parent="CenterVBox"]
+[node name="GameAreaTopHBox" type="HBoxContainer" parent="Center"]
 unique_name_in_owner = true
 layout_mode = 2
 alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="Cell1" type="TextureRect" parent="CenterVBox/GameAreaTopHBox"]
+[node name="Cell1" type="TextureRect" parent="Center/GameAreaTopHBox"]
 custom_minimum_size = Vector2(160, 264)
 layout_mode = 2
 expand_mode = 5
@@ -118,7 +187,7 @@ stretch_mode = 6
 script = ExtResource("6_swsdj")
 metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
 
-[node name="Cell2" type="TextureRect" parent="CenterVBox/GameAreaTopHBox"]
+[node name="Cell2" type="TextureRect" parent="Center/GameAreaTopHBox"]
 custom_minimum_size = Vector2(160, 264)
 layout_mode = 2
 expand_mode = 3
@@ -126,12 +195,12 @@ stretch_mode = 6
 script = ExtResource("6_swsdj")
 metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
 
-[node name="GameAreaBottomHBox" type="HBoxContainer" parent="CenterVBox"]
+[node name="GameAreaBottomHBox" type="HBoxContainer" parent="Center"]
 unique_name_in_owner = true
 layout_mode = 2
 alignment = 1
 
-[node name="Cell3" type="TextureRect" parent="CenterVBox/GameAreaBottomHBox"]
+[node name="Cell3" type="TextureRect" parent="Center/GameAreaBottomHBox"]
 custom_minimum_size = Vector2(160, 264)
 layout_mode = 2
 expand_mode = 5
@@ -139,7 +208,7 @@ stretch_mode = 6
 script = ExtResource("6_swsdj")
 metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
 
-[node name="Cell4" type="TextureRect" parent="CenterVBox/GameAreaBottomHBox"]
+[node name="Cell4" type="TextureRect" parent="Center/GameAreaBottomHBox"]
 custom_minimum_size = Vector2(160, 264)
 layout_mode = 2
 expand_mode = 3
@@ -349,6 +418,57 @@ theme_override_styles/hover = ExtResource("12_hdhpy")
 theme_override_styles/pressed = ExtResource("13_7c4o1")
 theme_override_styles/normal = ExtResource("14_j50xc")
 text = "Indulhat az új kör!"
+
+[node name="PlayerPointLabel" parent="." instance=ExtResource("2_84vkp")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -57.0
+offset_top = -64.0
+offset_right = 57.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Bot1PointLabel" parent="." instance=ExtResource("2_84vkp")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -32.0
+offset_bottom = 32.0
+grow_vertical = 2
+
+[node name="Bot2PointLabel" parent="." instance=ExtResource("2_84vkp")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -57.0
+offset_right = 57.0
+offset_bottom = 64.0
+grow_horizontal = 2
+
+[node name="Bot3PointLabel" parent="." instance=ExtResource("2_84vkp")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -114.0
+offset_top = -32.0
+offset_right = 0.0
+offset_bottom = 32.0
+grow_horizontal = 0
+grow_vertical = 2
 
 [node name="PassIcon" parent="." instance=ExtResource("11_usykt")]
 visible = false

@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
+using cardgames.Games.Lorum.Scripts.Cards;
 using cardgames.Games.Lorum.Scripts.Players;
 using cardgames.Lorum.Scripts.Cards;
 using cardgames.Lorum.Scripts.UI;
 using cardgames.Lorum.Scripts.UI.Elements;
+using cardgames.Settings.Scripts;
 using Godot;
 
 namespace cardgames.Games.Lorum.Scripts;
@@ -18,7 +21,7 @@ public partial class Lorum : Control
     private List<RichTextLabel> _pointLabels = new List<RichTextLabel>();
     
     //TODO uj kor meg exit gomb rajta van a player labelen
-
+    //TODO: refactor az animacio mitn zsirba, entitybasebe egy playcard fv
     /* 1. zold
      *  2. piros
      * 3. makk
@@ -28,12 +31,7 @@ public partial class Lorum : Control
 
 
     //ha roundsuntilend = 0, majd -1 akkor amíg el nem fogynak a pontok
-    public void init(int score, int roundsUntilEnd)
-    {
-        
-        if (roundsUntilEnd == 0) roundsUntilEnd = -1;
-        _gameLogic = new LorumGameLogic { StartingScore = score, RoundsUntilEnd = roundsUntilEnd };
-    }
+  
 
     private void OnLogicRoundStarted(int startingValue)
     {
@@ -59,11 +57,14 @@ public partial class Lorum : Control
 
     public async override void _Ready()
     {
-        init(10,5);
+        SettingsValues settingsValues = SettingsManager.Instance.LoadSettings();
+        int roundsLength = settingsValues.LorumLength;
+        if (roundsLength == 0) roundsLength = -1;
+        _gameLogic = new LorumGameLogic { StartingScore = settingsValues.LorumPoints, RoundsUntilEnd = roundsLength };
         CardDatabase.loadTextures();
         SetupNodesFromScene();
         SetupCellNodes();
-        CreatePlayers();
+        CreatePlayers(settingsValues.GlobalName);
         _gameLogic.OnRoundStarted += OnLogicRoundStarted;
         _gameLogic.OnGameOver += OnLogicGameOver;
         _gameLogic.OnPlayerTurnStarted += OnLogicPlayerTurnStarted;
@@ -93,12 +94,15 @@ public partial class Lorum : Control
 
         //PassIcon = GetNode<Pass>("PassIcon");
         PassIcon.PivotOffset = PassIcon.Size * 0.5f;
-
-        for (int i = 0; i < 4; i++)
+        
+        var pointLabel = GetNode<RichTextLabel>("%PlayerPointLabel");
+        _pointLabels.Add(pointLabel);
+       
+        for (int i = 1; i <= 3; i++)
         {
-            RichTextLabel pointLabel = (RichTextLabel)PointLabelScene.Instantiate();
+            string str = "%Bot" + i + "PointLabel";
+            pointLabel = GetNode<RichTextLabel>(str);
             _pointLabels.Add(pointLabel);
-            this.AddChild(pointLabel);
         }
 
         Container box = GetNode<Container>("%PlayerScrollContainer");
@@ -144,7 +148,7 @@ public partial class Lorum : Control
         }
     }
 
-    private void CreatePlayers()
+    private void CreatePlayers(string playerName)
     {
         CardContainer container0 = GetNode<CardContainer>("%PlayerHBox");
         CardContainer container1 = GetNode<CardContainer>("%Bot1Container");
@@ -152,7 +156,7 @@ public partial class Lorum : Control
         CardContainer container3 = GetNode<CardContainer>("%Bot3Container");
 
 
-        var player = new Player("player", _gameLogic.StartingScore, _pointLabels[0], container0,PassIcon);
+        var player = new Player(playerName, _gameLogic.StartingScore, _pointLabels[0], container0,PassIcon);
         var bots = new List<Bot>
         {
             new Bot("bot1", _gameLogic.StartingScore, _pointLabels[1], container1, PassIcon),
@@ -171,17 +175,11 @@ public partial class Lorum : Control
 
     public void OnNewRoundButtonPressed()
     {
-        HBoxContainer buttonContainer = GetNode<HBoxContainer>("%ButtonsContainer");
-        buttonContainer.Visible = false;
-        VBoxContainer center = GetNode<VBoxContainer>("%CenterVBox");
-        VBoxContainer statCenter = GetNode<VBoxContainer>("%StatCenterVBox");
-        center.Show();
-        statCenter.Hide();
+        ToggleUiVisibility(false);
         foreach (EntityBase item in _gameLogic.AllPlayers)
         {
             item.UpdateLabel();
         }
-
         _gameLogic.StartNewRound();
     }
 
@@ -201,19 +199,40 @@ public partial class Lorum : Control
     }
 
 
-    private async void OnLogicGameOver((EntityBase Winner, int PlayerPosition) result)
+    private async void OnLogicGameOver(List<EntityBase> entities)
     {
         GD.Print("GAME OVER");
-        await ToSignal(GetTree().CreateTimer(1.5f), "timeout");
-        RichTextLabel winLabel = GetNode<RichTextLabel>("%WinLabel");
-        VBoxContainer center = GetNode<VBoxContainer>("%CenterVBox");
-        VBoxContainer statCenter = GetNode<VBoxContainer>("%StatCenterVBox");
-        center.Hide();
-        statCenter.Show();
-        winLabel.Text = result.Winner.Name + " NYERT!\n\n";
-        winLabel.Text += "GRATULÁLUNK! \n" + result.PlayerPosition + ". LETTÉL!";
-        //TODO: RESULTS SCENE
 
+        for (int i = 0; i < entities.Count; i++)
+        {
+            AddRowToGrid(i+1, entities[i].Name, entities[i].Score);
+        }
+
+        ToggleUiVisibility(true);
+
+    }
+
+    private void ToggleUiVisibility(bool isGameOver)
+    {
+        bool toHide = !isGameOver;
+        VBoxContainer center = GetNode<VBoxContainer>("%Center");
+        Control gameResults = GetNode<Control>("%GameResults");
+        HBoxContainer buttonContainer = GetNode<HBoxContainer>("%ButtonsContainer");
+        _pointLabels.ForEach(p => p.Visible = toHide );
+        this.GetChildren().OfType<Container>().ToList().ForEach(c => c.Visible = toHide);
+        center.Visible = toHide;
+        gameResults.Visible = !toHide;
+        buttonContainer.Visible = !toHide;
+    }
+    
+    private void AddRowToGrid(int position, string name, int score)
+    {
+        GridContainer grid = GetNode<GridContainer>("GameResults/StatCenter/GridContainer");
+        Font font = GD.Load<Font>("res://Assets/Fonts/Montserrat-Regular.ttf");
+        Theme theme = new Theme { DefaultFont = font, DefaultFontSize = 32 };
+        grid.AddChild(new Label { Text = position + ".", Theme = theme, VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center});
+        grid.AddChild(new Label { Text = name, Theme = theme, VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center});
+        grid.AddChild(new Label { Text = score.ToString(), Theme = theme, VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center});
     }
     
     

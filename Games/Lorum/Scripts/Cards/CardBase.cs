@@ -1,7 +1,7 @@
 using System;
-
 using Godot;
 
+namespace cardgames.Games.Lorum.Scripts.Cards;
 public abstract partial class CardBase : Control
 {
 	[Export] public float FlipDuration { get; set; } = 0.5f;   // Teljes fordulási idő
@@ -21,5 +21,5 @@ public abstract partial class CardBase : Control
 	
 	
 
-	public abstract void Animate( string name,Cell targetCell, Action onDone);
+	public abstract Tween Animate(string name, Cell targetCel);
 }

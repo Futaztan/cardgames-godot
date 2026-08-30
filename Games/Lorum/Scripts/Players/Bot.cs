@@ -1,4 +1,6 @@
 using System;
+using System.Threading.Tasks;
+using cardgames.Games.Lorum.Scripts.Cards;
 using cardgames.Lorum.Scripts.UI;
 using Godot;
 
@@ -11,61 +13,57 @@ namespace cardgames.Games.Lorum.Scripts.Players
         {
         }
 
-        public int StartRound()
+        public async Task<int> StartRound()
         {
             Random random = new Random();
-            int whichCard = random.Next(0, 8);
+            int whichCard = random.Next(0, 8); //TODO OUTOFINDEX? hiba volt 1x?
 
             int value = CardNodes[whichCard].getValue();
             Texture2D texture = CardNodes[whichCard].getTexture();
-            Cell cell = Games.Lorum.Scripts.Lorum.CenterCells[WhichCell(value)];
+            Cell cell = Lorum.CenterCells[WhichCell(value)];
 
             BackCard playedCard = (BackCard)CardNodes[whichCard];
 
 
             PlayCardSound();
-            playedCard.Animate(_name, cell, () =>
-            {
-                cell.setDatas(value, texture);
-                CardNodes.Remove(playedCard);
-                playedCard.deleteCard();
-            });
-
+            Tween tween = playedCard.Animate(_name, cell);
+            await cell.ToSignal(tween, Tween.SignalName.Finished);
+            cell.setDatas(value, texture);
+            CardNodes.Remove(playedCard);
+            await Task.Delay(WaitMillisAfterCardPlace);
+            playedCard.deleteCard();
             return value;
         }
 
-        public int NormalRound()
+        public async Task<int> NormalRound()
         {
             for (int i = 0; i < CardNodes.Count; i++)
             {
                 int value = CardNodes[i].getValue();
-                Texture2D texture = CardNodes[i].getTexture();
-                Cell cell = Games.Lorum.Scripts.Lorum.CenterCells[WhichCell(value)];
-
-
+                Cell cell = Lorum.CenterCells[WhichCell(value)];
                 if (IsPlaceable(value, cell))
                 {
+                    Texture2D texture = CardNodes[i].getTexture();
                     BackCard playedCard = (BackCard)CardNodes[i];
 
                     PlayCardSound();
-                    playedCard.Animate(_name, cell, () =>
-                    {
-                        cell.setDatas(value, texture);
-                        CardNodes.Remove(playedCard);
-                        playedCard.deleteCard();
-                    });
-
-
+                    Tween tween = playedCard.Animate(_name, cell);
+                    await cell.ToSignal(tween, Tween.SignalName.Finished);
+                    cell.setDatas(value, texture);
+                    CardNodes.Remove(playedCard);
+                    await Task.Delay(WaitMillisAfterCardPlace);
+                    playedCard.deleteCard();
                     return CardNodes.Count - 1;
                 }
             }
 
             GD.Print("bot passz");
-            PassTurn();
+            await PassTurn();
             return -1;
         }
+        
 
-        private void PassTurn()
+        public override async Task PassTurn()
         {
             BoxContainer box = (BoxContainer)CardNodes[0].GetParent();
             Vector2 pos;
@@ -82,7 +80,7 @@ namespace cardgames.Games.Lorum.Scripts.Players
                 default: throw new Exception();
             }
 
-            _passIcon.moveTo(pos);
+            await _passIcon.MoveTo(pos);
         }
     }
 }

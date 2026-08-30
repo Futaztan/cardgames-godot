@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using cardgames.Games.Lorum.Scripts.Cards;
 using cardgames.Lorum.Scripts.Cards;
 using cardgames.Lorum.Scripts.UI;
 using Godot;
@@ -18,6 +20,7 @@ namespace cardgames.Games.Lorum.Scripts.Players
         private CardContainer _cardContainer;
         public CardContainer CardContainer => _cardContainer;
         public int CardsInHandCount => CardNodes.Count;
+        protected const int WaitMillisAfterCardPlace = 300;
 
 
         private AudioStreamPlayer _soundPlayer;
@@ -46,6 +49,8 @@ namespace cardgames.Games.Lorum.Scripts.Players
             _soundPlayer.PitchScale = (float)GD.RandRange(0.95, 1.05);
             _soundPlayer.Play();
         }
+
+        public abstract Task PassTurn();
 
         private void UpdateLabelWithDiff(int diff)
         {
@@ -85,6 +90,17 @@ namespace cardgames.Games.Lorum.Scripts.Players
         {
             return value % 10 == LorumGameLogic.StartingCardValueMod || value == cell.getValue() + 1 ||
                    value % 10 == 1 && cell.getValue() % 10 == 8;
+        }
+        
+        public bool HasPlayableCard()
+        {
+            foreach (var card in CardNodes)
+            {
+                int value = card.getValue();
+                Cell cell = Lorum.CenterCells[WhichCell(value)];
+                if (IsPlaceable(value, cell)) return true;
+            }
+            return false;
         }
 
         public void OnWin(int winsum)

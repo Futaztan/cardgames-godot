@@ -1,7 +1,8 @@
-using System;
-using Godot;
 
-namespace cardgames.Games.Lorum.Scripts.Cards;
+using Godot;
+using System;
+
+namespace cardgames.Games.Zsirozas.Scripts.Cards;
 public partial class PlayerCard : CardBase
 {
 
@@ -12,16 +13,16 @@ public partial class PlayerCard : CardBase
 	{
 		_frontFace = GetNode<TextureRect>("FrontFace");
 	}
+
 	public void DisableCard(bool setToGrey = true)
 	{
 		MouseFilter = MouseFilterEnum.Ignore;
 		if (setToGrey)
 		{
-			_frontFace.Modulate = new Color(0.6f, 0.6f, 0.6f, 1f); 
+			_frontFace.Modulate = new Color(0.6f, 0.6f, 0.6f, 1f);
 		}
-	
-
 	}
+
 	public void EnableCard()
 	{
 		MouseFilter = MouseFilterEnum.Pass;
@@ -29,7 +30,7 @@ public partial class PlayerCard : CardBase
 	}
 
 
-	public override Tween Animate(string name, Cell targetCel) //BOT2 JÓ
+	public override Tween Animate(string name, Cell targetCell)
 	{
 
 		float half = FlipDuration * 0.5f;
@@ -41,7 +42,7 @@ public partial class PlayerCard : CardBase
 		tween.SetEase(Tween.EaseType.InOut);
 
 
-		Vector2 targetGlobalPos = targetCel.GlobalPosition;
+		Vector2 targetGlobalPos = targetCell.GlobalPosition;
 		tween.TweenProperty(this, "global_position", targetGlobalPos, MoveDuration);
 
 		/*// Első félfordulat: 1 → 0
@@ -55,13 +56,8 @@ public partial class PlayerCard : CardBase
 
 		// Ha kell callback a végére:
 		//tween.TweenCallback(Callable.From(OnAnimDone));
-		
-		//tween.Finished += () => onDone();
 		return tween;
 	}
-
-
-
 	public void onPlayerCardClicked(InputEvent @event)
 	{
 		Vector2 _pressedPos = new Vector2(0,0);
@@ -92,15 +88,5 @@ public partial class PlayerCard : CardBase
 			}
 		}
 	}
-
-	/*if (@event is InputEventMouseButton mouseButton)
-	{
-		// Ellenőrizzük, hogy a bal gombot nyomták-e le és hogy ez egy "lenyomott" esemény.
-		if (mouseButton.ButtonIndex == MouseButton.Left && mouseButton.Pressed)
-		{
-			GD.Print("A Control node-ra kattintottak!");
-			EmitSignal(SignalName.CardClicked, this);
-
-		}
-	}*/
+	
 }

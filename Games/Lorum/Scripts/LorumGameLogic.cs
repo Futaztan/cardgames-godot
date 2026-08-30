@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using cardgames.Games.Lorum.Scripts.Cards;
 using cardgames.Games.Lorum.Scripts.Players;
 using Godot;
 
@@ -27,7 +29,7 @@ public class LorumGameLogic
     public event Action OnPlayerTurnStarted; // Amikor a humán játékos következik
     public event Action OnPlayerTurnPassed; // Amikor a humán játékos passzol
     public event Action AfterCardsDealed;
-    public event Action<(EntityBase, int)> OnGameOver; // ha valakienk elfogy a pénze
+    public event Action<List<EntityBase>> OnGameOver; // ha valakienk elfogy a pénze
     public event Action OnReset; // Ki rakott kártyát
     public event Action OnRoundOver;
 
@@ -70,7 +72,7 @@ public class LorumGameLogic
         else
         {
             GD.Print(WhoStarted + ". bot kezd");
-            StartingCardValue = Bots[WhoStarted - 1].StartRound();
+            StartingCardValue = await Bots[WhoStarted - 1].StartRound();
             OnRoundStarted?.Invoke(StartingCardValue);
             NextPlayerLoop(WhoStarted);
         }
@@ -83,11 +85,11 @@ public class LorumGameLogic
     }
     //valid-e amire kattintott
 
-    public void PlayHumanCard(PlayerCard card)
+    public async void PlayHumanCard(PlayerCard card)
     {
         if (StartingCardValue == -1)
         {
-            StartingCardValue = HumanPlayer.StartRound(card);
+            StartingCardValue = await HumanPlayer.StartRound(card);
 
             OnRoundStarted?.Invoke(StartingCardValue);
 
@@ -95,7 +97,7 @@ public class LorumGameLogic
             return;
         }
 
-        int cardCount = HumanPlayer.NormalRound(card);
+        int cardCount = await HumanPlayer.NormalRound(card);
         if (cardCount >= 0)
         {
             if (cardCount == 0)
@@ -111,25 +113,34 @@ public class LorumGameLogic
         int botIdx = fromWho;
         while (botIdx < 3)
         {
-            await Task.Delay(1400);
-            if (Bots[botIdx].NormalRound() == 0)
+            //await Task.Delay(1400);
+            if (Bots[botIdx].HasPlayableCard())
             {
-                OnRoundWin(botIdx + 1);
-                return;
+                int botsCardCount = await Bots[botIdx].NormalRound();
+                if (botsCardCount == 0)
+                {
+                    OnRoundWin(botIdx + 1);
+                    return;
+                }
+            }
+            else
+            {
+                await Bots[botIdx].PassTurn();
             }
 
             botIdx++;
         }
 
-        await Task.Delay(1400);
+        //await Task.Delay(1400);
 
         StartHumanPlayerRound();
     }
 
-    private void StartHumanPlayerRound()
+    private async void StartHumanPlayerRound()
     {
-        if (!HumanPlayer.CanPlaceCard())
+        if (!HumanPlayer.HasPlayableCard())
         {
+            await HumanPlayer.PassTurn();
             OnPlayerTurnPassed?.Invoke();
             NextPlayerLoop(0);
         }
@@ -151,35 +162,14 @@ public class LorumGameLogic
 
         if (IsGameOver())
         {
-            OnGameOver?.Invoke(GetGameResult());
+            var result = AllPlayers.OrderByDescending(p => p.Score).ToList();
+            OnGameOver?.Invoke(result);
         }
         else
         {
             OnRoundOver?.Invoke();
             //StartNewRound();
         }
-    }
-
-    private (EntityBase Winner, int PlayerPosition) GetGameResult()
-    {
-        int playerScore = HumanPlayer.Score;
-        int position = 1;
-        EntityBase winner = AllPlayers[0];
-        int maxScore = winner.Score;
-
-        for (int i = 1; i < AllPlayers.Count; i++)
-        {
-            int currentScore = AllPlayers[i].Score;
-            if (maxScore < currentScore)
-            {
-                maxScore = currentScore;
-                winner = AllPlayers[i];
-            }
-
-            if (playerScore < currentScore) position++;
-        }
-
-        return (winner, position);
     }
 
     private bool IsGameOver()

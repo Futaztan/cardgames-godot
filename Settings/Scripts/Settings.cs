@@ -8,14 +8,14 @@ public partial class Settings : Control
     [Export] private LineEdit Global_Name {get; set;}
     [Export] private SpinBox Lorum_Points {get; set;}
     [Export] private OptionButton Lorum_GameLength {get; set;}
-    private readonly SettingsManager _settingsManager = new ();
+    private readonly SettingsManager _settingsManager = SettingsManager.Instance;
 
     public override void _Ready()
     {
         SettingsValues values = _settingsManager.LoadSettings();
         Global_Name.Text = values.GlobalName;
         Lorum_Points.Value = values.LorumPoints;
-        Lorum_GameLength.Selected = values.LorumLengthIndex;
+        Lorum_GameLength.Selected = values.LorumLength;
     }
 
     private void OnSaveButtonPressed()
