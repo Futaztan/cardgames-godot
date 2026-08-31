@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://d1grrihuqrf7f" path="res://Assets/Other/background.jpeg" id="2_j2a3j"]
 [ext_resource type="PackedScene" uid="uid://bbr7bo160uoqf" path="res://Menu/MainMenu.tscn" id="3_hmj8e"]
 [ext_resource type="Script" uid="uid://c6ij705l8dihu" path="res://Games/Lorum/Scripts/UI/Elements/StartingCardLabel.cs" id="4_rkm5x"]
-[ext_resource type="Texture2D" uid="uid://cfq7gxasclfv6" path="res://Assets/Icons/zold-icon@small.png" id="5_7c4o1"]
+[ext_resource type="Texture2D" uid="uid://p4jxanucgkvm" path="res://Assets/Icons/leaf-icon@large.png" id="5_7c4o1"]
 [ext_resource type="FontFile" uid="uid://dutoijljh2rk0" path="res://Assets/Fonts/Montserrat-Regular.ttf" id="5_lcmnm"]
 [ext_resource type="FontFile" uid="uid://drly01v2pi4he" path="res://Assets/Fonts/Montserrat-Bold.ttf" id="6_j50xc"]
 [ext_resource type="Script" uid="uid://cx6ld5tp8qh52" path="res://Games/Lorum/Scripts/UI/Elements/Cell.cs" id="6_swsdj"]
@@ -45,6 +45,7 @@ metadata/_edit_lock_ = true
 
 [node name="GameResults" type="Control" parent="."]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
