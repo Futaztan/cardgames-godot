@@ -1,15 +1,17 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using cardgames.Games.Zsirozas.Scripts;
 using cardgames.Games.Zsirozas.Scripts.Cards;
 using cardgames.Games.Zsirozas.Scripts.Players;
+using cardgames.Zsirozas;
 using Godot;
 using zsir;
 
-namespace cardgames.Zsirozas;
+namespace cardgames.Games.Zsirozas.Scripts.UI;
 
 public partial class Zsir : Control
 {
+	[Export] private PackedScene MainMenuScene { get; set; }
 	public static Cell GameAreaCell;
 	private Cell _cardDeckCell = new();
 	private StartingCardLabel _startingValueLabel;
@@ -119,7 +121,12 @@ public partial class Zsir : Control
 		GD.Print("GAME OVER");
 		VBoxContainer center = GetNode<VBoxContainer>("Center");
 		Control gameResults = GetNode<Control>("GameResults");
-
+		GridContainer grid = GetNode<GridContainer>("%GridResults");
+		foreach (Node child in grid.GetChildren().Skip(3))
+		{
+			grid.RemoveChild(child);
+			child.QueueFree();
+		}
 		for (int i = 0; i < entities.Count; i++)
 		{
 			AddRowToGrid(i+1, entities[i].Name, entities[i].Score);
@@ -131,12 +138,24 @@ public partial class Zsir : Control
 
 	private void AddRowToGrid(int position, string name, int score)
 	{
-		GridContainer grid = GetNode<GridContainer>("GameResults/StatCenter/GridContainer");
+		GridContainer grid = GetNode<GridContainer>("%GridResults");
 		Font font = GD.Load<Font>("res://Assets/Fonts/Montserrat-Regular.ttf");
 		Theme theme = new Theme { DefaultFont = font, DefaultFontSize = 32 };
-		grid.AddChild(new Label { Text = position + ".", Theme = theme, VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center});
-		grid.AddChild(new Label { Text = name, Theme = theme, VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center});
-		grid.AddChild(new Label { Text = score.ToString(), Theme = theme, VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center});
+		grid.AddChild(CreateGridLabel(position + ".", theme));
+		grid.AddChild(CreateGridLabel(name, theme));
+		grid.AddChild(CreateGridLabel(score.ToString(), theme));
+	}
+	
+	private Label CreateGridLabel(string text, Theme theme)
+	{
+		return new Label
+		{
+			Text = text,
+			Theme = theme,
+			VerticalAlignment = VerticalAlignment.Center,
+			HorizontalAlignment = HorizontalAlignment.Center,
+			SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+		};
 	}
 
 	private void OnLogicPlayerTurnStarted()
@@ -177,19 +196,12 @@ public partial class Zsir : Control
 			 item.CardClicked += OnPlayerCardClicked;
 		 }*/
 
-
 		await ToSignal(GetTree().CreateTimer(1f), "timeout");
 	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
 	
-
 	private void ToggleButtonContainer(bool enabled) => GetNode<HBoxContainer>("%ButtonsContainer").Visible = enabled;
 	
-	private void OnExitButtonPressed() => GetTree().ChangeSceneToFile("res://Lorum/Scenes/Menus/GameMenu.tscn");
+	private void OnExitButtonPressed() => GetTree().ChangeSceneToPacked(MainMenuScene);
 
 	private void OnPassButtonPressed()
 	{

@@ -1,7 +1,8 @@
-[gd_scene load_steps=18 format=3 uid="uid://b716s0gf2mdb6"]
+[gd_scene load_steps=19 format=3 uid="uid://b716s0gf2mdb6"]
 
 [ext_resource type="Script" uid="uid://b46c2u1ifs1fs" path="res://Games/Zsirozas/Scripts/UI/Zsir.cs" id="1_c2jhi"]
 [ext_resource type="Texture2D" uid="uid://d1grrihuqrf7f" path="res://Assets/Other/background.jpeg" id="2_ry25h"]
+[ext_resource type="PackedScene" uid="uid://bbr7bo160uoqf" path="res://Menu/MainMenu.tscn" id="2_xkmqd"]
 [ext_resource type="FontFile" uid="uid://drly01v2pi4he" path="res://Assets/Fonts/Montserrat-Bold.ttf" id="3_41hlp"]
 [ext_resource type="Texture2D" uid="uid://cfq7gxasclfv6" path="res://Assets/Icons/zold-icon@small.png" id="3_c0wpv"]
 [ext_resource type="Script" uid="uid://rr74fvdxfq8c" path="res://Games/Zsirozas/Scripts/UI/StartingCardLabel.cs" id="4_ry25h"]
@@ -26,6 +27,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_c2jhi")
+MainMenuScene = ExtResource("2_xkmqd")
 
 [node name="BackGround" type="TextureRect" parent="."]
 layout_mode = 1
@@ -59,7 +61,8 @@ offset_bottom = 224.0
 grow_horizontal = 2
 texture = ExtResource("3_c0wpv")
 
-[node name="StatCenter" type="VBoxContainer" parent="GameResults"]
+[node name="GridResults" type="GridContainer" parent="GameResults"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -67,20 +70,16 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -268.5
-offset_top = -353.5
+offset_top = -190.0
 offset_right = 268.5
-offset_bottom = 139.5
+offset_bottom = -150.0
 grow_horizontal = 2
 grow_vertical = 2
-alignment = 1
-
-[node name="GridContainer" type="GridContainer" parent="GameResults/StatCenter"]
-layout_mode = 2
 theme_override_constants/h_separation = 100
 theme_override_constants/v_separation = 25
 columns = 3
 
-[node name="Placement" type="Label" parent="GameResults/StatCenter/GridContainer"]
+[node name="Placement" type="Label" parent="GameResults/GridResults"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_41hlp")
 theme_override_font_sizes/font_size = 32
@@ -88,7 +87,7 @@ text = "HELYEZÉS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Name" type="Label" parent="GameResults/StatCenter/GridContainer"]
+[node name="Name" type="Label" parent="GameResults/GridResults"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_41hlp")
 theme_override_font_sizes/font_size = 32
@@ -96,7 +95,7 @@ text = "NÉV"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Score" type="Label" parent="GameResults/StatCenter/GridContainer"]
+[node name="Score" type="Label" parent="GameResults/GridResults"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_41hlp")
 theme_override_font_sizes/font_size = 32
@@ -299,6 +298,7 @@ script = ExtResource("7_6vt5t")
 CardScene = ExtResource("17_p0idq")
 
 [node name="ButtonsContainer" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
 visible = false
 layout_mode = 1
 anchors_preset = 12

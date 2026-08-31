@@ -18,7 +18,7 @@ thickness = 2
 default_font = ExtResource("2_b4apk")
 default_font_size = 24
 
-[node name="Settings" type="Control" node_paths=PackedStringArray("Global_Name", "Lorum_Points", "Lorum_GameLength")]
+[node name="Settings" type="Control" node_paths=PackedStringArray("Global_NameUI", "Lorum_PointsUI", "Lorum_GameLengthUI")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,9 +27,9 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_5p68s")
 MainMenuScene = ExtResource("2_carl2")
-Global_Name = NodePath("VBoxContainer/LineEdit")
-Lorum_Points = NodePath("VBoxContainer/SpinBox")
-Lorum_GameLength = NodePath("VBoxContainer/OptionButton")
+Global_NameUI = NodePath("VBoxContainer/LineEdit")
+Lorum_PointsUI = NodePath("VBoxContainer/SpinBox")
+Lorum_GameLengthUI = NodePath("VBoxContainer/OptionButton")
 
 [node name="BackGround" type="TextureRect" parent="."]
 layout_mode = 1

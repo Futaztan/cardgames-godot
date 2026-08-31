@@ -22,8 +22,8 @@ public class Bot : EntityBase
         return playedCard;
     }
     //-1 startingcardvalue ha nincs kezdő lap még
-
-    public CardBase SelectPlayedCard(int startingCardValue, bool mustPlay)
+    //3 lehetőség: kezdő, muszaj raknia, nem muszaj raknia
+    public CardBase SelectPlayedCard(int startingCardValue, bool mustPlay = false)
     {
         if (startingCardValue != -1)
         {
@@ -38,14 +38,13 @@ public class Bot : EntityBase
                 }
             }
         }
- //TODO 3 lehetőség: kezdő, muszaj raknia, nem muszaj raknia
         if (startingCardValue == -1 || mustPlay)
         {
             Random random = new Random();
             int randomCard = random.Next(0, CardsInHands.Count);
             return (BackCard)CardsInHands[randomCard];
-        }
-        else return null;
+        } 
+        return null;
  
     }
 

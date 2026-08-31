@@ -45,7 +45,6 @@ metadata/_edit_lock_ = true
 
 [node name="GameResults" type="Control" parent="."]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -65,7 +64,8 @@ offset_bottom = 224.0
 grow_horizontal = 2
 texture = ExtResource("5_7c4o1")
 
-[node name="StatCenter" type="VBoxContainer" parent="GameResults"]
+[node name="GridResults" type="GridContainer" parent="GameResults"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -73,20 +73,16 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -268.5
-offset_top = -353.5
+offset_top = -190.0
 offset_right = 268.5
-offset_bottom = 139.5
+offset_bottom = -150.0
 grow_horizontal = 2
 grow_vertical = 2
-alignment = 1
-
-[node name="GridContainer" type="GridContainer" parent="GameResults/StatCenter"]
-layout_mode = 2
 theme_override_constants/h_separation = 100
 theme_override_constants/v_separation = 25
 columns = 3
 
-[node name="Placement" type="Label" parent="GameResults/StatCenter/GridContainer"]
+[node name="Placement" type="Label" parent="GameResults/GridResults"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("6_j50xc")
 theme_override_font_sizes/font_size = 32
@@ -94,7 +90,7 @@ text = "HELYEZÉS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Name" type="Label" parent="GameResults/StatCenter/GridContainer"]
+[node name="Name" type="Label" parent="GameResults/GridResults"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("6_j50xc")
 theme_override_font_sizes/font_size = 32
@@ -102,40 +98,11 @@ text = "NÉV"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Score" type="Label" parent="GameResults/StatCenter/GridContainer"]
+[node name="Score" type="Label" parent="GameResults/GridResults"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("6_j50xc")
 theme_override_font_sizes/font_size = 32
 text = "PONT"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="StatCenterVBox" type="VBoxContainer" parent="."]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -221.5
-offset_top = -353.5
-offset_right = 221.5
-offset_bottom = 139.5
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="WinLabel" type="RichTextLabel" parent="StatCenterVBox"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 500)
-layout_mode = 2
-theme_override_font_sizes/normal_font_size = 40
-bbcode_enabled = true
-text = "TESZT
-"
-scroll_active = false
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -387,7 +354,6 @@ CardScene = ExtResource("10_1boov")
 
 [node name="ButtonsContainer" type="HBoxContainer" parent="."]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -401,6 +367,7 @@ alignment = 1
 
 [node name="ExitButton" type="Button" parent="ButtonsContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_lcmnm")
 theme_override_font_sizes/font_size = 33
@@ -411,6 +378,7 @@ text = "Kilépés a menübe"
 
 [node name="NewRoundButton" type="Button" parent="ButtonsContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_lcmnm")
 theme_override_font_sizes/font_size = 33

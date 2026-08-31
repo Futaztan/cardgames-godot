@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using cardgames.Games.Lorum.Scripts.Cards;
 using cardgames.Games.Lorum.Scripts.Players;
 using cardgames.Lorum.Scripts.Cards;
@@ -12,16 +13,14 @@ namespace cardgames.Games.Lorum.Scripts;
 
 public partial class Lorum : Control
 {
-    public static List<Cell> CenterCells = new List<Cell>();
+    public static List<Cell> CenterCells;
     [Export] public StartingCardLabel StartingValueLabel { get; set; }
     [Export] public Pass PassIcon { get; set; }
     private LorumGameLogic _gameLogic;
     [Export] private PackedScene PointLabelScene { get; set; }
     [Export] private PackedScene MainMenuScene {get; set;}
-    private List<RichTextLabel> _pointLabels = new List<RichTextLabel>();
+    private readonly List<RichTextLabel> _pointLabels = new List<RichTextLabel>();
     
-    //TODO uj kor meg exit gomb rajta van a player labelen
-    //TODO: refactor az animacio mitn zsirba, entitybasebe egy playcard fv
     /* 1. zold
      *  2. piros
      * 3. makk
@@ -135,6 +134,7 @@ public partial class Lorum : Control
     private void SetupCellNodes()
     {
         ////// CELLÁK
+        CenterCells = new List<Cell>();
         HBoxContainer hbox = GetNode<HBoxContainer>("%GameAreaTopHBox");
         foreach (Cell child in hbox.GetChildren())
         {
@@ -173,13 +173,14 @@ public partial class Lorum : Control
         _gameLogic.PlayHumanCard(card);
     }
 
-    public void OnNewRoundButtonPressed()
+    private void OnNewRoundButtonPressed()
     {
-        ToggleUiVisibility(false);
-        foreach (EntityBase item in _gameLogic.AllPlayers)
+        //ToggleUiVisibilityOnGameOver(false);
+       /* foreach (EntityBase item in _gameLogic.AllPlayers)
         {
             item.UpdateLabel();
-        }
+        }*/
+        ToggleNewRoundButtonVisibility(false);
         _gameLogic.StartNewRound();
     }
 
@@ -194,45 +195,79 @@ public partial class Lorum : Control
     
     private void OnLogicRoundOver()
     {
-        HBoxContainer buttonContainer = GetNode<HBoxContainer>("%ButtonsContainer");
-        buttonContainer.Visible = true;
+        ToggleNewRoundButtonVisibility(true);
     }
+
+    private void ToggleExitButtonVisibility(bool isVisible)
+    {
+        Button exitButton = GetNode<Button>("%ExitButton");
+        exitButton.Visible = isVisible;
+    }
+    private void ToggleNewRoundButtonVisibility(bool isVisible)
+    {
+        Button newRoundButton = GetNode<Button>("%NewRoundButton");
+        newRoundButton.Visible = isVisible;
+    }
+    
 
 
     private async void OnLogicGameOver(List<EntityBase> entities)
     {
         GD.Print("GAME OVER");
-
+        await Task.Delay(5000);
+        GridContainer grid = GetNode<GridContainer>("%GridResults");
+        foreach (Node child in grid.GetChildren().Skip(3))
+        {
+            grid.RemoveChild(child);
+            child.QueueFree();
+        }
         for (int i = 0; i < entities.Count; i++)
         {
             AddRowToGrid(i+1, entities[i].Name, entities[i].Score);
         }
 
-        ToggleUiVisibility(true);
+        VBoxContainer center = GetNode<VBoxContainer>("%Center");
+        Control gameResults = GetNode<Control>("%GameResults");
+        _pointLabels.ForEach(p => p.Visible = false );
+        this.GetChildren().OfType<Container>().ToList().SkipLast(1).ToList().ForEach(c => c.Visible = false);
+        center.Visible = false;
+        gameResults.Visible = true;
+        ToggleExitButtonVisibility(true);
+  
 
     }
 
-    private void ToggleUiVisibility(bool isGameOver)
+    /*private void ToggleUiVisibilityOnGameOver(bool isGameOver)
     {
         bool toHide = !isGameOver;
         VBoxContainer center = GetNode<VBoxContainer>("%Center");
         Control gameResults = GetNode<Control>("%GameResults");
-        HBoxContainer buttonContainer = GetNode<HBoxContainer>("%ButtonsContainer");
         _pointLabels.ForEach(p => p.Visible = toHide );
         this.GetChildren().OfType<Container>().ToList().ForEach(c => c.Visible = toHide);
         center.Visible = toHide;
         gameResults.Visible = !toHide;
-        buttonContainer.Visible = !toHide;
-    }
+        ToggleExitButtonVisibility(!toHide);
+    }*/
     
     private void AddRowToGrid(int position, string name, int score)
     {
-        GridContainer grid = GetNode<GridContainer>("GameResults/StatCenter/GridContainer");
+        GridContainer grid = GetNode<GridContainer>("%GridResults");
         Font font = GD.Load<Font>("res://Assets/Fonts/Montserrat-Regular.ttf");
         Theme theme = new Theme { DefaultFont = font, DefaultFontSize = 32 };
-        grid.AddChild(new Label { Text = position + ".", Theme = theme, VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center});
-        grid.AddChild(new Label { Text = name, Theme = theme, VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center});
-        grid.AddChild(new Label { Text = score.ToString(), Theme = theme, VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center});
+        grid.AddChild(CreateGridLabel(position + ".", theme));
+        grid.AddChild(CreateGridLabel(name, theme));
+        grid.AddChild(CreateGridLabel(score.ToString(), theme));
+    }
+    private Label CreateGridLabel(string text, Theme theme)
+    {
+        return new Label
+        {
+            Text = text,
+            Theme = theme,
+            VerticalAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+        };
     }
     
     

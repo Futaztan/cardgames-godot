@@ -12,12 +12,6 @@ public class Player : EntityBase
     {
         DisableCards();
     }
-
-    public async Task<int> PlayRound(PlayerCard clickedCard)
-    {
-       await PlayCard(clickedCard);
-       return clickedCard.getValue();
-    }
     
     public void EnableAllCards()
     {
@@ -39,7 +33,7 @@ public class Player : EntityBase
         }
     }
 
-    public bool DoHavePlayableCard()
+    public bool HavePlayableCard()
     {
         foreach (var card in CardsInHands)
         {

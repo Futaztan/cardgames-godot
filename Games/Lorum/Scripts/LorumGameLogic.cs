@@ -136,7 +136,7 @@ public class LorumGameLogic
         StartHumanPlayerRound();
     }
 
-    private async void StartHumanPlayerRound()
+    private async Task StartHumanPlayerRound()
     {
         if (!HumanPlayer.HasPlayableCard())
         {

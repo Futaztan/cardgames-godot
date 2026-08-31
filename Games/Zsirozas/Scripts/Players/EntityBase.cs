@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using cardgames.Games.Zsirozas.Scripts.Cards;
 using cardgames.Zsirozas;
+using Zsir = cardgames.Games.Zsirozas.Scripts.UI.Zsir;
 
 namespace zsir;
 

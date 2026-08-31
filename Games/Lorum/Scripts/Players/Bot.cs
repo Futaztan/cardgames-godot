@@ -17,43 +17,22 @@ namespace cardgames.Games.Lorum.Scripts.Players
         {
             Random random = new Random();
             int whichCard = random.Next(0, 8); //TODO OUTOFINDEX? hiba volt 1x?
-
-            int value = CardNodes[whichCard].getValue();
-            Texture2D texture = CardNodes[whichCard].getTexture();
-            Cell cell = Lorum.CenterCells[WhichCell(value)];
-
-            BackCard playedCard = (BackCard)CardNodes[whichCard];
-
-
-            PlayCardSound();
-            Tween tween = playedCard.Animate(_name, cell);
-            await cell.ToSignal(tween, Tween.SignalName.Finished);
-            cell.setDatas(value, texture);
-            CardNodes.Remove(playedCard);
-            await Task.Delay(WaitMillisAfterCardPlace);
-            playedCard.deleteCard();
-            return value;
+            BackCard playedCard = (BackCard)CardsInHand[whichCard];
+            await PlayCard(playedCard);
+            return playedCard.getValue();
         }
 
         public async Task<int> NormalRound()
         {
-            for (int i = 0; i < CardNodes.Count; i++)
+            for (int i = 0; i < CardsInHand.Count; i++)
             {
-                int value = CardNodes[i].getValue();
+                int value = CardsInHand[i].getValue();
                 Cell cell = Lorum.CenterCells[WhichCell(value)];
                 if (IsPlaceable(value, cell))
                 {
-                    Texture2D texture = CardNodes[i].getTexture();
-                    BackCard playedCard = (BackCard)CardNodes[i];
-
-                    PlayCardSound();
-                    Tween tween = playedCard.Animate(_name, cell);
-                    await cell.ToSignal(tween, Tween.SignalName.Finished);
-                    cell.setDatas(value, texture);
-                    CardNodes.Remove(playedCard);
-                    await Task.Delay(WaitMillisAfterCardPlace);
-                    playedCard.deleteCard();
-                    return CardNodes.Count - 1;
+                    BackCard playedCard = (BackCard)CardsInHand[i];
+                    await PlayCard(playedCard);
+                    return CardsInHand.Count;
                 }
             }
 
@@ -65,7 +44,7 @@ namespace cardgames.Games.Lorum.Scripts.Players
 
         public override async Task PassTurn()
         {
-            BoxContainer box = (BoxContainer)CardNodes[0].GetParent();
+            BoxContainer box = (BoxContainer)CardsInHand[0].GetParent();
             Vector2 pos;
             switch (_name)
             {

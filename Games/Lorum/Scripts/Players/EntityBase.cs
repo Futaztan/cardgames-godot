@@ -11,7 +11,7 @@ namespace cardgames.Games.Lorum.Scripts.Players
 {
     public abstract class EntityBase
     {
-        protected List<CardBase> CardNodes = new List<CardBase>();
+        protected List<CardBase> CardsInHand = new List<CardBase>();
         protected string _name = "placeholder";
         protected Pass _passIcon;
         public string Name => _name;
@@ -19,8 +19,8 @@ namespace cardgames.Games.Lorum.Scripts.Players
         public int Score => _score;
         private CardContainer _cardContainer;
         public CardContainer CardContainer => _cardContainer;
-        public int CardsInHandCount => CardNodes.Count;
-        protected const int WaitMillisAfterCardPlace = 300;
+        public int CardsInHandCount => CardsInHand.Count;
+        protected const int WaitMillisAfterCardPlace = 0;
 
 
         private AudioStreamPlayer _soundPlayer;
@@ -94,7 +94,7 @@ namespace cardgames.Games.Lorum.Scripts.Players
         
         public bool HasPlayableCard()
         {
-            foreach (var card in CardNodes)
+            foreach (var card in CardsInHand)
             {
                 int value = card.getValue();
                 Cell cell = Lorum.CenterCells[WhichCell(value)];
@@ -120,33 +120,46 @@ namespace cardgames.Games.Lorum.Scripts.Players
 
         public void ResetState()
         {
-            CardNodes = new List<CardBase>();
+            CardsInHand = new List<CardBase>();
             foreach (CardBase item in _cardContainer.GetChildren().OfType<CardBase>())
             {
                 item.QueueFree();
             }
+            UpdateLabel();
         }
 
         public void NewCardToHand(int rnd)
         {
             CardBase newcard = (CardBase)_cardContainer.CardScene.Instantiate();
             _cardContainer.AddChild(newcard);
-            CardNodes.Add(newcard);
-            CardNodes.Last().setDatas(CardDatabase.CardDatas[rnd].Item1, CardDatabase.CardDatas[rnd].Item2);
+            CardsInHand.Add(newcard);
+            CardsInHand.Last().setDatas(CardDatabase.CardDatas[rnd].Item1, CardDatabase.CardDatas[rnd].Item2);
 
             GD.Print("-------------");
             GD.Print(Name);
-            foreach (var item in CardNodes)
+            foreach (var item in CardsInHand)
             {
                 _cardContainer.RemoveChild(item);
             }
 
-            CardNodes = CardNodes.OrderBy(node => node.getValue()).ToList();
-            foreach (var item in CardNodes)
+            CardsInHand = CardsInHand.OrderBy(node => node.getValue()).ToList();
+            foreach (var item in CardsInHand)
             {
                 GD.Print(item.getValue() + " " + item.getTexture());
                 _cardContainer.AddChild(item);
             }
+        }
+        
+        public async Task PlayCard(CardBase playedCard)
+        {
+            Cell cell = Lorum.CenterCells[WhichCell(playedCard.getValue())];
+            PlayCardSound();
+            Tween tween = playedCard.Animate(_name, cell);
+            await cell.ToSignal(tween, Tween.SignalName.Finished);
+            cell.setDatas(playedCard.getValue(), playedCard.getTexture());
+            CardsInHand.Remove(playedCard);
+            playedCard.deleteCard();
+            await Task.Delay(WaitMillisAfterCardPlace);
         }
     }
 }
