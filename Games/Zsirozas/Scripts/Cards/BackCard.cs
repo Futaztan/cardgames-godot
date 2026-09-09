@@ -22,7 +22,7 @@ public partial class BackCard : CardBase
 
 
 		Vector2 targetGlobalPos = targetCell.GlobalPosition;
-		//Vector2 targetSize = targetCell.Size;
+		Vector2 targetScale = targetCell.Size / this._frontFace.Size;
 
 		float half = FlipDuration * 0.5f;
 
@@ -34,17 +34,24 @@ public partial class BackCard : CardBase
 		}
 
 	
+		// Biztosítjuk, hogy a kártya a saját közepéből forogjon és méreteződjön
+		PivotOffset = Size * 0.5f;
+
 		var tween = CreateTween();
 		tween.SetTrans(Tween.TransitionType.Cubic);
 		tween.SetEase(Tween.EaseType.InOut);
 
-		//Vector2 scaleFactor = targetCell.Size / _backFace.Size;
-		//Vector2 center = targetGlobalPos + targetCell.Size * 0.5f;
-
+		// 1. Kártya becsukása X tengelyen (Flip első fele)
 		tween.TweenProperty(this, "scale:x", 0f, half);
+
+		// 2. Kép átváltása a hátlapról az előlapra
 		tween.TweenCallback(Callable.From(() => SwapFace()));
+
+		// 3. Mozgatás a célcellára, és ezzel PÁRHUZAMOSAN a kártya szétnyitása a célméretre
 		tween.TweenProperty(this, "global_position", targetGlobalPos, MoveDuration);
-		tween.Parallel().TweenProperty(this, "scale:x", 1f, half);
+		tween.Parallel().TweenProperty(this, "scale:x", targetScale.X, half);
+		tween.Parallel().TweenProperty(this, "scale:y", targetScale.Y, half);
+		
 		return tween;
 
 	}

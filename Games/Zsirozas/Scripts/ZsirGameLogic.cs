@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using cardgames.Games.Zsirozas.Scripts.Cards;
 using cardgames.Games.Zsirozas.Scripts.Players;
 using Godot;
-using zsir;
 
 namespace cardgames.Games.Zsirozas.Scripts;
 
@@ -18,7 +17,6 @@ public class ZsirGameLogic
     private Dealer _dealer;
 
     private int _roundLength = 0;
-    private const int WaitMillisAfterCardPlace = 400;
 
     private int WhoStarted { get; set; } = -1;
     public int StartingCardValueMod => StartingCardValue % 10;
@@ -29,6 +27,7 @@ public class ZsirGameLogic
 
     public event Action<EntityBase, int> OnRoundStarted; // Ki kezd, mi a kezdő érték
     public event Action<EntityBase, CardBase> OnCardPlayed; // Ki rakott kártyát
+    public event Action OnPlayerTurnFinished;
     public event Action OnReset; // Ki rakott kártyát
     public event Func<EntityBase, Task> OnRoundEnded; // Ki vitte el a kört
     public event Action<List<EntityBase>> OnGameOver; // Győztes, Játékos helyezése
@@ -95,12 +94,14 @@ public class ZsirGameLogic
         {
             StartingCardValue = card.getValue();
             OnRoundStarted?.Invoke(HumanPlayer, StartingCardValue);
+            OnPlayerTurnFinished?.Invoke();
             await HumanPlayer.PlayCard(card);
             
             //await Task.Delay(WaitMillisAfterCardPlace);
         }
         else
         {
+            OnPlayerTurnFinished?.Invoke();
             await HumanPlayer.PlayCard(card);
             //await Task.Delay(WaitMillisAfterCardPlace);
         }

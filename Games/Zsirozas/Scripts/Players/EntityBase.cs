@@ -1,26 +1,24 @@
-using Godot;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using cardgames.Games.Zsirozas.Scripts.Cards;
-using cardgames.Zsirozas;
+using Godot;
 using Zsir = cardgames.Games.Zsirozas.Scripts.UI.Zsir;
 
-namespace zsir;
+namespace cardgames.Games.Zsirozas.Scripts.Players;
 
 public class EntityBase 
 {
     public List<CardBase> CardsInHands { get; private set; } = new();
     public int Id { get; }
     public string Name { get; }
-    public List<CardBase> CollectedCards = new List<CardBase>();
-    private CardContainer _cardContainer;
-    protected const int WaitMillisAfterCardPlace = 400;
+    public readonly List<CardBase> CollectedCards = new List<CardBase>();
+    private readonly CardContainer _cardContainer;
+    private const int WaitMillisAfterCardPlace = 400;
     public CardContainer CardContainer => _cardContainer;
 
-    private AudioStreamPlayer _soundPlayer;
-    private AudioStream _cardPlaceSound;
+    private readonly AudioStreamPlayer _soundPlayer;
+    private readonly AudioStream _cardPlaceSound;
 
     public int Score
     {
@@ -52,7 +50,7 @@ public class EntityBase
         _cardContainer.AddChild(_soundPlayer);    
     }
 
-    protected void PlayCardSound()
+    private void PlayCardSound()
     {
         if (_soundPlayer == null || _cardPlaceSound == null) return;
         _soundPlayer.PitchScale = (float)GD.RandRange(0.95, 1.05);

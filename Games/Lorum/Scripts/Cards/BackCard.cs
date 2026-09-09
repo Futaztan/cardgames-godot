@@ -22,29 +22,25 @@ public partial class BackCard : CardBase
 
 
 		Vector2 targetGlobalPos = targetCel.GlobalPosition;
-		//Vector2 targetSize = targetCell.Size;
+		Vector2 targetScale = targetCel.Size / this._frontFace.Size;
 
 		float half = FlipDuration * 0.5f;
-
+		PivotOffset = Size * 0.5f;
 		if (name != "bot2")
 		{
 			TextureRect backFaceRotated = GetNode<TextureRect>("BackFaceRotated");
 			backFaceRotated.Visible = false;
 			_backFace.Visible = true;
 		}
-
-	
 		var tween = CreateTween();
 		tween.SetTrans(Tween.TransitionType.Cubic);
 		tween.SetEase(Tween.EaseType.InOut);
 
-		//Vector2 scaleFactor = targetCell.Size / _backFace.Size;
-		//Vector2 center = targetGlobalPos + targetCell.Size * 0.5f;
-
 		tween.TweenProperty(this, "scale:x", 0f, half);
 		tween.TweenCallback(Callable.From(() => SwapFace()));
 		tween.TweenProperty(this, "global_position", targetGlobalPos, MoveDuration);
-		tween.Parallel().TweenProperty(this, "scale:x", 1f, half);
+		tween.Parallel().TweenProperty(this, "scale:x", targetScale.X, half);
+		tween.Parallel().TweenProperty(this, "scale:y", targetScale.Y, half);
 		return tween;
 
 	}

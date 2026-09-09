@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using cardgames.Games.Zsirozas.Scripts.Players;
 using Godot;
-using zsir;
 
-namespace cardgames.Zsirozas;
+namespace cardgames.Games.Zsirozas.Scripts.UI;
 public partial class StartingCardLabel : RichTextLabel
 {
 
@@ -30,7 +30,7 @@ public partial class StartingCardLabel : RichTextLabel
 		int path = whichCell(startingCardValue);
 		string image = "[img]" + _imagePaths[path] + "[/img]";
 		string txt = _values[(startingCardValue%10) - 1];
-		this.Text = startingPlayer.Name +  "\n" +image + " " + txt;
+		this.Text = "Kezdőlap:\n" +startingPlayer.Name +  "\n" +image + " " + txt;
 	}
 	public void removeText()
 	{

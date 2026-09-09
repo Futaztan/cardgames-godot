@@ -1,12 +1,15 @@
-[gd_scene load_steps=8 format=3 uid="uid://bbr7bo160uoqf"]
+[gd_scene load_steps=11 format=3 uid="uid://bbr7bo160uoqf"]
 
 [ext_resource type="Script" uid="uid://d2n3nruf4koss" path="res://Games/Lorum/Scripts/UI/Menus/MainMenu.cs" id="1_gkltl"]
 [ext_resource type="Texture2D" uid="uid://d1grrihuqrf7f" path="res://Assets/Other/background.jpeg" id="4_lc50w"]
 [ext_resource type="FontFile" uid="uid://drly01v2pi4he" path="res://Assets/Fonts/Montserrat-Bold.ttf" id="5_o4foy"]
 [ext_resource type="StyleBox" uid="uid://k28ubpjt1mv5" path="res://Assets/Themes/button_hover.tres" id="6_yfl44"]
+[ext_resource type="Texture2D" uid="uid://2lu10d8lcidu" path="res://Assets/Icons/jelek_zold.png" id="7_fgdcb"]
 [ext_resource type="StyleBox" uid="uid://ccbwuqog67eph" path="res://Assets/Themes/button_pressed.tres" id="7_xiwrg"]
+[ext_resource type="Texture2D" uid="uid://culjj7w2b83th" path="res://Assets/Icons/jelek_piros.png" id="8_gk4pn"]
 [ext_resource type="StyleBox" uid="uid://isefq5hdrpkw" path="res://Assets/Themes/button_normal.tres" id="8_kxlxl"]
-[ext_resource type="FontFile" uid="uid://dutoijljh2rk0" path="res://Assets/Fonts/Montserrat-Regular.ttf" id="9_ey37i"]
+[ext_resource type="Texture2D" uid="uid://ep2qbj7t4ppp" path="res://Assets/Icons/jelek_tok.png" id="9_xcttp"]
+[ext_resource type="Texture2D" uid="uid://dv6ng78ppcifv" path="res://Assets/Icons/jelek_makk.png" id="10_gcihc"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -31,7 +34,7 @@ texture = ExtResource("4_lc50w")
 expand_mode = 1
 metadata/_edit_lock_ = true
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="Icons" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -39,18 +42,83 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 2
-offset_left = 260.0
-offset_right = 460.0
-offset_bottom = 274.0
+[node name="TextureRect" type="TextureRect" parent="Icons"]
+layout_mode = 1
+offset_right = 101.0
+offset_bottom = 116.0
+texture = ExtResource("7_fgdcb")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="Icons"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -101.0
+offset_bottom = 116.0
+grow_horizontal = 0
+texture = ExtResource("8_gk4pn")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="Icons"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -116.0
+offset_right = 101.0
+grow_vertical = 0
+texture = ExtResource("9_xcttp")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect4" type="TextureRect" parent="Icons"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -101.0
+offset_top = -116.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("10_gcihc")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 200.0
+offset_bottom = 249.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("5_o4foy")
+theme_override_font_sizes/font_size = 42
+text = "Magyar Kártyajátékok"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Label"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 100.0
+offset_right = 300.0
+offset_bottom = 480.0
+grow_horizontal = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
 theme_override_constants/separation = 40
 alignment = 1
 
-[node name="Button" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(100, 70)
+[node name="Button" type="Button" parent="Label/VBoxContainer"]
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("5_o4foy")
@@ -58,12 +126,13 @@ theme_override_font_sizes/font_size = 24
 theme_override_styles/hover = ExtResource("6_yfl44")
 theme_override_styles/pressed = ExtResource("7_xiwrg")
 theme_override_styles/normal = ExtResource("8_kxlxl")
-text = "LORUM"
+text = "Lórum"
 
-[node name="Button2" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(100, 70)
+[node name="Button2" type="Button" parent="Label/VBoxContainer"]
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("9_ey37i")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_o4foy")
 theme_override_font_sizes/font_size = 24
 theme_override_styles/hover = ExtResource("6_yfl44")
 theme_override_styles/pressed = ExtResource("7_xiwrg")
@@ -71,8 +140,8 @@ theme_override_styles/normal = ExtResource("8_kxlxl")
 text = "Zsírozás
 "
 
-[node name="Button3" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(100, 70)
+[node name="Button3" type="Button" parent="Label/VBoxContainer"]
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("5_o4foy")
@@ -83,6 +152,6 @@ theme_override_styles/normal = ExtResource("8_kxlxl")
 text = "Beállítások
 "
 
-[connection signal="pressed" from="VBoxContainer/Button" to="." method="onLorumButtonPressed"]
-[connection signal="pressed" from="VBoxContainer/Button2" to="." method="onZsirButtonPressed"]
-[connection signal="pressed" from="VBoxContainer/Button3" to="." method="OnSettingsButtonPressed"]
+[connection signal="pressed" from="Label/VBoxContainer/Button" to="." method="onLorumButtonPressed"]
+[connection signal="pressed" from="Label/VBoxContainer/Button2" to="." method="onZsirButtonPressed"]
+[connection signal="pressed" from="Label/VBoxContainer/Button3" to="." method="OnSettingsButtonPressed"]

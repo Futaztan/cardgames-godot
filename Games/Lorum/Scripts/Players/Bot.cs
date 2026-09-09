@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using cardgames.Games.Lorum.Scripts.Cards;
 using cardgames.Lorum.Scripts.UI;
@@ -15,20 +16,36 @@ namespace cardgames.Games.Lorum.Scripts.Players
 
         public async Task<int> StartRound()
         {
-            Random random = new Random();
-            int whichCard = random.Next(0, 8); //TODO OUTOFINDEX? hiba volt 1x?
-            BackCard playedCard = (BackCard)CardsInHand[whichCard];
-            await PlayCard(playedCard);
-            return playedCard.getValue();
+            int whichCard = -1;
+           
+            try
+            {
+                Random random = new Random();
+                whichCard = random.Next(0, 8); //TODO OUTOFINDEX? hiba volt 2x
+                BackCard playedCard = (BackCard)CardsInHand[whichCard];
+                await PlayCard(playedCard);
+                return playedCard.getValue();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                GD.Print(e.Message);
+                GD.Print(CardsInHand + " " + CardsInHand.Count);
+                GD.Print("whichacard: "+ whichCard);
+                
+                throw;
+            }
+       
+
         }
 
         public async Task<int> NormalRound()
         {
             for (int i = 0; i < CardsInHand.Count; i++)
             {
-                int value = CardsInHand[i].getValue();
-                Cell cell = Lorum.CenterCells[WhichCell(value)];
-                if (IsPlaceable(value, cell))
+                //int value = CardsInHand[i].getValue();
+                //Cell cell = Lorum.CenterCells[WhichCell(value)];
+                if (IsPlaceable(CardsInHand[i]))
                 {
                     BackCard playedCard = (BackCard)CardsInHand[i];
                     await PlayCard(playedCard);

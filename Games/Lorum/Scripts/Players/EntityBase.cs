@@ -20,7 +20,7 @@ namespace cardgames.Games.Lorum.Scripts.Players
         private CardContainer _cardContainer;
         public CardContainer CardContainer => _cardContainer;
         public int CardsInHandCount => CardsInHand.Count;
-        protected const int WaitMillisAfterCardPlace = 0;
+        private const int WaitMillisAfterCardPlace = 400;
 
 
         private AudioStreamPlayer _soundPlayer;
@@ -43,7 +43,7 @@ namespace cardgames.Games.Lorum.Scripts.Players
             UpdateLabel();
         }
         
-        protected void PlayCardSound()
+        private void PlayCardSound()
         {
             if (_soundPlayer == null || _cardPlaceSound == null) return;
             _soundPlayer.PitchScale = (float)GD.RandRange(0.95, 1.05);
@@ -71,7 +71,7 @@ namespace cardgames.Games.Lorum.Scripts.Players
             //_label.Text = "[b]" + _name + "\n" + Score + " pont [/b]";
         }
 
-        public void UpdateLabel()
+        private void UpdateLabel()
         {
             _label.Text = "[b]" + _name + "\n" + _score + " pont [/b]";
             _label.Size = _label.GetMinimumSize();
@@ -86,8 +86,10 @@ namespace cardgames.Games.Lorum.Scripts.Players
             else throw new ArgumentException("nem ide valo value");
         }
 
-        protected bool IsPlaceable(int value, Cell cell)
+        protected bool IsPlaceable(CardBase card)
         {
+            int value = card.getValue();
+            Cell cell = Lorum.CenterCells[WhichCell(value)];
             return value % 10 == LorumGameLogic.StartingCardValueMod || value == cell.getValue() + 1 ||
                    value % 10 == 1 && cell.getValue() % 10 == 8;
         }
@@ -96,9 +98,7 @@ namespace cardgames.Games.Lorum.Scripts.Players
         {
             foreach (var card in CardsInHand)
             {
-                int value = card.getValue();
-                Cell cell = Lorum.CenterCells[WhichCell(value)];
-                if (IsPlaceable(value, cell)) return true;
+                if (IsPlaceable(card)) return true;
             }
             return false;
         }
@@ -150,7 +150,7 @@ namespace cardgames.Games.Lorum.Scripts.Players
             }
         }
         
-        public async Task PlayCard(CardBase playedCard)
+        protected async Task PlayCard(CardBase playedCard)
         {
             Cell cell = Lorum.CenterCells[WhichCell(playedCard.getValue())];
             PlayCardSound();

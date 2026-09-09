@@ -3,9 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using cardgames.Games.Zsirozas.Scripts.Cards;
 using cardgames.Games.Zsirozas.Scripts.Players;
-using cardgames.Zsirozas;
 using Godot;
-using zsir;
 
 namespace cardgames.Games.Zsirozas.Scripts.UI;
 
@@ -41,6 +39,7 @@ public partial class Zsir : Control
 		CreatePlayers();
 		_gameLogic.OnRoundStarted += OnLogicRoundStarted;
 		//_gameLogic.OnCardPlayed += OnLogicCardPlayed;
+		_gameLogic.OnPlayerTurnFinished += OnLogicPlayerTurnFinished;
 		_gameLogic.OnRoundEnded += OnLogicRoundEnded;
 		_gameLogic.OnGameOver += OnLogicGameOver;
 		_gameLogic.OnPlayerTurnStarted += OnLogicPlayerTurnStarted;
@@ -82,7 +81,7 @@ public partial class Zsir : Control
 
 	private void CreatePlayers()
 	{
-		CardContainer container0 = GetNode<CardContainer>("PLAYER/HBoxContainer");
+		CardContainer container0 = GetNode<CardContainer>("%PLAYER");
 		CardContainer container1 = GetNode<CardContainer>("BOT1");
 		CardContainer container2 = GetNode<CardContainer>("BOT2");
 		CardContainer container3 = GetNode<CardContainer>("BOT3");
@@ -140,7 +139,7 @@ public partial class Zsir : Control
 	{
 		GridContainer grid = GetNode<GridContainer>("%GridResults");
 		Font font = GD.Load<Font>("res://Assets/Fonts/Montserrat-Regular.ttf");
-		Theme theme = new Theme { DefaultFont = font, DefaultFontSize = 32 };
+		Theme theme = new Theme { DefaultFont = font, DefaultFontSize = 46 };
 		grid.AddChild(CreateGridLabel(position + ".", theme));
 		grid.AddChild(CreateGridLabel(name, theme));
 		grid.AddChild(CreateGridLabel(score.ToString(), theme));
@@ -173,8 +172,14 @@ public partial class Zsir : Control
 			_gameLogic.HumanPlayer.EnablePlayableCards();
 		}
 		else _gameLogic.HumanPlayer.EnableAllCards();
+		var label = GetNode<Label>("%PlayerTurnInfoLabel");
+		label.Visible = true;
 	}
-
+	private void OnLogicPlayerTurnFinished()
+	{
+		var label = GetNode<Label>("%PlayerTurnInfoLabel");
+		label.Visible = false;
+	}
 
 	private void OnLogicRoundStarted(EntityBase startingPlayer, int startingValue)
 	{

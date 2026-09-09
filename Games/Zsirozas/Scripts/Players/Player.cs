@@ -1,8 +1,7 @@
 using System.Threading.Tasks;
 using cardgames.Games.Zsirozas.Scripts.Cards;
-using cardgames.Zsirozas;
+
 using Godot;
-using zsir;
 
 namespace cardgames.Games.Zsirozas.Scripts.Players;
 

@@ -26,7 +26,8 @@ public class LorumGameLogic
     private Dealer _dealer;
 
     public event Action<int> OnRoundStarted; // Ki kezd, mi a kezdő érték
-    public event Action OnPlayerTurnStarted; // Amikor a humán játékos következik
+    public event Action OnPlayerTurnFinished;
+    public event Action<bool> OnPlayerTurnStarted; // Amikor a humán játékos következik
     public event Action OnPlayerTurnPassed; // Amikor a humán játékos passzol
     public event Action AfterCardsDealed;
     public event Action<List<EntityBase>> OnGameOver; // ha valakienk elfogy a pénze
@@ -68,7 +69,7 @@ public class LorumGameLogic
         WhoStarted = whoStarts;
 
 
-        if (WhoStarted == 0) OnPlayerTurnStarted?.Invoke();
+        if (WhoStarted == 0) OnPlayerTurnStarted?.Invoke(true);
         else
         {
             GD.Print(WhoStarted + ". bot kezd");
@@ -90,7 +91,7 @@ public class LorumGameLogic
         if (StartingCardValue == -1)
         {
             StartingCardValue = await HumanPlayer.StartRound(card);
-
+            OnPlayerTurnFinished?.Invoke();
             OnRoundStarted?.Invoke(StartingCardValue);
 
             NextPlayerLoop(0);
@@ -100,6 +101,7 @@ public class LorumGameLogic
         int cardCount = await HumanPlayer.NormalRound(card);
         if (cardCount >= 0)
         {
+            OnPlayerTurnFinished?.Invoke();
             if (cardCount == 0)
             {
                 OnRoundWin(0);
@@ -144,8 +146,7 @@ public class LorumGameLogic
             OnPlayerTurnPassed?.Invoke();
             NextPlayerLoop(0);
         }
-        else OnPlayerTurnStarted?.Invoke();
-        // HumanPlayer.enableCards();
+        else OnPlayerTurnStarted?.Invoke(false);
     }
 
     private void OnRoundWin(int winnerid)

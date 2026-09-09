@@ -26,11 +26,22 @@ public class Player : EntityBase
         return clickedCard.getValue();
     }
 
-    public void EnableCards()
+    public void EnableAllCards()
     {
         foreach (PlayerCard card in CardsInHand)
         {
             card.EnableCard();
+        }
+    }
+
+    public void EnablePlayableCards()
+    {
+        foreach (PlayerCard card in CardsInHand)
+        {
+            if (IsPlaceable(card))
+            {
+                card.EnableCard();
+            }
         }
     }
 
@@ -48,10 +59,8 @@ public class Player : EntityBase
 
     public async Task<int> NormalRound(PlayerCard clickedCard)
     {
-        int value = clickedCard.getValue();
-        Cell cell = Lorum.CenterCells[WhichCell(value)];
-
-        if (IsPlaceable(value, cell))
+        
+        if (IsPlaceable(clickedCard))
         {
             DisableCards(clickedCard);
             await PlayCard(clickedCard);

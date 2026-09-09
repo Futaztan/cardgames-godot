@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 namespace cardgames.Games.Lorum.Scripts.UI.Menus;
@@ -9,6 +10,7 @@ public partial class MainMenu : Control
 	private string ZsirScenePath { get; set; }
 	[Export(PropertyHint.File, "*.tscn")] 
 	private string SettingsScenePath { get; set; }
+	
 	
 	public void onLorumButtonPressed()
 	{

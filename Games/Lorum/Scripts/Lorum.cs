@@ -5,9 +5,10 @@ using cardgames.Games.Lorum.Scripts.Cards;
 using cardgames.Games.Lorum.Scripts.Players;
 using cardgames.Lorum.Scripts.Cards;
 using cardgames.Lorum.Scripts.UI;
-using cardgames.Lorum.Scripts.UI.Elements;
+
 using cardgames.Settings.Scripts;
 using Godot;
+using StartingCardLabel = cardgames.Games.Lorum.Scripts.UI.Elements.StartingCardLabel;
 
 namespace cardgames.Games.Lorum.Scripts;
 
@@ -42,7 +43,7 @@ public partial class Lorum : Control
         GD.Print("Player passz");
     }
 
-    private void OnLogicPlayerTurnStarted()
+    private void OnLogicPlayerTurnStarted(bool isStarting)
     {
         GD.Print("player jon");
       /*  foreach (PlayerCard item in _gameLogic.HumanPlayer.CardsInHands)
@@ -50,7 +51,19 @@ public partial class Lorum : Control
             item.CardClicked -= OnPlayerCardClicked;
             item.CardClicked += OnPlayerCardClicked;
         }*/
-        _gameLogic.HumanPlayer.EnableCards();
+      var label = GetNode<Label>("%PlayerTurnInfoLabel");
+      label.Visible = true;
+      if (isStarting)
+      {
+          _gameLogic.HumanPlayer.EnableAllCards();
+      }
+      else _gameLogic.HumanPlayer.EnablePlayableCards();
+    }
+
+    private void OnLogicPlayerTurnFinished()
+    {
+        var label = GetNode<Label>("%PlayerTurnInfoLabel");
+        label.Visible = false;
     }
 
 
@@ -68,6 +81,7 @@ public partial class Lorum : Control
         _gameLogic.OnGameOver += OnLogicGameOver;
         _gameLogic.OnPlayerTurnStarted += OnLogicPlayerTurnStarted;
         _gameLogic.OnPlayerTurnPassed += OnLogicPlayerTurnPassed;
+        _gameLogic.OnPlayerTurnFinished += OnLogicPlayerTurnFinished;
         _gameLogic.OnReset += OnLogicReset;
         _gameLogic.OnRoundOver += OnLogicRoundOver;
         _gameLogic.AfterCardsDealed += AfterLogicCardsDealed;
@@ -214,7 +228,7 @@ public partial class Lorum : Control
     private async void OnLogicGameOver(List<EntityBase> entities)
     {
         GD.Print("GAME OVER");
-        await Task.Delay(5000);
+        await Task.Delay(3500);
         GridContainer grid = GetNode<GridContainer>("%GridResults");
         foreach (Node child in grid.GetChildren().Skip(3))
         {
@@ -253,7 +267,7 @@ public partial class Lorum : Control
     {
         GridContainer grid = GetNode<GridContainer>("%GridResults");
         Font font = GD.Load<Font>("res://Assets/Fonts/Montserrat-Regular.ttf");
-        Theme theme = new Theme { DefaultFont = font, DefaultFontSize = 32 };
+        Theme theme = new Theme { DefaultFont = font, DefaultFontSize = 46 };
         grid.AddChild(CreateGridLabel(position + ".", theme));
         grid.AddChild(CreateGridLabel(name, theme));
         grid.AddChild(CreateGridLabel(score.ToString(), theme));

@@ -16,7 +16,7 @@ thickness = 2
 
 [sub_resource type="Theme" id="Theme_carl2"]
 default_font = ExtResource("2_b4apk")
-default_font_size = 24
+default_font_size = 42
 
 [node name="Settings" type="Control" node_paths=PackedStringArray("Global_NameUI", "Lorum_PointsUI", "Lorum_GameLengthUI")]
 layout_mode = 3
@@ -60,15 +60,15 @@ alignment = 1
 [node name="Label2" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("2_b4apk")
-theme_override_font_sizes/font_size = 40
+theme_override_fonts/font = ExtResource("4_ygfwu")
+theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = ExtResource("3_5p68s")
 text = "Név"
 
 [node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_b4apk")
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 42
 text = "Játékos"
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
@@ -78,9 +78,8 @@ theme_override_styles/separator = SubResource("StyleBoxLine_okdie")
 
 [node name="Label3" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("4_ygfwu")
-theme_override_font_sizes/font_size = 50
+theme_override_font_sizes/font_size = 74
 text = "LÓRUM"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -88,8 +87,8 @@ vertical_alignment = 1
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("2_b4apk")
-theme_override_font_sizes/font_size = 40
+theme_override_fonts/font = ExtResource("4_ygfwu")
+theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = ExtResource("3_5p68s")
 text = "Pontok"
 
@@ -104,12 +103,13 @@ rounded = true
 [node name="Label4" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("2_b4apk")
-theme_override_font_sizes/font_size = 40
+theme_override_fonts/font = ExtResource("4_ygfwu")
+theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = ExtResource("3_5p68s")
 text = "Játék hossza"
 
 [node name="OptionButton" type="OptionButton" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_b4apk")
 theme_override_font_sizes/font_size = 24
@@ -128,17 +128,6 @@ custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 theme_override_styles/separator = SubResource("StyleBoxLine_okdie")
 
-[node name="SaveButton" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(100, 60)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_fonts/font = ExtResource("4_ygfwu")
-theme_override_font_sizes/font_size = 32
-theme_override_styles/hover = ExtResource("6_idwoe")
-theme_override_styles/pressed = ExtResource("7_carl2")
-theme_override_styles/normal = ExtResource("8_wupaj")
-text = "Mentés"
-
 [node name="Label" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 10
@@ -151,4 +140,27 @@ text = "BEÁLLÍTÁSOK"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="pressed" from="VBoxContainer/SaveButton" to="." method="OnSaveButtonPressed"]
+[node name="SaveButton" type="Button" parent="."]
+custom_minimum_size = Vector2(100, 60)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -135.0
+offset_top = -140.0
+offset_right = 135.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_ygfwu")
+theme_override_font_sizes/font_size = 55
+theme_override_styles/hover = ExtResource("6_idwoe")
+theme_override_styles/pressed = ExtResource("7_carl2")
+theme_override_styles/normal = ExtResource("8_wupaj")
+text = "Mentés"
+
+[connection signal="pressed" from="SaveButton" to="." method="OnSaveButtonPressed"]

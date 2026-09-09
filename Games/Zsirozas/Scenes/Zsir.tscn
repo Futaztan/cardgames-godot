@@ -1,16 +1,19 @@
-[gd_scene load_steps=19 format=3 uid="uid://b716s0gf2mdb6"]
+[gd_scene load_steps=23 format=3 uid="uid://b716s0gf2mdb6"]
 
 [ext_resource type="Script" uid="uid://b46c2u1ifs1fs" path="res://Games/Zsirozas/Scripts/UI/Zsir.cs" id="1_c2jhi"]
 [ext_resource type="Texture2D" uid="uid://d1grrihuqrf7f" path="res://Assets/Other/background.jpeg" id="2_ry25h"]
 [ext_resource type="PackedScene" uid="uid://bbr7bo160uoqf" path="res://Menu/MainMenu.tscn" id="2_xkmqd"]
 [ext_resource type="FontFile" uid="uid://drly01v2pi4he" path="res://Assets/Fonts/Montserrat-Bold.ttf" id="3_41hlp"]
 [ext_resource type="Script" uid="uid://rr74fvdxfq8c" path="res://Games/Zsirozas/Scripts/UI/StartingCardLabel.cs" id="4_ry25h"]
-[ext_resource type="Texture2D" uid="uid://p4jxanucgkvm" path="res://Assets/Icons/leaf-icon@large.png" id="4_xkmqd"]
 [ext_resource type="FontFile" uid="uid://dutoijljh2rk0" path="res://Assets/Fonts/Montserrat-Regular.ttf" id="4_xr2a4"]
 [ext_resource type="Texture2D" uid="uid://ds0hxesnfrjra" path="res://Assets/Cards/back.png" id="5_d47dr"]
+[ext_resource type="Texture2D" uid="uid://2lu10d8lcidu" path="res://Assets/Icons/jelek_zold.png" id="5_w56ld"]
 [ext_resource type="Script" uid="uid://cx6ld5tp8qh52" path="res://Games/Lorum/Scripts/UI/Elements/Cell.cs" id="6_b3bc4"]
+[ext_resource type="Texture2D" uid="uid://culjj7w2b83th" path="res://Assets/Icons/jelek_piros.png" id="6_w14lt"]
 [ext_resource type="Script" uid="uid://ch4xiqg7yxp8y" path="res://Games/Lorum/Scripts/UI/Elements/CardContainer.cs" id="7_6vt5t"]
+[ext_resource type="Texture2D" uid="uid://ep2qbj7t4ppp" path="res://Assets/Icons/jelek_tok.png" id="7_kfvr1"]
 [ext_resource type="PackedScene" uid="uid://51u33bf5tmm5" path="res://Games/Lorum/Scenes/Cards/BackCard_Rotated.tscn" id="8_52yk3"]
+[ext_resource type="Texture2D" uid="uid://dv6ng78ppcifv" path="res://Assets/Icons/jelek_makk.png" id="8_xwyd6"]
 [ext_resource type="PackedScene" uid="uid://do2ui3awxrx8q" path="res://Games/Lorum/Scenes/Cards/BackCard.tscn" id="9_gxf5a"]
 [ext_resource type="StyleBox" uid="uid://k28ubpjt1mv5" path="res://Assets/Themes/button_hover.tres" id="11_d47dr"]
 [ext_resource type="StyleBox" uid="uid://ccbwuqog67eph" path="res://Assets/Themes/button_pressed.tres" id="12_41hlp"]
@@ -18,6 +21,14 @@
 [ext_resource type="PackedScene" uid="uid://bd4jlch8i83jq" path="res://Games/Zsirozas/Scenes/Cards/BackCard_Rotated.tscn" id="13_p0idq"]
 [ext_resource type="PackedScene" uid="uid://b8vw0rb80mr6f" path="res://Games/Zsirozas/Scenes/Cards/BackCard.tscn" id="15_xkmqd"]
 [ext_resource type="PackedScene" uid="uid://bslds25pbk3ag" path="res://Games/Zsirozas/Scenes/Cards/PlayerCard.tscn" id="17_p0idq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xkmqd"]
+bg_color = Color(0.490196, 0.639216, 0.572549, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_size = 3
 
 [node name="Zsir" type="Control"]
 layout_mode = 3
@@ -49,17 +60,19 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TopIcon" type="TextureRect" parent="GameResults"]
-custom_minimum_size = Vector2(169, 224)
+[node name="Label" type="Label" parent="GameResults"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -84.0
-offset_right = 85.0
-offset_bottom = 224.0
+offset_left = -213.0
+offset_top = 130.0
+offset_right = 213.0
+offset_bottom = 209.0
 grow_horizontal = 2
-texture = ExtResource("4_xkmqd")
+theme_override_fonts/font = ExtResource("3_41hlp")
+theme_override_font_sizes/font_size = 64
+text = "Eredmények"
 
 [node name="GridResults" type="GridContainer" parent="GameResults"]
 unique_name_in_owner = true
@@ -69,10 +82,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -268.5
-offset_top = -190.0
-offset_right = 268.5
-offset_bottom = -150.0
+offset_left = -321.5
+offset_top = -170.0
+offset_right = 321.5
+offset_bottom = -118.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/h_separation = 100
@@ -82,7 +95,7 @@ columns = 3
 [node name="Placement" type="Label" parent="GameResults/GridResults"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_41hlp")
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 42
 text = "HELYEZÉS"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -90,7 +103,7 @@ vertical_alignment = 1
 [node name="Name" type="Label" parent="GameResults/GridResults"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_41hlp")
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 42
 text = "NÉV"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -98,10 +111,65 @@ vertical_alignment = 1
 [node name="Score" type="Label" parent="GameResults/GridResults"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_41hlp")
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 42
 text = "PONT"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Icons" type="Control" parent="GameResults"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="GameResults/Icons"]
+layout_mode = 1
+offset_right = 101.0
+offset_bottom = 116.0
+texture = ExtResource("5_w56ld")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="GameResults/Icons"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -101.0
+offset_bottom = 116.0
+grow_horizontal = 0
+texture = ExtResource("6_w14lt")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="GameResults/Icons"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -116.0
+offset_right = 101.0
+grow_vertical = 0
+texture = ExtResource("7_kfvr1")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect4" type="TextureRect" parent="GameResults/Icons"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -101.0
+offset_top = -116.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("8_xwyd6")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Center" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -123,10 +191,10 @@ layout_mode = 2
 alignment = 1
 
 [node name="StartingCardLabel" type="RichTextLabel" parent="Center/HBoxContainer"]
-custom_minimum_size = Vector2(300, 20)
+custom_minimum_size = Vector2(300, 130)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("4_xr2a4")
-theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/normal_font_size = 40
 bbcode_enabled = true
 text = "KEZDOLAP"
 fit_content = true
@@ -142,7 +210,7 @@ alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="CardDeck" type="TextureRect" parent="Center/HBoxContainer1"]
-custom_minimum_size = Vector2(150, 220)
+custom_minimum_size = Vector2(136, 200)
 layout_mode = 2
 texture = ExtResource("5_d47dr")
 expand_mode = 3
@@ -154,7 +222,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="GameArea" type="TextureRect" parent="Center/HBoxContainer2"]
-custom_minimum_size = Vector2(160, 264)
+custom_minimum_size = Vector2(190, 314)
 layout_mode = 2
 expand_mode = 5
 stretch_mode = 6
@@ -164,18 +232,16 @@ metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
 [node name="PassButton" type="Button" parent="Center/HBoxContainer2/GameArea"]
 visible = false
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -240.0
-offset_top = -43.0
-offset_right = -100.0
-grow_horizontal = 2
+offset_left = -180.0
+offset_top = -52.0
+offset_right = -9.0
 grow_vertical = 0
-theme_override_fonts/font = ExtResource("4_xr2a4")
-theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_41hlp")
+theme_override_font_sizes/font_size = 30
 theme_override_styles/hover = ExtResource("11_d47dr")
 theme_override_styles/pressed = ExtResource("12_41hlp")
 theme_override_styles/normal = ExtResource("13_c0wpv")
@@ -271,31 +337,22 @@ layout_mode = 2
 visible = false
 layout_mode = 2
 
-[node name="PLAYER" type="ScrollContainer" parent="."]
-clip_contents = false
+[node name="PLAYER" type="BoxContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 37.0
-offset_top = -313.0
-offset_right = -29.0
-offset_bottom = -4.0
+offset_top = -231.0
+offset_bottom = 53.0
 grow_horizontal = 2
 grow_vertical = 0
-follow_focus = true
-horizontal_scroll_mode = 3
-vertical_scroll_mode = 0
-
-[node name="HBoxContainer" type="HBoxContainer" parent="PLAYER"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-theme_override_constants/separation = 10
+theme_override_constants/separation = -70
 alignment = 1
 script = ExtResource("7_6vt5t")
 CardScene = ExtResource("17_p0idq")
+metadata/_custom_type_script = "uid://ch4xiqg7yxp8y"
 
 [node name="ButtonsContainer" type="HBoxContainer" parent="."]
 unique_name_in_owner = true
@@ -328,6 +385,28 @@ theme_override_styles/hover = ExtResource("11_d47dr")
 theme_override_styles/pressed = ExtResource("12_41hlp")
 theme_override_styles/normal = ExtResource("13_c0wpv")
 text = "Indulhat az új kör!"
+
+[node name="PlayerTurnInfoLabel" type="Label" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -118.5
+offset_top = -347.0
+offset_right = 118.5
+offset_bottom = -307.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("3_41hlp")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_xkmqd")
+text = "Te következel!"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="CardPlacedAudioPlayer" type="AudioStreamPlayer" parent="."]
 
