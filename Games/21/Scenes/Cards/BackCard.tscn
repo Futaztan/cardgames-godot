@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://cnx06m4wyuxv2"]
+
+[ext_resource type="Script" uid="uid://2guwd7ex18od" path="res://Games/21/Scripts/Cards/BackCard.cs" id="1_4gxm1"]
+[ext_resource type="Texture2D" uid="uid://ds0hxesnfrjra" path="res://Assets/Cards/back.png" id="2_5cxgp"]
+[ext_resource type="Texture2D" uid="uid://de2mvmyvboojp" path="res://Assets/Cards/makk_7.png" id="3_yd7il"]
+
+[node name="Back_Card" type="Control"]
+custom_minimum_size = Vector2(70, 155)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 113.0
+offset_bottom = 155.0
+size_flags_horizontal = 4
+script = ExtResource("1_4gxm1")
+metadata/_custom_type_script = "uid://k41cc56hh2hh"
+
+[node name="BackFace" type="TextureRect" parent="."]
+layout_mode = 1
+offset_right = 45.0
+offset_bottom = 56.0
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("2_5cxgp")
+expand_mode = 5
+
+[node name="FrontFace" type="TextureRect" parent="."]
+visible = false
+custom_minimum_size = Vector2(160, 264)
+layout_mode = 0
+offset_right = 140.0
+offset_bottom = 231.0
+texture = ExtResource("3_yd7il")

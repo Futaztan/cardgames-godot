@@ -9,6 +9,9 @@ public partial class MainMenu : Control
 	[Export(PropertyHint.File, "*.tscn")] 
 	private string ZsirScenePath { get; set; }
 	[Export(PropertyHint.File, "*.tscn")] 
+	
+	private string _21ScenePath { get; set; }
+	[Export(PropertyHint.File, "*.tscn")] 
 	private string SettingsScenePath { get; set; }
 	
 	
@@ -35,6 +38,12 @@ public partial class MainMenu : Control
 		//menuInstance.init(GameTypeEnum.LORUM);
 		
 		//QueueFree();
+	}
+
+	private void On21ButtonPressed()
+	{
+		PackedScene scene = GD.Load<PackedScene>(_21ScenePath);
+		GetTree().ChangeSceneToPacked(scene);
 	}
 
 	private void OnSettingsButtonPressed()

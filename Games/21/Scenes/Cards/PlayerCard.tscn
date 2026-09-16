@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://baem1t44ljxkx"]
+
+[ext_resource type="Script" uid="uid://cfjh6375nlrtd" path="res://Games/21/Scripts/Cards/PlayerCard.cs" id="1_fi525"]
+[ext_resource type="Texture2D" uid="uid://de2mvmyvboojp" path="res://Assets/Cards/makk_7.png" id="2_1rvlu"]
+
+[node name="PlayerCard" type="CenterContainer"]
+custom_minimum_size = Vector2(140, 230)
+offset_right = 140.0
+offset_bottom = 231.0
+script = ExtResource("1_fi525")
+metadata/_custom_type_script = "uid://b63usmscmn1wc"
+
+[node name="FrontFace" type="TextureRect" parent="."]
+clip_contents = true
+custom_minimum_size = Vector2(190, 314)
+layout_mode = 2
+texture = ExtResource("2_1rvlu")
+stretch_mode = 4
+
+[connection signal="gui_input" from="." to="." method="onPlayerCardClicked"]

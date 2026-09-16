@@ -21,6 +21,7 @@ grow_vertical = 2
 script = ExtResource("1_gkltl")
 LorumScenePath = "uid://3aq5ia7a6f64"
 ZsirScenePath = "uid://b716s0gf2mdb6"
+_21ScenePath = "uid://n7v5g02ec8n3"
 SettingsScenePath = "uid://p7m01wx43dj1"
 
 [node name="BackGround" type="TextureRect" parent="."]
@@ -140,6 +141,17 @@ theme_override_styles/normal = ExtResource("8_kxlxl")
 text = "Zsírozás
 "
 
+[node name="Button4" type="Button" parent="Label/VBoxContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_o4foy")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/hover = ExtResource("6_yfl44")
+theme_override_styles/pressed = ExtResource("7_xiwrg")
+theme_override_styles/normal = ExtResource("8_kxlxl")
+text = "21"
+
 [node name="Button3" type="Button" parent="Label/VBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
@@ -154,4 +166,5 @@ text = "Beállítások
 
 [connection signal="pressed" from="Label/VBoxContainer/Button" to="." method="onLorumButtonPressed"]
 [connection signal="pressed" from="Label/VBoxContainer/Button2" to="." method="onZsirButtonPressed"]
+[connection signal="pressed" from="Label/VBoxContainer/Button4" to="." method="On21ButtonPressed"]
 [connection signal="pressed" from="Label/VBoxContainer/Button3" to="." method="OnSettingsButtonPressed"]
