@@ -10,7 +10,7 @@ public partial class PlayerCard : CardBase
 
 	public override void _Ready()
 	{
-		_frontFace = GetNode<TextureRect>("FrontFace");
+		FrontFace = GetNode<TextureRect>("FrontFace");
 	}
 
 	public void DisableCard(bool setToGrey = true)
@@ -18,14 +18,14 @@ public partial class PlayerCard : CardBase
 		MouseFilter = MouseFilterEnum.Ignore;
 		if (setToGrey)
 		{
-			_frontFace.Modulate = new Color(0.6f, 0.6f, 0.6f, 1f);
+			FrontFace.Modulate = new Color(0.6f, 0.6f, 0.6f, 1f);
 		}
 	}
 
 	public void EnableCard()
 	{
 		MouseFilter = MouseFilterEnum.Pass;
-		_frontFace.Modulate = new Color(1f, 1f, 1f, 1f); 
+		FrontFace.Modulate = new Color(1f, 1f, 1f, 1f); 
 	}
 
 

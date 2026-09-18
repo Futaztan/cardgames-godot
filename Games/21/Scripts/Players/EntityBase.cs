@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,21 +17,32 @@ public class EntityBase
     private readonly CardContainer _cardContainer;
     private const int WaitMillisAfterCardPlace = 400;
     public CardContainer CardContainer => _cardContainer;
+    private Label _pointLabel;
 
     private readonly AudioStreamPlayer _soundPlayer;
     private readonly AudioStream _cardPlaceSound;
 
     private int  _originalMoney;
-    public int Money { get; set; }
+    private int _money;
 
-    
-    protected EntityBase(string name, int id, CardContainer container, int money)
+    public int Money
+    {
+        get => _money;
+        set
+        {
+            _money = value;
+            _pointLabel.Text = Name + " pontjai:\n" + _money;
+        }
+    }
+
+    protected EntityBase(string name, int id, CardContainer container, int money, Label label)
     {
         Name = name;
         Id = id;
         _originalMoney = money;
-        Money = money;
+        _pointLabel = label;
         _cardContainer = container;
+        Money = money;
         _cardPlaceSound = GD.Load<AudioStream>("res://Assets/Sound/card_placed.mp3");
         
         _soundPlayer = new AudioStreamPlayer();
@@ -38,12 +50,28 @@ public class EntityBase
         _cardContainer.AddChild(_soundPlayer);    
     }
 
+    public int CardsValueInHand
+    {
+        get
+        {
+            int score = 0;
+            foreach (var card in CardsInHands)
+            {
+                score += card.ScoreValue;
+            }
+            return score;
+        }
+    }
+
+
     private void PlayCardSound()
     {
         if (_soundPlayer == null || _cardPlaceSound == null) return;
         _soundPlayer.PitchScale = (float)GD.RandRange(0.95, 1.05);
         _soundPlayer.Play();
     }
+    
+    
 
 
     public void ResetRoundState()
@@ -68,7 +96,7 @@ public class EntityBase
         CardsInHands.Add(newcard);
         // int rnd = gameLogic.DrawCardIndex();
         CardsInHands.Last()
-            .setDatas(CardDatabase.CardDatas[random].Item1, CardDatabase.CardDatas[random].Item2);
+            .SetDatas(CardDatabase.CardDatas[random].Item1,CardDatabase.CardDatas[random].ScoreValue , CardDatabase.CardDatas[random].Item3);
 
         GD.Print("-------------");
         GD.Print(Name);
@@ -77,10 +105,10 @@ public class EntityBase
             _cardContainer.RemoveChild(item);
         }
 
-        CardsInHands = CardsInHands.OrderBy(node => node.getValue()).ToList();
+        CardsInHands = CardsInHands.OrderBy(node => node.Value).ToList();
         foreach (var item in CardsInHands)
         {
-            GD.Print(item.getValue() + " " + item.getTexture());
+            GD.Print(item.Value + " " + item.GetTexture());
             _cardContainer.AddChild(item);
         }
     }
@@ -91,9 +119,9 @@ public class EntityBase
         PlayCardSound();
         Tween tween = playedCard.Animate(Name,  Zsir.GameAreaCell);
         await Zsir.GameAreaCell.ToSignal(tween, Tween.SignalName.Finished);
-        Zsir.GameAreaCell.setDatas(playedCard.getValue(), playedCard.getTexture());
+        Zsir.GameAreaCell.setDatas(playedCard.Value, playedCard.GetTexture());
         CardsInHands.Remove(playedCard);
-        playedCard.deleteCard();
+        playedCard.DeleteCard();
         await Task.Delay(WaitMillisAfterCardPlace);
     }
 }

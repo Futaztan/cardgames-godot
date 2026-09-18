@@ -6,9 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://bbr7bo160uoqf" path="res://Menu/MainMenu.tscn" id="2_carl2"]
 [ext_resource type="StyleBox" uid="uid://drccutulbj16b" path="res://Settings/Style/settings_label_style.tres" id="3_5p68s"]
 [ext_resource type="FontFile" uid="uid://drly01v2pi4he" path="res://Assets/Fonts/Montserrat-Bold.ttf" id="4_ygfwu"]
-[ext_resource type="StyleBox" uid="uid://k28ubpjt1mv5" path="res://Assets/Themes/button_hover.tres" id="6_idwoe"]
-[ext_resource type="StyleBox" uid="uid://ccbwuqog67eph" path="res://Assets/Themes/button_pressed.tres" id="7_carl2"]
-[ext_resource type="StyleBox" uid="uid://isefq5hdrpkw" path="res://Assets/Themes/button_normal.tres" id="8_wupaj"]
+[ext_resource type="StyleBox" uid="uid://k28ubpjt1mv5" path="res://Assets/Themes/normal/green/button_hover.tres" id="6_idwoe"]
+[ext_resource type="StyleBox" uid="uid://ccbwuqog67eph" path="res://Assets/Themes/normal/green/button_pressed.tres" id="7_carl2"]
+[ext_resource type="StyleBox" uid="uid://isefq5hdrpkw" path="res://Assets/Themes/normal/green/button_normal.tres" id="8_wupaj"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_okdie"]
 color = Color(1, 1, 1, 1)

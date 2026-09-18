@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://r6lsr54m66g8"]
 
 [ext_resource type="FontFile" uid="uid://dutoijljh2rk0" path="res://Assets/Fonts/Montserrat-Regular.ttf" id="1_hvkin"]
-[ext_resource type="StyleBox" uid="uid://isefq5hdrpkw" path="res://Assets/Themes/button_normal.tres" id="1_ndcfv"]
+[ext_resource type="StyleBox" uid="uid://isefq5hdrpkw" path="res://Assets/Themes/normal/green/button_normal.tres" id="1_ndcfv"]
 
 [node name="PointLabel" type="RichTextLabel"]
 offset_right = 114.0

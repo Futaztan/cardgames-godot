@@ -6,26 +6,24 @@ public abstract partial class CardBase : Control
 {
     protected float FlipDuration = 0.5f; // Teljes fordulási idő
     protected float MoveDuration = 0.5f; // Mozgás ideje
-    protected int _value = -1;
-    protected TextureRect _frontFace;
+    public int Value { get; private set; } = -1;
+    protected TextureRect FrontFace { get; set; }
+    public int ScoreValue { get; private set; }
 
-    public void setDatas(int value, Texture2D text)
+    public void SetDatas(int value,int score, Texture2D text)
     {
-        _value = value;
-        _frontFace.Texture = text;
+        Value = value;
+        ScoreValue = score;
+        FrontFace.Texture = text;
+    }
+    
+
+    public Texture2D GetTexture()
+    {
+        return FrontFace.Texture;
     }
 
-    internal int getValue()
-    {
-        return _value;
-    }
-
-    internal Texture2D getTexture()
-    {
-        return _frontFace.Texture;
-    }
-
-    internal void deleteCard()
+    public void DeleteCard()
     {
         this.QueueFree();
     }

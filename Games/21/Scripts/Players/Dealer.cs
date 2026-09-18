@@ -49,16 +49,12 @@ public class Dealer
         Control cardDeck = mainScene.GetNode<Control>("Center/CardDeck");
         int rnd = DrawCardIndex();
 
-        DealAnimation(mainScene, cardDeck, to.CardContainer, rotate, rnd, () =>
+        Tween tween = DealAnimation(mainScene, cardDeck, to.CardContainer, rotate, rnd, () =>
         {
-           
             to.NewCardToHand(rnd);
         });
 
-        await mainScene.ToSignal(mainScene.GetTree().CreateTimer(0.15f), SceneTreeTimer.SignalName.Timeout);
-
-
-        await mainScene.ToSignal(mainScene.GetTree().CreateTimer(0.2f), SceneTreeTimer.SignalName.Timeout);
+        await mainScene.ToSignal(tween, Tween.SignalName.Finished);
     }
 
     private Node GetMainScene()
@@ -67,7 +63,7 @@ public class Dealer
         return tree.CurrentScene;
     }
 
-    private void DealAnimation(Node mainScene, Control cardDeck, Control toNode, bool rotate, int randomValue, Action onAnimationDone)
+    private Tween DealAnimation(Node mainScene, Control cardDeck, Control toNode, bool rotate, int randomValue, Action onAnimationDone)
     {
         TextureRect animatedCard = new TextureRect();
         animatedCard.Texture = GD.Load<Texture2D>("res://Assets/Cards/back.png");
@@ -102,12 +98,12 @@ public class Dealer
             tween.Parallel().TweenProperty(animatedCard, "scale:x", targetScale.X, 0.5f);
             tween.Parallel().TweenProperty(animatedCard, "scale:y", targetScale.Y, 0.25f);
         }
-   
 
-        tween.TweenCallback(Callable.From(() =>
+        tween.Finished += () =>
         {
             animatedCard.QueueFree();
             onAnimationDone?.Invoke();
-        }));
+        };
+        return tween;
     }
 }

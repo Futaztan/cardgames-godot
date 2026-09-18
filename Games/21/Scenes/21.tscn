@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://n7v5g02ec8n3"]
+[gd_scene load_steps=22 format=3 uid="uid://n7v5g02ec8n3"]
 
 [ext_resource type="Script" uid="uid://22i3lg7p36s5" path="res://Games/21/Scripts/_21.cs" id="1_ei2hj"]
 [ext_resource type="Texture2D" uid="uid://d1grrihuqrf7f" path="res://Assets/Other/background.jpeg" id="2_p3qm7"]
@@ -7,6 +7,32 @@
 [ext_resource type="Script" uid="uid://ch4xiqg7yxp8y" path="res://Games/Lorum/Scripts/UI/Elements/CardContainer.cs" id="5_hb4kf"]
 [ext_resource type="PackedScene" uid="uid://baem1t44ljxkx" path="res://Games/21/Scenes/Cards/PlayerCard.tscn" id="6_ei2hj"]
 [ext_resource type="PackedScene" uid="uid://cnx06m4wyuxv2" path="res://Games/21/Scenes/Cards/BackCard.tscn" id="7_p3qm7"]
+[ext_resource type="FontFile" uid="uid://drly01v2pi4he" path="res://Assets/Fonts/Montserrat-Bold.ttf" id="8_5pcow"]
+[ext_resource type="StyleBox" uid="uid://bi1gu6kgj223t" path="res://Assets/Themes/rounded/red/rounded_button_red_hover.tres" id="9_a7gfh"]
+[ext_resource type="StyleBox" uid="uid://doa0w47am7ret" path="res://Assets/Themes/rounded/red/rounded_button_red_pressed.tres" id="9_r8u6i"]
+[ext_resource type="StyleBox" uid="uid://cm6cfeq8hy2gg" path="res://Assets/Themes/rounded/red/rounded_button_red_normal.tres" id="10_a7gfh"]
+[ext_resource type="StyleBox" uid="uid://otdvwyld4038" path="res://Assets/Themes/rounded/green/rounded_button_pressed.tres" id="11_ip7yj"]
+[ext_resource type="StyleBox" uid="uid://clnw2e1qi03ox" path="res://Assets/Themes/rounded/green/rounded_button_normal.tres" id="12_7557r"]
+[ext_resource type="StyleBox" uid="uid://b2yy7lqaur1q1" path="res://Assets/Themes/rounded/green/rounded_button_hover.tres" id="12_ip7yj"]
+[ext_resource type="StyleBox" uid="uid://dtnx85e1deaxk" path="res://Assets/Themes/normal/red/button_red_hover.tres" id="15_f3mp2"]
+[ext_resource type="StyleBox" uid="uid://isefq5hdrpkw" path="res://Assets/Themes/normal/green/button_normal.tres" id="15_ip7yj"]
+[ext_resource type="StyleBox" uid="uid://io2jlmno5snt" path="res://Assets/Themes/normal/red/button_red_pressed.tres" id="16_v28yy"]
+[ext_resource type="StyleBox" uid="uid://ci7iqngtud52q" path="res://Assets/Themes/normal/red/button_red_normal.tres" id="17_xqlga"]
+[ext_resource type="StyleBox" uid="uid://k28ubpjt1mv5" path="res://Assets/Themes/normal/green/button_hover.tres" id="18_yq4qc"]
+[ext_resource type="StyleBox" uid="uid://ccbwuqog67eph" path="res://Assets/Themes/normal/green/button_pressed.tres" id="19_2iuss"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tacc5"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.921021, 0.966721, 0.927991, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+shadow_color = Color(0, 0, 0, 0.568627)
+shadow_size = 10
 
 [node name="21" type="Control"]
 layout_mode = 3
@@ -49,7 +75,49 @@ expand_mode = 3
 script = ExtResource("4_dv0th")
 metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
 
-[node name="Player" type="BoxContainer" parent="."]
+[node name="Bot" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dealer" type="HBoxContainer" parent="Bot"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 30.0
+offset_bottom = 185.0
+grow_horizontal = 2
+alignment = 1
+script = ExtResource("5_hb4kf")
+CardScene = ExtResource("7_p3qm7")
+metadata/_custom_type_script = "uid://ch4xiqg7yxp8y"
+
+[node name="BotPointLabel" type="Label" parent="Bot"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -40.0
+offset_right = 156.0
+offset_bottom = -17.0
+grow_vertical = 2
+text = "asdasdsadsadsad"
+uppercase = true
+
+[node name="Player" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlayerContainer" type="BoxContainer" parent="Player"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 12
@@ -66,25 +134,235 @@ script = ExtResource("5_hb4kf")
 CardScene = ExtResource("6_ei2hj")
 metadata/_custom_type_script = "uid://ch4xiqg7yxp8y"
 
-[node name="Dealer" type="HBoxContainer" parent="."]
+[node name="WagerMenu" type="ColorRect" parent="Player"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.392157)
+
+[node name="PanelContainer" type="PanelContainer" parent="Player/WagerMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -354.0
+offset_top = -208.0
+offset_right = 354.0
+offset_bottom = 208.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tacc5")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Player/WagerMenu/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 70
+
+[node name="Label" type="Label" parent="Player/WagerMenu/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 54
+text = "TEDD MEG A TÉTED"
+horizontal_alignment = 1
+
+[node name="WagerLabel" type="Label" parent="Player/WagerMenu/PanelContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.301708, 0.103848, 0.158186, 1)
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 72
+text = "25$"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Player/WagerMenu/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/hover = ExtResource("9_a7gfh")
+theme_override_styles/pressed = ExtResource("9_r8u6i")
+theme_override_styles/normal = ExtResource("10_a7gfh")
+text = "-20	"
+
+[node name="Button2" type="Button" parent="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/hover = ExtResource("9_a7gfh")
+theme_override_styles/pressed = ExtResource("9_r8u6i")
+theme_override_styles/normal = ExtResource("10_a7gfh")
+text = "-10"
+
+[node name="Button3" type="Button" parent="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/hover = ExtResource("9_a7gfh")
+theme_override_styles/pressed = ExtResource("9_r8u6i")
+theme_override_styles/normal = ExtResource("10_a7gfh")
+text = "-5"
+
+[node name="Button4" type="Button" parent="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/hover = ExtResource("9_a7gfh")
+theme_override_styles/pressed = ExtResource("9_r8u6i")
+theme_override_styles/normal = ExtResource("10_a7gfh")
+text = "-1"
+
+[node name="Button5" type="Button" parent="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/hover = ExtResource("12_ip7yj")
+theme_override_styles/pressed = ExtResource("11_ip7yj")
+theme_override_styles/normal = ExtResource("12_7557r")
+text = "+1"
+
+[node name="Button6" type="Button" parent="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/hover = ExtResource("12_ip7yj")
+theme_override_styles/pressed = ExtResource("11_ip7yj")
+theme_override_styles/normal = ExtResource("12_7557r")
+text = "+5"
+
+[node name="Button7" type="Button" parent="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/hover = ExtResource("12_ip7yj")
+theme_override_styles/pressed = ExtResource("11_ip7yj")
+theme_override_styles/normal = ExtResource("12_7557r")
+text = "+10"
+
+[node name="Button8" type="Button" parent="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/hover = ExtResource("12_ip7yj")
+theme_override_styles/pressed = ExtResource("11_ip7yj")
+theme_override_styles/normal = ExtResource("12_7557r")
+text = "+20"
+
+[node name="Button" type="Button" parent="Player/WagerMenu/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 43
+theme_override_styles/hover = ExtResource("12_ip7yj")
+theme_override_styles/pressed = ExtResource("11_ip7yj")
+theme_override_styles/normal = ExtResource("12_7557r")
+text = "OK"
+
+[node name="DecisionMenu" type="VBoxContainer" parent="Player"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -359.0
+offset_top = -52.5
+offset_right = 359.0
+offset_bottom = 52.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Player/DecisionMenu"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="StopButton" type="Button" parent="Player/DecisionMenu/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/hover = ExtResource("15_f3mp2")
+theme_override_styles/pressed = ExtResource("16_v28yy")
+theme_override_styles/normal = ExtResource("17_xqlga")
+text = "MEGÁLLOK"
+
+[node name="AskButton" type="Button" parent="Player/DecisionMenu/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/hover = ExtResource("18_yq4qc")
+theme_override_styles/pressed = ExtResource("19_2iuss")
+theme_override_styles/normal = ExtResource("15_ip7yj")
+text = "LAPOT KÉREK"
+
+[node name="ValueLabel" type="Label" parent="Player/DecisionMenu"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 32
+text = "Érték: "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NewRoundContainer" type="HBoxContainer" parent="Player/DecisionMenu"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+alignment = 1
+
+[node name="NewRoundButton" type="Button" parent="Player/DecisionMenu/NewRoundContainer"]
+custom_minimum_size = Vector2(300, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 48
+theme_override_styles/hover = ExtResource("18_yq4qc")
+theme_override_styles/pressed = ExtResource("19_2iuss")
+theme_override_styles/normal = ExtResource("15_ip7yj")
+text = "ÚJ KÖR"
+
+[node name="PlayerPointLabel" type="Label" parent="Player"]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 30.0
-offset_bottom = 185.0
-grow_horizontal = 2
-alignment = 1
-script = ExtResource("5_hb4kf")
-CardScene = ExtResource("7_p3qm7")
-metadata/_custom_type_script = "uid://ch4xiqg7yxp8y"
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = 110.0
+offset_right = 156.0
+offset_bottom = 133.0
+grow_vertical = 2
+text = "asdasdsadsadsad"
+uppercase = true
 
-[node name="HSlider" type="HSlider" parent="."]
-clip_contents = true
-custom_minimum_size = Vector2(200, 200)
-layout_mode = 0
-offset_left = 163.0
-offset_top = 218.0
-offset_right = 606.0
-offset_bottom = 418.0
-tick_count = 1
+[connection signal="pressed" from="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer/Button" to="." method="OnModifyWagerButtonPressed" binds= [-20]]
+[connection signal="pressed" from="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer/Button2" to="." method="OnModifyWagerButtonPressed" binds= [-10]]
+[connection signal="pressed" from="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer/Button3" to="." method="OnModifyWagerButtonPressed" binds= [-5]]
+[connection signal="pressed" from="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer/Button4" to="." method="OnModifyWagerButtonPressed" binds= [-1]]
+[connection signal="pressed" from="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer/Button5" to="." method="OnModifyWagerButtonPressed" binds= [1]]
+[connection signal="pressed" from="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer/Button6" to="." method="OnModifyWagerButtonPressed" binds= [5]]
+[connection signal="pressed" from="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer/Button7" to="." method="OnModifyWagerButtonPressed" binds= [10]]
+[connection signal="pressed" from="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer/Button8" to="." method="OnModifyWagerButtonPressed" binds= [20]]
+[connection signal="pressed" from="Player/WagerMenu/PanelContainer/VBoxContainer/Button" to="." method="OnWagerOkButtonPressed"]
+[connection signal="pressed" from="Player/DecisionMenu/HBoxContainer/StopButton" to="." method="OnStopsButtonPressed"]
+[connection signal="pressed" from="Player/DecisionMenu/HBoxContainer/AskButton" to="." method="OnAskingForCardButtonPressed"]
+[connection signal="pressed" from="Player/DecisionMenu/NewRoundContainer/NewRoundButton" to="." method="OnNewRoundButtonPressed"]

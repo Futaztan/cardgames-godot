@@ -12,7 +12,7 @@ public partial class BackCard : CardBase
     public override void _Ready()
     {
         _backFace = GetNode<TextureRect>("BackFace");
-        _frontFace = GetNode<TextureRect>("FrontFace");
+        FrontFace = GetNode<TextureRect>("FrontFace");
         this.PivotOffset = this.Size * 0.5f;
         Scale = Vector2.One;
     }
@@ -22,7 +22,7 @@ public partial class BackCard : CardBase
 
 
         Vector2 targetGlobalPos = targetCell.GlobalPosition;
-        Vector2 targetScale = targetCell.Size / this._frontFace.Size;
+        Vector2 targetScale = targetCell.Size / this.FrontFace.Size;
 
         float half = FlipDuration * 0.5f;
 
@@ -59,6 +59,6 @@ public partial class BackCard : CardBase
     private void SwapFace()
     {
         _backFace.Visible = false;
-        _frontFace.Visible = true;
+        FrontFace.Visible = true;
     }
 }
