@@ -46,7 +46,7 @@ public class Dealer
     public async Task DealCard(EntityBase to, bool rotate)
     {
         Node mainScene = GetMainScene();
-        Control cardDeck = mainScene.GetNode<Control>("Center/CardDeck");
+        Control cardDeck = mainScene.GetNode<Control>("%CardDeck");
         int rnd = DrawCardIndex();
 
         Tween tween = DealAnimation(mainScene, cardDeck, to.CardContainer, rotate, rnd, () =>

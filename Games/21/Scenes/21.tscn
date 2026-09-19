@@ -54,26 +54,18 @@ texture = ExtResource("2_p3qm7")
 expand_mode = 1
 metadata/_edit_lock_ = true
 
-[node name="CardPlacedAudioPlayer" type="AudioStreamPlayer" parent="."]
-
-[node name="Center" type="HBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -340.0
-offset_bottom = -140.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="CardDeck" type="TextureRect" parent="Center"]
+[node name="CardDeck" type="TextureRect" parent="."]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(136, 200)
 layout_mode = 2
+offset_right = 144.07
+offset_bottom = 200.0
 texture = ExtResource("3_v2kgb")
 expand_mode = 3
 script = ExtResource("4_dv0th")
 metadata/_custom_type_script = "uid://cx6ld5tp8qh52"
+
+[node name="CardPlacedAudioPlayer" type="AudioStreamPlayer" parent="."]
 
 [node name="Bot" type="Control" parent="."]
 layout_mode = 1
@@ -83,18 +75,37 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Dealer" type="HBoxContainer" parent="Bot"]
+[node name="BotContainer" type="HBoxContainer" parent="Bot"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
+offset_left = 247.0
 offset_top = 30.0
-offset_bottom = 185.0
+offset_bottom = 181.0
 grow_horizontal = 2
-alignment = 1
+theme_override_constants/separation = -70
+alignment = 2
 script = ExtResource("5_hb4kf")
 CardScene = ExtResource("7_p3qm7")
 metadata/_custom_type_script = "uid://ch4xiqg7yxp8y"
+
+[node name="ValueLabel" type="Label" parent="Bot"]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -54.0
+offset_top = 400.0
+offset_right = 54.0
+offset_bottom = 440.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 32
+text = "Érték: "
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="BotPointLabel" type="Label" parent="Bot"]
 unique_name_in_owner = true

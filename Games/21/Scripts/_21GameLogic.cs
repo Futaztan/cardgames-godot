@@ -42,8 +42,9 @@ public class _21GameLogic
     public event Action<int> OnWagerChanged;
     public event Action<int> OnAskPlayerForMove;
 
-    public event Action OnPlayerBusted;
+    public event Action OnRoundOver;
     public event Action OnContinueGameAfterDeal;
+    public event Action OnStartBotRound;
     public _21GameLogic( Player humanPlayer, Bot bot, int originalMoney )
     { 
         _humanPlayer = humanPlayer;
@@ -53,20 +54,20 @@ public class _21GameLogic
         _dealer = new Dealer(_allPlayers);
     }
     
-    private void ResetGameState()
+    private void ResetGame()
     {
         _allPlayers.ForEach(player => player.ResetGameState());
-        ResetRoundState();
+        ResetRound();
     }
-    private void ResetRoundState()
+    private void ResetRound()
     {
         _dealer.Reset();
         _allPlayers.ForEach(player => player.ResetRoundState());
     }
 
-    public async Task StartNewGame()
+    public async Task StartNewRound()
     {
-        ResetGameState();
+        ResetRound();
         //OnReset?.Invoke();
         await _dealer.DealCard(_bot,false);
         await _dealer.DealCard(_humanPlayer,true);
@@ -82,6 +83,8 @@ public class _21GameLogic
 
     private void OnRoundWin(EntityBase winner)
     {
+        if (winner is null) return;
+        
         int winnerId = winner.Id;
         _allPlayers[winnerId].Money += Wager;
         for (int i = 0; i < 2; i++)
@@ -97,13 +100,35 @@ public class _21GameLogic
         if (_humanPlayer.CardsValueInHand > 21)
         {
             OnRoundWin(_bot);
-            OnPlayerBusted?.Invoke();
+            OnRoundOver?.Invoke();
         }
         else OnContinueGameAfterDeal?.Invoke();
     }
 
-    public void ResetRound()
+    public async Task BotRound()
     {
-        
+        OnStartBotRound?.Invoke();
+        await _dealer.DealCard(_bot, false);
+        while (_bot.DecideToGetNewCard())
+        {
+            await _dealer.DealCard(_bot, false);
+        }
+
+        _bot.ShowCards();
+        OnRoundWin(DecideWhoWonRound());
+        OnRoundOver?.Invoke();
     }
+
+    private EntityBase DecideWhoWonRound()
+    {
+        int botValue = _bot.CardsValueInHand;
+        int playerValue = _humanPlayer.CardsValueInHand;
+        if (botValue > 21) return _humanPlayer;
+        if (botValue > playerValue) return _bot;
+        if (botValue < playerValue) return _humanPlayer;
+        if (botValue == playerValue) return null;
+        else throw new Exception("nem kene ide jutni");
+    }
+
+   
 }

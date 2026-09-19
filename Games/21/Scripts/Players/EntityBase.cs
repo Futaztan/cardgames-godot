@@ -18,6 +18,7 @@ public class EntityBase
     private const int WaitMillisAfterCardPlace = 400;
     public CardContainer CardContainer => _cardContainer;
     private Label _pointLabel;
+    private Label _cardsValueLabel;
 
     private readonly AudioStreamPlayer _soundPlayer;
     private readonly AudioStream _cardPlaceSound;
@@ -35,12 +36,13 @@ public class EntityBase
         }
     }
 
-    protected EntityBase(string name, int id, CardContainer container, int money, Label label)
+    protected EntityBase(string name, int id, CardContainer container, int money, Label label, Label valueLabel)
     {
         Name = name;
         Id = id;
         _originalMoney = money;
         _pointLabel = label;
+        _cardsValueLabel = valueLabel;
         _cardContainer = container;
         Money = money;
         _cardPlaceSound = GD.Load<AudioStream>("res://Assets/Sound/card_placed.mp3");
@@ -63,6 +65,17 @@ public class EntityBase
         }
     }
 
+    public void UpdateValueLabel()
+    {
+        int value = CardsValueInHand;
+        if (value > 21)
+        {
+            _cardsValueLabel.AddThemeColorOverride("font_color", new Color("#ff9999"));
+        }
+        else _cardsValueLabel.AddThemeColorOverride("font_color", new Color(Colors.White));
+
+        _cardsValueLabel.Text = Name + " értéke: " + value;
+    }
 
     private void PlayCardSound()
     {
@@ -111,6 +124,7 @@ public class EntityBase
             GD.Print(item.Value + " " + item.GetTexture());
             _cardContainer.AddChild(item);
         }
+        UpdateValueLabel();
     }
     
     public async Task PlayCard(CardBase playedCard)

@@ -61,4 +61,20 @@ public partial class BackCard : CardBase
         _backFace.Visible = false;
         FrontFace.Visible = true;
     }
+
+    public void AnimateSwapFace()
+    {
+        PivotOffset = Size * 0.5f;
+        var tween = CreateTween();
+        tween.SetTrans(Tween.TransitionType.Cubic);
+        tween.SetEase(Tween.EaseType.InOut);
+        float half = FlipDuration * 0.5f;
+        // 1. Kártya becsukása X tengelyen (Flip első fele)
+        tween.TweenProperty(this, "scale:x", 0f, half);
+        // 2. Kép átváltása a hátlapról az előlapra
+        tween.TweenCallback(Callable.From(() => SwapFace()));
+        tween.Parallel().TweenProperty(this, "scale:x", 1f, half);
+        tween.Parallel().TweenProperty(this, "scale:y", 1f, half);
+   
+    }
 }

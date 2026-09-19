@@ -25,9 +25,10 @@ public partial class _21 : Control
         _gameLogic.OnWagerChanged += OnLogicWagerChanged;
         _gameLogic.OnSelectWager += OnLogicSelectWager;
         _gameLogic.OnAskPlayerForMove += OnLogicAskPlayerForMove;
-        _gameLogic.OnPlayerBusted += OnLogicPlayerBusted;
+        _gameLogic.OnRoundOver += OnLogicRoundOver;
         _gameLogic.OnContinueGameAfterDeal += OnLogicContinueGameAfterDeal;
-        _gameLogic.StartNewGame();
+        _gameLogic.OnStartBotRound += OnLogicStartBotRound;
+        _gameLogic.StartNewRound();
     }
 
     private void ResetRound()
@@ -35,20 +36,23 @@ public partial class _21 : Control
         ToggleDecisionMenuButtonsVisibility(true);
         ToggleDecisionMenuButtonsClick(true);
         GetNode<Container>("%NewRoundContainer").Visible = false;
+        GetNode<Label>("Bot/ValueLabel").Visible = false;
         ToggleDecisionMenuVisibility(false);
     }
 
     private void CreatePlayers()
     {
         CardContainer container0 = GetNode<CardContainer>("%PlayerContainer");
-        CardContainer container1 = GetNode<CardContainer>("%Dealer");
+        CardContainer container1 = GetNode<CardContainer>("%BotContainer");
         Label label0 = GetNode<Label>("%PlayerPointLabel");
         Label label1 = GetNode<Label>("%BotPointLabel");
+        Label valueLabel0 = GetNode<Label>("Player/DecisionMenu/ValueLabel");
+        Label valueLabel1 = GetNode<Label>("Bot/ValueLabel");
 
         int money = 100;
 
-        var player = new Player("player", 0, container0, money, label0);
-        var bot = new Bot("bot", 1, container1, money, label1);
+        var player = new Player("player", 0, container0, money, label0, valueLabel0);
+        var bot = new Bot("bot", 1, container1, money, label1,valueLabel1);
         _gameLogic = new _21GameLogic(player, bot, money);
     }
 
@@ -74,7 +78,7 @@ public partial class _21 : Control
     {
         ToggleDecisionMenuVisibility(true);
         ToggleStopButtonDisable();
-        OnPlayerValueChanged();
+        //OnPlayerValueChanged();
     }
 
     private void ToggleDecisionMenuVisibility(bool isVisible)
@@ -95,20 +99,20 @@ public partial class _21 : Control
     {
         ToggleDecisionMenuButtonsClick(false);
         await _gameLogic.NDeal();
-        OnPlayerValueChanged();
+        //OnPlayerValueChanged();
     }
+    
 
-    private void OnLogicPlayerBusted()
+    private void OnLogicRoundOver()
     {
         ToggleDecisionMenuButtonsVisibility(false);
-        var newround = GetNode<Container>("%NewRoundContainer");
-        newround.Visible = true;
+        GetNode<Container>("%NewRoundContainer").Visible = true;
     }
 
     private void OnNewRoundButtonPressed()
     {
         ResetRound();
-        _gameLogic.ResetRound();
+        _gameLogic.StartNewRound();
     }
 
     private void OnLogicContinueGameAfterDeal()
@@ -164,7 +168,14 @@ public partial class _21 : Control
         stopButton.Disabled = (_gameLogic.PlayerCardsValue < 15);
     }
 
+    private void OnLogicStartBotRound()
+    {
+        GetNode<Label>("Bot/ValueLabel").Visible = true;
+    }
+
     private void OnStopsButtonPressed()
     {
+        ToggleDecisionMenuButtonsVisibility(false);
+        _gameLogic.BotRound();
     }
 }
