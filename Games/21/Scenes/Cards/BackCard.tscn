@@ -5,9 +5,9 @@
 [ext_resource type="Texture2D" uid="uid://de2mvmyvboojp" path="res://Assets/Cards/makk_7.png" id="3_yd7il"]
 
 [node name="Back_Card" type="CenterContainer"]
-custom_minimum_size = Vector2(70, 155)
-offset_right = 113.0
-offset_bottom = 155.0
+custom_minimum_size = Vector2(160, 264)
+offset_right = 160.0
+offset_bottom = 264.0
 size_flags_horizontal = 4
 script = ExtResource("1_4gxm1")
 metadata/_custom_type_script = "uid://k41cc56hh2hh"

@@ -17,8 +17,9 @@ public class EntityBase
     private readonly CardContainer _cardContainer;
     private const int WaitMillisAfterCardPlace = 400;
     public CardContainer CardContainer => _cardContainer;
-    private Label _pointLabel;
-    private Label _cardsValueLabel;
+    private readonly Label _pointLabel;
+    private readonly Label _cardsValueLabel;
+    public GoldCoin GoldCoinTexture { get; private set; }
 
     private readonly AudioStreamPlayer _soundPlayer;
     private readonly AudioStream _cardPlaceSound;
@@ -26,17 +27,20 @@ public class EntityBase
     private int  _originalMoney;
     private int _money;
 
+    public Vector2 CardSize { get; protected set; }
+
     public int Money
     {
         get => _money;
         set
         {
             _money = value;
-            _pointLabel.Text = Name + " pontjai:\n" + _money;
+            _pointLabel.Text = _money.ToString();
+            //_pointLabel.SetAnchorsPreset(Control.LayoutPreset.Center);
         }
     }
 
-    protected EntityBase(string name, int id, CardContainer container, int money, Label label, Label valueLabel)
+    protected EntityBase(string name, int id, CardContainer container, int money, Label label, Label valueLabel, GoldCoin goldCoin)
     {
         Name = name;
         Id = id;
@@ -44,6 +48,7 @@ public class EntityBase
         _pointLabel = label;
         _cardsValueLabel = valueLabel;
         _cardContainer = container;
+        GoldCoinTexture = goldCoin;
         Money = money;
         _cardPlaceSound = GD.Load<AudioStream>("res://Assets/Sound/card_placed.mp3");
         
@@ -64,10 +69,21 @@ public class EntityBase
             return score;
         }
     }
+    public bool StartedWithTwoAces()
+    {
+        if (CardsInHands.Count < 2) return false;
+        for (int i = 0; i < 2; i++)
+        {
+            if (CardsInHands[i].Value % 10 != 4) return false;
+        }
 
-    public void UpdateValueLabel()
+        return true;
+    }
+    private void UpdateValueLabel()
     {
         int value = CardsValueInHand;
+        if (StartedWithTwoAces()) value = 21;
+       
         if (value > 21)
         {
             _cardsValueLabel.AddThemeColorOverride("font_color", new Color("#ff9999"));
@@ -77,13 +93,22 @@ public class EntityBase
         _cardsValueLabel.Text = Name + " értéke: " + value;
     }
 
+    public void SetLabelColor(string color)
+    {
+        _cardsValueLabel.AddThemeColorOverride("font_color", new Color(color));
+    }
+
     private void PlayCardSound()
     {
         if (_soundPlayer == null || _cardPlaceSound == null) return;
         _soundPlayer.PitchScale = (float)GD.RandRange(0.95, 1.05);
         _soundPlayer.Play();
     }
-    
+
+    public void AnimateCoins(Control to)
+    {
+        GoldCoinTexture.AnimateCoins(to);
+    }
     
 
 
@@ -113,7 +138,7 @@ public class EntityBase
 
         GD.Print("-------------");
         GD.Print(Name);
-        foreach (var item in CardsInHands)
+        /*foreach (var item in CardsInHands)
         {
             _cardContainer.RemoveChild(item);
         }
@@ -123,7 +148,7 @@ public class EntityBase
         {
             GD.Print(item.Value + " " + item.GetTexture());
             _cardContainer.AddChild(item);
-        }
+        }*/
         UpdateValueLabel();
     }
     

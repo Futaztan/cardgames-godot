@@ -48,8 +48,8 @@ public class Dealer
         Node mainScene = GetMainScene();
         Control cardDeck = mainScene.GetNode<Control>("%CardDeck");
         int rnd = DrawCardIndex();
-
-        Tween tween = DealAnimation(mainScene, cardDeck, to.CardContainer, rotate, rnd, () =>
+       
+        Tween tween = DealAnimation(mainScene, cardDeck, to, rotate, rnd, () =>
         {
             to.NewCardToHand(rnd);
         });
@@ -63,13 +63,14 @@ public class Dealer
         return tree.CurrentScene;
     }
 
-    private Tween DealAnimation(Node mainScene, Control cardDeck, Control toNode, bool rotate, int randomValue, Action onAnimationDone)
+    private Tween DealAnimation(Node mainScene, Control cardDeck, EntityBase to, bool rotate, int randomValue, Action onAnimationDone)
     {
+        
         TextureRect animatedCard = new TextureRect();
         animatedCard.Texture = GD.Load<Texture2D>("res://Assets/Cards/back.png");
         animatedCard.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
-        animatedCard.StretchMode = TextureRect.StretchModeEnum.KeepAspect;
-        animatedCard.Size = 1.1f * cardDeck.Size;
+        animatedCard.StretchMode = TextureRect.StretchModeEnum.Scale;
+        animatedCard.Size = to.CardSize;
         mainScene.AddChild(animatedCard);
         animatedCard.GlobalPosition = cardDeck.GlobalPosition;
         animatedCard.PivotOffset = animatedCard.Size / 2.0f;
@@ -89,7 +90,7 @@ public class Dealer
         }
 
         tween.TweenProperty(animatedCard, "global_position",
-            toNode.GlobalPosition + new Vector2(toNode.Size.X / 2f, 0) - new Vector2(animatedCard.Size.X / 2f, 0),
+            to.CardContainer.GlobalPosition + new Vector2(to.CardContainer.Size.X / 2f, 0) - new Vector2(animatedCard.Size.X / 2f, 0),
             0.5f);
 
         if (rotate)

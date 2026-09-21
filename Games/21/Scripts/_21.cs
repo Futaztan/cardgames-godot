@@ -48,11 +48,12 @@ public partial class _21 : Control
         Label label1 = GetNode<Label>("%BotPointLabel");
         Label valueLabel0 = GetNode<Label>("Player/DecisionMenu/ValueLabel");
         Label valueLabel1 = GetNode<Label>("Bot/ValueLabel");
-
+        var goldcoin0 = GetNode<GoldCoin>("%PlayerGoldCoin");
+        var goldcoin1 = GetNode<GoldCoin>("%BotGoldCoin");
         int money = 100;
 
-        var player = new Player("player", 0, container0, money, label0, valueLabel0);
-        var bot = new Bot("bot", 1, container1, money, label1,valueLabel1);
+        var player = new Player("player", 0, container0, money, label0, valueLabel0, goldcoin0);
+        var bot = new Bot("bot", 1, container1, money, label1,valueLabel1, goldcoin1);
         _gameLogic = new _21GameLogic(player, bot, money);
     }
 
@@ -67,10 +68,12 @@ public partial class _21 : Control
         wagerLabel.Text = wager + "$";
     }
 
-    private void OnLogicSelectWager(int wager)
+    private void OnLogicSelectWager(int wager, int maxWager)
     {
         ColorRect menu = GetNode<ColorRect>("%WagerMenu");
         menu.Visible = true;
+        Label maxLabel = GetNode<Label>("%MaxWagerLabel");
+        maxLabel.Text = "MAXIMÁLIS TÉT: " + maxWager; 
         OnLogicWagerChanged(wager);
     }
 
@@ -105,9 +108,14 @@ public partial class _21 : Control
 
     private void OnLogicRoundOver()
     {
+         
+     
+        GetNode<Label>("Bot/ValueLabel").Visible = true;
         ToggleDecisionMenuButtonsVisibility(false);
+        ToggleDecisionMenuVisibility(true);
         GetNode<Container>("%NewRoundContainer").Visible = true;
     }
+    
 
     private void OnNewRoundButtonPressed()
     {
@@ -170,7 +178,7 @@ public partial class _21 : Control
 
     private void OnLogicStartBotRound()
     {
-        GetNode<Label>("Bot/ValueLabel").Visible = true;
+        //GetNode<Label>("Bot/ValueLabel").Visible = true;
     }
 
     private void OnStopsButtonPressed()

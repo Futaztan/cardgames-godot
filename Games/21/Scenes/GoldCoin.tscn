@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://clut6ikwbls8o"]
+
+[ext_resource type="Texture2D" uid="uid://cua6ldeh8ro8k" path="res://Assets/Other/gold_coin.png" id="1_0wv8u"]
+[ext_resource type="Script" uid="uid://b72fc25qxsseu" path="res://Games/21/Scripts/GoldCoin.cs" id="2_1d1ap"]
+
+[node name="GoldCoin" type="TextureRect"]
+custom_minimum_size = Vector2(141, 110)
+offset_right = 43.0
+offset_bottom = 42.0
+texture = ExtResource("1_0wv8u")
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("2_1d1ap")

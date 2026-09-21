@@ -15,22 +15,21 @@ public class _21GameLogic
     private int _originalMoney;
     private int _wager = 10;
     public int PlayerCardsValue => _humanPlayer.CardsValueInHand;
+    
+    private int MaxWager => Math.Min(_humanPlayer.Money, _bot.SpecifyMaxWager());
 
     public int Wager
     {
-        get
-        {
-            return _wager;
-        }
+        get => _wager;
         set
         {
-            if (value < 0)
+            if (value < 1)
             {
-                _wager = 0;
+                _wager = 1;
             }
-            else if (_humanPlayer.Money < value)
+            else if (MaxWager < value)
             {
-                _wager = _humanPlayer.Money;
+                _wager = MaxWager;
             }
             else _wager = value;
             OnWagerChanged?.Invoke(_wager);
@@ -38,7 +37,7 @@ public class _21GameLogic
         }
     }
 
-    public event Action<int>  OnSelectWager;
+    public event Action<int, int>  OnSelectWager;
     public event Action<int> OnWagerChanged;
     public event Action<int> OnAskPlayerForMove;
 
@@ -71,27 +70,45 @@ public class _21GameLogic
         //OnReset?.Invoke();
         await _dealer.DealCard(_bot,false);
         await _dealer.DealCard(_humanPlayer,true);
-        OnSelectWager?.Invoke(_wager);
+  
+        OnSelectWager?.Invoke(Wager, MaxWager);
         
     }
 
     public async Task SecondDeal()
     {
         await _dealer.DealCard(_humanPlayer,true);
-        OnAskPlayerForMove?.Invoke(_humanPlayer.CardsValueInHand);
+        if (_humanPlayer.StartedWithTwoAces())
+        {
+            HandleRoundOver(_humanPlayer);
+        }
+        else OnAskPlayerForMove?.Invoke(_humanPlayer.CardsValueInHand);
     }
 
     private void OnRoundWin(EntityBase winner)
     {
+        _bot.ShowCards();
         if (winner is null) return;
-        
         int winnerId = winner.Id;
         _allPlayers[winnerId].Money += Wager;
-        for (int i = 0; i < 2; i++)
+        _allPlayers[winnerId].SetLabelColor("#99ff99");
+        for (int i = 0; i < _allPlayers.Count; i++)
         {
             if(i==winnerId) continue;
             _allPlayers[i].Money -= Wager;
+            _allPlayers[i].SetLabelColor("#ff9999");
+            _allPlayers[i].AnimateCoins(_allPlayers[winnerId].GoldCoinTexture);
         }
+    }
+
+    private bool IsGameOver()
+    {
+        foreach (var entity in _allPlayers)
+        {
+            if (entity.Money <= 0) return true;
+        }
+
+        return false;
     }
 
     public async Task NDeal()
@@ -99,12 +116,20 @@ public class _21GameLogic
         await _dealer.DealCard(_humanPlayer, true);
         if (_humanPlayer.CardsValueInHand > 21)
         {
-            OnRoundWin(_bot);
-            OnRoundOver?.Invoke();
+            HandleRoundOver(_bot);
         }
         else OnContinueGameAfterDeal?.Invoke();
     }
 
+    private void HandleRoundOver(EntityBase winner)
+    {
+        OnRoundWin(winner);
+        if (IsGameOver())
+        {
+            throw new NotImplementedException();
+        }
+        else OnRoundOver?.Invoke();
+    }
     public async Task BotRound()
     {
         OnStartBotRound?.Invoke();
@@ -114,12 +139,11 @@ public class _21GameLogic
             await _dealer.DealCard(_bot, false);
         }
 
-        _bot.ShowCards();
-        OnRoundWin(DecideWhoWonRound());
-        OnRoundOver?.Invoke();
+        var winner = DecisionWhoWonRound();
+        HandleRoundOver(winner);
     }
 
-    private EntityBase DecideWhoWonRound()
+    private EntityBase DecisionWhoWonRound()
     {
         int botValue = _bot.CardsValueInHand;
         int playerValue = _humanPlayer.CardsValueInHand;
