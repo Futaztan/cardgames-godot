@@ -1,7 +1,8 @@
-[gd_scene load_steps=23 format=3 uid="uid://n7v5g02ec8n3"]
+[gd_scene load_steps=26 format=3 uid="uid://n7v5g02ec8n3"]
 
 [ext_resource type="Script" uid="uid://22i3lg7p36s5" path="res://Games/21/Scripts/_21.cs" id="1_ei2hj"]
 [ext_resource type="Texture2D" uid="uid://d1grrihuqrf7f" path="res://Assets/Other/background.jpeg" id="2_p3qm7"]
+[ext_resource type="PackedScene" uid="uid://bbr7bo160uoqf" path="res://Menu/MainMenu.tscn" id="2_yq4qc"]
 [ext_resource type="Texture2D" uid="uid://ds0hxesnfrjra" path="res://Assets/Cards/back.png" id="3_v2kgb"]
 [ext_resource type="Script" uid="uid://cx6ld5tp8qh52" path="res://Games/Lorum/Scripts/UI/Elements/Cell.cs" id="4_dv0th"]
 [ext_resource type="Script" uid="uid://ch4xiqg7yxp8y" path="res://Games/Lorum/Scripts/UI/Elements/CardContainer.cs" id="5_hb4kf"]
@@ -21,19 +22,19 @@
 [ext_resource type="StyleBox" uid="uid://ci7iqngtud52q" path="res://Assets/Themes/normal/red/button_red_normal.tres" id="17_xqlga"]
 [ext_resource type="StyleBox" uid="uid://k28ubpjt1mv5" path="res://Assets/Themes/normal/green/button_hover.tres" id="18_yq4qc"]
 [ext_resource type="StyleBox" uid="uid://ccbwuqog67eph" path="res://Assets/Themes/normal/green/button_pressed.tres" id="19_2iuss"]
+[ext_resource type="FontFile" uid="uid://dutoijljh2rk0" path="res://Assets/Fonts/Montserrat-Regular.ttf" id="22_xqlga"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tacc5"]
-content_margin_left = 20.0
-content_margin_top = 20.0
-content_margin_right = 20.0
-content_margin_bottom = 20.0
-bg_color = Color(0.921021, 0.966721, 0.927991, 1)
+bg_color = Color(0.874403, 0.952582, 0.943749, 1)
 corner_radius_top_left = 24
 corner_radius_top_right = 24
 corner_radius_bottom_right = 24
 corner_radius_bottom_left = 24
 shadow_color = Color(0, 0, 0, 0.568627)
 shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yq4qc"]
+bg_color = Color(0.362953, 0.681131, 0.513311, 1)
 
 [node name="21" type="Control"]
 layout_mode = 3
@@ -43,6 +44,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ei2hj")
+MainMenuScene = ExtResource("2_yq4qc")
 
 [node name="BackGround" type="TextureRect" parent="."]
 layout_mode = 1
@@ -201,6 +203,7 @@ uppercase = true
 
 [node name="WagerMenu" type="ColorRect" parent="Player"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -414,6 +417,89 @@ theme_override_styles/pressed = ExtResource("19_2iuss")
 theme_override_styles/normal = ExtResource("15_ip7yj")
 text = "ÚJ KÖR"
 
+[node name="GameOverMenu" type="ColorRect" parent="Player"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.392157)
+
+[node name="PanelContainer" type="PanelContainer" parent="Player/GameOverMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -354.0
+offset_top = -208.0
+offset_right = 354.0
+offset_bottom = 208.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tacc5")
+
+[node name="Label" type="Label" parent="Player/GameOverMenu/PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 72
+theme_override_styles/normal = SubResource("StyleBoxFlat_yq4qc")
+text = "JÁTÉK VÉGE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Player/GameOverMenu/PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 10
+
+[node name="Label1" type="Label" parent="Player/GameOverMenu/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 46
+text = "Az osztó nyert!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="Player/GameOverMenu/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("8_5pcow")
+theme_override_font_sizes/font_size = 30
+text = "Elfogytak a pontjaid, így az osztó nyert. Indulhat a következő kör?"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Player/GameOverMenu/PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 12
+alignment = 1
+
+[node name="Button" type="Button" parent="Player/GameOverMenu/PanelContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("22_xqlga")
+theme_override_font_sizes/font_size = 35
+theme_override_styles/hover = ExtResource("9_a7gfh")
+theme_override_styles/pressed = ExtResource("9_r8u6i")
+theme_override_styles/normal = ExtResource("10_a7gfh")
+text = "Kilépés a menübe"
+
+[node name="Button2" type="Button" parent="Player/GameOverMenu/PanelContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("22_xqlga")
+theme_override_font_sizes/font_size = 35
+theme_override_styles/hover = ExtResource("12_ip7yj")
+theme_override_styles/pressed = ExtResource("11_ip7yj")
+theme_override_styles/normal = ExtResource("12_7557r")
+text = "Indulhat az új kör!"
+
 [connection signal="pressed" from="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer/Button" to="." method="OnModifyWagerButtonPressed" binds= [-20]]
 [connection signal="pressed" from="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer/Button2" to="." method="OnModifyWagerButtonPressed" binds= [-10]]
 [connection signal="pressed" from="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer/Button3" to="." method="OnModifyWagerButtonPressed" binds= [-5]]
@@ -426,3 +512,5 @@ text = "ÚJ KÖR"
 [connection signal="pressed" from="Player/DecisionMenu/HBoxContainer/StopButton" to="." method="OnStopsButtonPressed"]
 [connection signal="pressed" from="Player/DecisionMenu/HBoxContainer/AskButton" to="." method="OnAskingForCardButtonPressed"]
 [connection signal="pressed" from="Player/DecisionMenu/NewRoundContainer/NewRoundButton" to="." method="OnNewRoundButtonPressed"]
+[connection signal="pressed" from="Player/GameOverMenu/PanelContainer/HBoxContainer/Button" to="." method="OnBackToMenuButtonPressed"]
+[connection signal="pressed" from="Player/GameOverMenu/PanelContainer/HBoxContainer/Button2" to="." method="OnNewGameButtonPressed"]

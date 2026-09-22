@@ -11,6 +11,7 @@ using cardgames.Games._21.Scripts.Players;
 public partial class _21 : Control
 {
     [Export] private Cell CardDeckCell { get; set; }
+    [Export] private PackedScene MainMenuScene {get; set;}
 
     private _21GameLogic _gameLogic;
 
@@ -26,12 +27,27 @@ public partial class _21 : Control
         _gameLogic.OnSelectWager += OnLogicSelectWager;
         _gameLogic.OnAskPlayerForMove += OnLogicAskPlayerForMove;
         _gameLogic.OnRoundOver += OnLogicRoundOver;
+        _gameLogic.OnReset += OnLogicResetRound;
         _gameLogic.OnContinueGameAfterDeal += OnLogicContinueGameAfterDeal;
         _gameLogic.OnStartBotRound += OnLogicStartBotRound;
-        _gameLogic.StartNewRound();
+        _gameLogic.OnGameOver += OnLogicGameOver;
+        _gameLogic.StartNewGame();
     }
 
-    private void ResetRound()
+    private void OnLogicGameOver(EntityBase winner)
+    {
+        GetNode<ColorRect>("%GameOverMenu").Visible = true;
+        var whowon = GetNode<Label>("Player/GameOverMenu/PanelContainer/VBoxContainer/Label1");
+        var desc = GetNode<Label>("Player/GameOverMenu/PanelContainer/VBoxContainer/Label2");
+        whowon.Text = winner.Name + " nyert!";
+        if (winner is Player)
+        {
+            desc.Text = "Elfogytak az osztó pontjai, így Te nyertél!\nIndulhat a következő kör?";
+        }
+        else desc.Text = "Elfogytak a pontjaid, így az osztó nyert.\nIndulhat a következő kör?";
+    }
+
+    private void OnLogicResetRound()
     {
         ToggleDecisionMenuButtonsVisibility(true);
         ToggleDecisionMenuButtonsClick(true);
@@ -119,7 +135,6 @@ public partial class _21 : Control
 
     private void OnNewRoundButtonPressed()
     {
-        ResetRound();
         _gameLogic.StartNewRound();
     }
 
@@ -185,5 +200,16 @@ public partial class _21 : Control
     {
         ToggleDecisionMenuButtonsVisibility(false);
         _gameLogic.BotRound();
+    }
+
+    private void OnNewGameButtonPressed()
+    {
+        GetNode<ColorRect>("%GameOverMenu").Visible = false;
+        _gameLogic.StartNewGame();
+    }
+
+    private void OnBackToMenuButtonPressed()
+    {
+        GetTree().ChangeSceneToPacked(MainMenuScene);
     }
 }

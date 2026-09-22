@@ -23,8 +23,7 @@ public class EntityBase
 
     private readonly AudioStreamPlayer _soundPlayer;
     private readonly AudioStream _cardPlaceSound;
-
-    private int  _originalMoney;
+   
     private int _money;
 
     public Vector2 CardSize { get; protected set; }
@@ -36,20 +35,17 @@ public class EntityBase
         {
             _money = value;
             _pointLabel.Text = _money.ToString();
-            //_pointLabel.SetAnchorsPreset(Control.LayoutPreset.Center);
         }
     }
 
-    protected EntityBase(string name, int id, CardContainer container, int money, Label label, Label valueLabel, GoldCoin goldCoin)
+    protected EntityBase(string name, int id, CardContainer container,  Label label, Label valueLabel, GoldCoin goldCoin)
     {
         Name = name;
         Id = id;
-        _originalMoney = money;
         _pointLabel = label;
         _cardsValueLabel = valueLabel;
         _cardContainer = container;
         GoldCoinTexture = goldCoin;
-        Money = money;
         _cardPlaceSound = GD.Load<AudioStream>("res://Assets/Sound/card_placed.mp3");
         
         _soundPlayer = new AudioStreamPlayer();
@@ -120,13 +116,7 @@ public class EntityBase
             item.QueueFree();
         }
     }
-
-    public void ResetGameState()
-    {
-        Money = _originalMoney;
-        //ResetRoundState();
-    }
-
+    
     public void NewCardToHand(int random)
     {
         CardBase newcard = (CardBase)_cardContainer.CardScene.Instantiate();

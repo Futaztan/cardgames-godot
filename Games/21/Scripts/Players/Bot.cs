@@ -6,7 +6,7 @@ namespace cardgames.Games._21.Scripts.Players;
 
 public class Bot  : EntityBase
 {
-    public Bot(string name, int id, CardContainer container, int money, Label label, Label valueLabel, GoldCoin goldCoin) : base(name, id, container,money, label, valueLabel, goldCoin)
+    public Bot(string name, int id, CardContainer container, int money, Label label, Label valueLabel, GoldCoin goldCoin) : base(name, id, container, label, valueLabel, goldCoin)
     {
         PackedScene cardScene = GD.Load<PackedScene>("res://Games/21/Scenes/Cards/BackCard.tscn");
         Control cardInstance = (Control)cardScene.Instantiate();
@@ -40,6 +40,7 @@ public class Bot  : EntityBase
 
     public int SpecifyMaxWager()
     {
+        //return 100;
         return Math.Min(Money, 20);
     }
 }

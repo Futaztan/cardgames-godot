@@ -40,10 +40,11 @@ public class _21GameLogic
     public event Action<int, int>  OnSelectWager;
     public event Action<int> OnWagerChanged;
     public event Action<int> OnAskPlayerForMove;
-
+    public event Action OnReset;
     public event Action OnRoundOver;
     public event Action OnContinueGameAfterDeal;
     public event Action OnStartBotRound;
+    public event Action<EntityBase> OnGameOver;
     public _21GameLogic( Player humanPlayer, Bot bot, int originalMoney )
     { 
         _humanPlayer = humanPlayer;
@@ -53,21 +54,21 @@ public class _21GameLogic
         _dealer = new Dealer(_allPlayers);
     }
     
-    private void ResetGame()
-    {
-        _allPlayers.ForEach(player => player.ResetGameState());
-        ResetRound();
-    }
     private void ResetRound()
     {
         _dealer.Reset();
         _allPlayers.ForEach(player => player.ResetRoundState());
     }
+    public void StartNewGame()
+    {
+        _allPlayers.ForEach(p=> p.Money = _originalMoney);
+        StartNewRound();
+    }
 
     public async Task StartNewRound()
     {
         ResetRound();
-        //OnReset?.Invoke();
+        OnReset?.Invoke();
         await _dealer.DealCard(_bot,false);
         await _dealer.DealCard(_humanPlayer,true);
   
@@ -126,7 +127,7 @@ public class _21GameLogic
         OnRoundWin(winner);
         if (IsGameOver())
         {
-            throw new NotImplementedException();
+            OnGameOver?.Invoke(winner);
         }
         else OnRoundOver?.Invoke();
     }
@@ -153,6 +154,7 @@ public class _21GameLogic
         if (botValue == playerValue) return null;
         else throw new Exception("nem kene ide jutni");
     }
+
 
    
 }
