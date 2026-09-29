@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://p7m01wx43dj1"]
+[gd_scene load_steps=14 format=3 uid="uid://p7m01wx43dj1"]
 
 [ext_resource type="Script" uid="uid://pj3ajg608pty" path="res://Settings/Scripts/Settings.cs" id="1_5p68s"]
 [ext_resource type="Texture2D" uid="uid://d1grrihuqrf7f" path="res://Assets/Other/background.jpeg" id="1_w44vd"]
@@ -16,10 +16,6 @@
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_okdie"]
 color = Color(1, 1, 1, 1)
 thickness = 2
-
-[sub_resource type="Theme" id="Theme_carl2"]
-default_font = ExtResource("2_b4apk")
-default_font_size = 42
 
 [node name="Settings" type="Control" node_paths=PackedStringArray("Global_NameUI", "Lorum_MoneyContainerUI", "Lorum_GameLengthContainerUI", "_21_MoneyContainerUI")]
 layout_mode = 3
@@ -150,15 +146,6 @@ button_group = ExtResource("7_h3kls")
 text = "100"
 metadata/starter_money = 100
 
-[node name="SpinBox" type="SpinBox" parent="VBoxContainer/Lorum"]
-visible = false
-custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
-theme = SubResource("Theme_carl2")
-min_value = 1.0
-value = 10.0
-rounded = true
-
 [node name="Label4" type="Label" parent="VBoxContainer/Lorum"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -166,22 +153,6 @@ theme_override_fonts/font = ExtResource("4_ygfwu")
 theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = ExtResource("3_5p68s")
 text = "Játék hossza"
-
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer/Lorum"]
-visible = false
-custom_minimum_size = Vector2(0, 70)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_b4apk")
-theme_override_font_sizes/font_size = 24
-item_count = 4
-popup/item_0/text = "Amíg elfogy valakinek a pontja"
-popup/item_0/id = 0
-popup/item_1/text = "3 kör"
-popup/item_1/id = 3
-popup/item_2/text = "5 kör"
-popup/item_2/id = 5
-popup/item_3/text = "10 kör"
-popup/item_3/id = 10
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/Lorum"]
 layout_mode = 2
