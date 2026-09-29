@@ -29,7 +29,7 @@ public partial class Settings : Control
 
     private void LoadLorumSettingsToUI(SettingsValues values)
     {
-        foreach (CheckBox button in Lorum_GameLengthContainerUI.GetChildren().OfType<CheckBox>())
+        foreach (Button button in Lorum_GameLengthContainerUI.GetChildren().OfType<Button>())
         {
             if (button.GetMeta("game_length").AsInt32() == values.LorumSettings.Length)
             {
@@ -37,7 +37,7 @@ public partial class Settings : Control
             }
         }
         
-        foreach (CheckBox button in Lorum_MoneyContainerUI.GetChildren().OfType<CheckBox>())
+        foreach (Button button in Lorum_MoneyContainerUI.GetChildren().OfType<Button>())
         {
             if (button.GetMeta("starter_money").AsInt32() == values.LorumSettings.Money)
             {
@@ -47,7 +47,7 @@ public partial class Settings : Control
     }
     private void Load21SettingsToUI(SettingsValues values)
     {
-        foreach (CheckBox button in _21_MoneyContainerUI.GetChildren())
+        foreach (Button button in _21_MoneyContainerUI.GetChildren())
         {
             if (button.GetMeta("starter_money").AsInt32() == values._21Settings.Money)
             {
@@ -74,19 +74,19 @@ public partial class Settings : Control
     {
        
         int length = -1;
-        foreach (var checkBox in Lorum_GameLengthContainerUI.GetChildren().OfType<CheckBox>())
+        foreach (var button in Lorum_GameLengthContainerUI.GetChildren().OfType<Button>())
         {
-            if (checkBox.IsPressed())
+            if (button.IsPressed())
             {
-                length = checkBox.GetMeta("game_length").AsInt32();
+                length = button.GetMeta("game_length").AsInt32();
             }
         }
         int money = 20;
-        foreach (var checkBox in Lorum_MoneyContainerUI.GetChildren().OfType<CheckBox>())
+        foreach (var button in Lorum_MoneyContainerUI.GetChildren().OfType<Button>())
         {
-            if (checkBox.IsPressed())
+            if (button.IsPressed())
             {
-                money = checkBox.GetMeta("starter_money").AsInt32();
+                money = button.GetMeta("starter_money").AsInt32();
             }
         }
 
@@ -96,7 +96,7 @@ public partial class Settings : Control
     private _21Settings Get21SettingsFromUI()
     {
         int money = 20;
-        foreach (CheckBox button in _21_MoneyContainerUI.GetChildren().OfType<CheckBox>())
+        foreach (Button button in _21_MoneyContainerUI.GetChildren().OfType<Button>())
         {
             if (button.IsPressed())
             {

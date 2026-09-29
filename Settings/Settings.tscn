@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://p7m01wx43dj1"]
+[gd_scene load_steps=16 format=3 uid="uid://p7m01wx43dj1"]
 
 [ext_resource type="Script" uid="uid://pj3ajg608pty" path="res://Settings/Scripts/Settings.cs" id="1_5p68s"]
 [ext_resource type="Texture2D" uid="uid://d1grrihuqrf7f" path="res://Assets/Other/background.jpeg" id="1_w44vd"]
@@ -12,6 +12,8 @@
 [ext_resource type="ButtonGroup" uid="uid://dct4qsyg7c0bk" path="res://Settings/21/money_button_grouptres.tres" id="7_wupaj"]
 [ext_resource type="ButtonGroup" uid="uid://dulcifjyaogp4" path="res://Settings/Lorum/length_button_group.tres" id="8_ci0ph"]
 [ext_resource type="StyleBox" uid="uid://isefq5hdrpkw" path="res://Assets/Themes/normal/green/button_normal.tres" id="8_wupaj"]
+[ext_resource type="StyleBox" uid="uid://3u6uotxw1bct" path="res://Assets/Themes/checkbox/rounded_checkbox_button_selected.tres" id="9_q5jkm"]
+[ext_resource type="StyleBox" uid="uid://cigy56b2r6n7e" path="res://Assets/Themes/checkbox/rounded_checkbox_button_normal.tres" id="10_0jqeq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h3kls"]
 bg_color = Color(0, 0, 0, 0.0392157)
@@ -144,33 +146,58 @@ text = "Pontok"
 layout_mode = 2
 alignment = 1
 
-[node name="CheckBox" type="CheckBox" parent="VBoxContainer2/ScrollContainer/VBoxContainer/Lorum/MarginContainer/Lorum/HBoxContainer"]
+[node name="CheckBox" type="Button" parent="VBoxContainer2/ScrollContainer/VBoxContainer/Lorum/MarginContainer/Lorum/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+theme_override_styles/pressed = ExtResource("9_q5jkm")
+theme_override_styles/normal = ExtResource("10_0jqeq")
+toggle_mode = true
 button_group = ExtResource("7_h3kls")
 text = "10"
 metadata/starter_money = 10
 
-[node name="CheckBox2" type="CheckBox" parent="VBoxContainer2/ScrollContainer/VBoxContainer/Lorum/MarginContainer/Lorum/HBoxContainer"]
+[node name="CheckBox2" type="Button" parent="VBoxContainer2/ScrollContainer/VBoxContainer/Lorum/MarginContainer/Lorum/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+theme_override_styles/pressed = ExtResource("9_q5jkm")
+theme_override_styles/normal = ExtResource("10_0jqeq")
+toggle_mode = true
 button_group = ExtResource("7_h3kls")
 text = "20"
 metadata/starter_money = 20
 
-[node name="CheckBox5" type="CheckBox" parent="VBoxContainer2/ScrollContainer/VBoxContainer/Lorum/MarginContainer/Lorum/HBoxContainer"]
+[node name="CheckBox5" type="Button" parent="VBoxContainer2/ScrollContainer/VBoxContainer/Lorum/MarginContainer/Lorum/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+theme_override_styles/pressed = ExtResource("9_q5jkm")
+theme_override_styles/normal = ExtResource("10_0jqeq")
+toggle_mode = true
 button_group = ExtResource("7_h3kls")
 text = "30
 "
 metadata/starter_money = 30
 
-[node name="CheckBox3" type="CheckBox" parent="VBoxContainer2/ScrollContainer/VBoxContainer/Lorum/MarginContainer/Lorum/HBoxContainer"]
+[node name="CheckBox3" type="Button" parent="VBoxContainer2/ScrollContainer/VBoxContainer/Lorum/MarginContainer/Lorum/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+theme_override_styles/pressed = ExtResource("9_q5jkm")
+theme_override_styles/normal = ExtResource("10_0jqeq")
+toggle_mode = true
 button_group = ExtResource("7_h3kls")
 text = "50"
 metadata/starter_money = 50
 
-[node name="CheckBox4" type="CheckBox" parent="VBoxContainer2/ScrollContainer/VBoxContainer/Lorum/MarginContainer/Lorum/HBoxContainer"]
+[node name="CheckBox4" type="Button" parent="VBoxContainer2/ScrollContainer/VBoxContainer/Lorum/MarginContainer/Lorum/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+theme_override_styles/pressed = ExtResource("9_q5jkm")
+theme_override_styles/normal = ExtResource("10_0jqeq")
+toggle_mode = true
 button_group = ExtResource("7_h3kls")
 text = "100"
 metadata/starter_money = 100
@@ -187,27 +214,47 @@ text = "Játék hossza"
 layout_mode = 2
 alignment = 1
 
-[node name="CheckBox" type="CheckBox" parent="VBoxContainer2/ScrollContainer/VBoxContainer/Lorum/MarginContainer/Lorum/HBoxContainer2"]
+[node name="CheckBox" type="Button" parent="VBoxContainer2/ScrollContainer/VBoxContainer/Lorum/MarginContainer/Lorum/HBoxContainer2"]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+theme_override_styles/pressed = ExtResource("9_q5jkm")
+theme_override_styles/normal = ExtResource("10_0jqeq")
+toggle_mode = true
 button_group = ExtResource("8_ci0ph")
 text = "Kiesésig
 "
 metadata/game_length = -1
 
-[node name="CheckBox2" type="CheckBox" parent="VBoxContainer2/ScrollContainer/VBoxContainer/Lorum/MarginContainer/Lorum/HBoxContainer2"]
+[node name="CheckBox2" type="Button" parent="VBoxContainer2/ScrollContainer/VBoxContainer/Lorum/MarginContainer/Lorum/HBoxContainer2"]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+theme_override_styles/pressed = ExtResource("9_q5jkm")
+theme_override_styles/normal = ExtResource("10_0jqeq")
+toggle_mode = true
 button_group = ExtResource("8_ci0ph")
 text = "3 kör"
 metadata/game_length = 3
 
-[node name="CheckBox3" type="CheckBox" parent="VBoxContainer2/ScrollContainer/VBoxContainer/Lorum/MarginContainer/Lorum/HBoxContainer2"]
+[node name="CheckBox3" type="Button" parent="VBoxContainer2/ScrollContainer/VBoxContainer/Lorum/MarginContainer/Lorum/HBoxContainer2"]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+theme_override_styles/pressed = ExtResource("9_q5jkm")
+theme_override_styles/normal = ExtResource("10_0jqeq")
+toggle_mode = true
 button_group = ExtResource("8_ci0ph")
 text = "5 kör"
 metadata/game_length = 5
 
-[node name="CheckBox4" type="CheckBox" parent="VBoxContainer2/ScrollContainer/VBoxContainer/Lorum/MarginContainer/Lorum/HBoxContainer2"]
+[node name="CheckBox4" type="Button" parent="VBoxContainer2/ScrollContainer/VBoxContainer/Lorum/MarginContainer/Lorum/HBoxContainer2"]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+theme_override_styles/pressed = ExtResource("9_q5jkm")
+theme_override_styles/normal = ExtResource("10_0jqeq")
+toggle_mode = true
 button_group = ExtResource("8_ci0ph")
 text = "10 kör"
 metadata/game_length = 10
@@ -219,9 +266,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_h3kls")
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer2/ScrollContainer/VBoxContainer/21"]
 layout_mode = 2
 theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 16
+theme_override_constants/margin_top = 24
 theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_bottom = 24
 
 [node name="21" type="VBoxContainer" parent="VBoxContainer2/ScrollContainer/VBoxContainer/21/MarginContainer"]
 layout_mode = 2
@@ -245,34 +292,65 @@ text = "Kezdő pontszám"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2/ScrollContainer/VBoxContainer/21/MarginContainer/21"]
 layout_mode = 2
+theme_override_constants/separation = 20
 alignment = 1
 
-[node name="CheckBox" type="CheckBox" parent="VBoxContainer2/ScrollContainer/VBoxContainer/21/MarginContainer/21/HBoxContainer"]
+[node name="CheckBox" type="Button" parent="VBoxContainer2/ScrollContainer/VBoxContainer/21/MarginContainer/21/HBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+theme_override_styles/pressed = ExtResource("9_q5jkm")
+theme_override_styles/normal = ExtResource("10_0jqeq")
+toggle_mode = true
 button_group = ExtResource("7_wupaj")
 text = "10"
 metadata/starter_money = 10
 
-[node name="CheckBox2" type="CheckBox" parent="VBoxContainer2/ScrollContainer/VBoxContainer/21/MarginContainer/21/HBoxContainer"]
+[node name="CheckBox2" type="Button" parent="VBoxContainer2/ScrollContainer/VBoxContainer/21/MarginContainer/21/HBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+theme_override_styles/pressed = ExtResource("9_q5jkm")
+theme_override_styles/normal = ExtResource("10_0jqeq")
+toggle_mode = true
 button_group = ExtResource("7_wupaj")
 text = "20"
 metadata/starter_money = 20
 
-[node name="CheckBox3" type="CheckBox" parent="VBoxContainer2/ScrollContainer/VBoxContainer/21/MarginContainer/21/HBoxContainer"]
+[node name="CheckBox3" type="Button" parent="VBoxContainer2/ScrollContainer/VBoxContainer/21/MarginContainer/21/HBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+theme_override_styles/pressed = ExtResource("9_q5jkm")
+theme_override_styles/normal = ExtResource("10_0jqeq")
+toggle_mode = true
 button_group = ExtResource("7_wupaj")
 text = "50"
 metadata/starter_money = 50
 
-[node name="CheckBox4" type="CheckBox" parent="VBoxContainer2/ScrollContainer/VBoxContainer/21/MarginContainer/21/HBoxContainer"]
+[node name="CheckBox4" type="Button" parent="VBoxContainer2/ScrollContainer/VBoxContainer/21/MarginContainer/21/HBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+theme_override_styles/pressed = ExtResource("9_q5jkm")
+theme_override_styles/normal = ExtResource("10_0jqeq")
+toggle_mode = true
 button_group = ExtResource("7_wupaj")
 text = "100"
 metadata/starter_money = 100
 
-[node name="CheckBox5" type="CheckBox" parent="VBoxContainer2/ScrollContainer/VBoxContainer/21/MarginContainer/21/HBoxContainer"]
+[node name="CheckBox5" type="Button" parent="VBoxContainer2/ScrollContainer/VBoxContainer/21/MarginContainer/21/HBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+theme_override_styles/pressed = ExtResource("9_q5jkm")
+theme_override_styles/normal = ExtResource("10_0jqeq")
+toggle_mode = true
 button_group = ExtResource("7_wupaj")
 text = "200"
 metadata/starter_money = 200
