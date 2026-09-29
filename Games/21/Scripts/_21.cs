@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using cardgames.Games._21.Scripts;
 using cardgames.Games._21.Scripts.Cards;
 using cardgames.Games._21.Scripts.Players;
+using cardgames.Settings.Scripts;
 
 
 public partial class _21 : Control
@@ -19,10 +20,9 @@ public partial class _21 : Control
     public override async void _Ready()
     {
         CardDatabase.loadTextures();
-
-
         await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
-        CreatePlayers();
+        var settings = SettingsManager.Instance.LoadSettings();
+        CreatePlayers(settings);
         _gameLogic.OnWagerChanged += OnLogicWagerChanged;
         _gameLogic.OnSelectWager += OnLogicSelectWager;
         _gameLogic.OnAskPlayerForMove += OnLogicAskPlayerForMove;
@@ -56,7 +56,7 @@ public partial class _21 : Control
         ToggleDecisionMenuVisibility(false);
     }
 
-    private void CreatePlayers()
+    private void CreatePlayers(SettingsValues settings)
     {
         CardContainer container0 = GetNode<CardContainer>("%PlayerContainer");
         CardContainer container1 = GetNode<CardContainer>("%BotContainer");
@@ -66,10 +66,10 @@ public partial class _21 : Control
         Label valueLabel1 = GetNode<Label>("Bot/ValueLabel");
         var goldcoin0 = GetNode<GoldCoin>("%PlayerGoldCoin");
         var goldcoin1 = GetNode<GoldCoin>("%BotGoldCoin");
-        int money = 100;
+        int money = settings._21Settings.Money;
 
-        var player = new Player("player", 0, container0, money, label0, valueLabel0, goldcoin0);
-        var bot = new Bot("bot", 1, container1, money, label1,valueLabel1, goldcoin1);
+        var player = new Player(settings.GlobalSettings.GlobalName, 0, container0, money, label0, valueLabel0, goldcoin0);
+        var bot = new Bot("Osztó", 1, container1, money, label1,valueLabel1, goldcoin1);
         _gameLogic = new _21GameLogic(player, bot, money);
     }
 

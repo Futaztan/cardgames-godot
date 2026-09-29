@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://p7m01wx43dj1"]
+[gd_scene load_steps=15 format=3 uid="uid://p7m01wx43dj1"]
 
 [ext_resource type="Script" uid="uid://pj3ajg608pty" path="res://Settings/Scripts/Settings.cs" id="1_5p68s"]
 [ext_resource type="Texture2D" uid="uid://d1grrihuqrf7f" path="res://Assets/Other/background.jpeg" id="1_w44vd"]
@@ -8,6 +8,9 @@
 [ext_resource type="FontFile" uid="uid://drly01v2pi4he" path="res://Assets/Fonts/Montserrat-Bold.ttf" id="4_ygfwu"]
 [ext_resource type="StyleBox" uid="uid://k28ubpjt1mv5" path="res://Assets/Themes/normal/green/button_hover.tres" id="6_idwoe"]
 [ext_resource type="StyleBox" uid="uid://ccbwuqog67eph" path="res://Assets/Themes/normal/green/button_pressed.tres" id="7_carl2"]
+[ext_resource type="ButtonGroup" uid="uid://c0oc57a54o1ha" path="res://Settings/Lorum/money_button_group.tres" id="7_h3kls"]
+[ext_resource type="ButtonGroup" uid="uid://dct4qsyg7c0bk" path="res://Settings/21/money_button_grouptres.tres" id="7_wupaj"]
+[ext_resource type="ButtonGroup" uid="uid://dulcifjyaogp4" path="res://Settings/Lorum/length_button_group.tres" id="8_ci0ph"]
 [ext_resource type="StyleBox" uid="uid://isefq5hdrpkw" path="res://Assets/Themes/normal/green/button_normal.tres" id="8_wupaj"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_okdie"]
@@ -18,7 +21,7 @@ thickness = 2
 default_font = ExtResource("2_b4apk")
 default_font_size = 42
 
-[node name="Settings" type="Control" node_paths=PackedStringArray("Global_NameUI", "Lorum_PointsUI", "Lorum_GameLengthUI")]
+[node name="Settings" type="Control" node_paths=PackedStringArray("Global_NameUI", "Lorum_MoneyContainerUI", "Lorum_GameLengthContainerUI", "_21_MoneyContainerUI")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,9 +30,10 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_5p68s")
 MainMenuScene = ExtResource("2_carl2")
-Global_NameUI = NodePath("VBoxContainer/LineEdit")
-Lorum_PointsUI = NodePath("VBoxContainer/SpinBox")
-Lorum_GameLengthUI = NodePath("VBoxContainer/OptionButton")
+Global_NameUI = NodePath("VBoxContainer/Global/LineEdit")
+Lorum_MoneyContainerUI = NodePath("VBoxContainer/Lorum/HBoxContainer")
+Lorum_GameLengthContainerUI = NodePath("VBoxContainer/Lorum/HBoxContainer2")
+_21_MoneyContainerUI = NodePath("VBoxContainer/21/HBoxContainer")
 
 [node name="BackGround" type="TextureRect" parent="."]
 layout_mode = 1
@@ -41,6 +45,18 @@ grow_vertical = 2
 texture = ExtResource("1_w44vd")
 expand_mode = 1
 metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 75.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("4_ygfwu")
+theme_override_font_sizes/font_size = 60
+text = "BEÁLLÍTÁSOK"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -57,7 +73,11 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Label2" type="Label" parent="VBoxContainer"]
+[node name="Global" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label2" type="Label" parent="VBoxContainer/Global"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("4_ygfwu")
@@ -65,7 +85,7 @@ theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = ExtResource("3_5p68s")
 text = "Név"
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Global"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_b4apk")
 theme_override_font_sizes/font_size = 42
@@ -76,7 +96,10 @@ custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 theme_override_styles/separator = SubResource("StyleBoxLine_okdie")
 
-[node name="Label3" type="Label" parent="VBoxContainer"]
+[node name="Lorum" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="VBoxContainer/Lorum"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_ygfwu")
 theme_override_font_sizes/font_size = 74
@@ -84,7 +107,7 @@ text = "LÓRUM"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/Lorum"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("4_ygfwu")
@@ -92,7 +115,43 @@ theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = ExtResource("3_5p68s")
 text = "Pontok"
 
-[node name="SpinBox" type="SpinBox" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Lorum"]
+layout_mode = 2
+alignment = 1
+
+[node name="CheckBox" type="CheckBox" parent="VBoxContainer/Lorum/HBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("7_h3kls")
+text = "10"
+metadata/starter_money = 10
+
+[node name="CheckBox2" type="CheckBox" parent="VBoxContainer/Lorum/HBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("7_h3kls")
+text = "20"
+metadata/starter_money = 20
+
+[node name="CheckBox5" type="CheckBox" parent="VBoxContainer/Lorum/HBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("7_h3kls")
+text = "30
+"
+metadata/starter_money = 30
+
+[node name="CheckBox3" type="CheckBox" parent="VBoxContainer/Lorum/HBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("7_h3kls")
+text = "50"
+metadata/starter_money = 50
+
+[node name="CheckBox4" type="CheckBox" parent="VBoxContainer/Lorum/HBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("7_h3kls")
+text = "100"
+metadata/starter_money = 100
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/Lorum"]
+visible = false
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 theme = SubResource("Theme_carl2")
@@ -100,7 +159,7 @@ min_value = 1.0
 value = 10.0
 rounded = true
 
-[node name="Label4" type="Label" parent="VBoxContainer"]
+[node name="Label4" type="Label" parent="VBoxContainer/Lorum"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("4_ygfwu")
@@ -108,7 +167,8 @@ theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = ExtResource("3_5p68s")
 text = "Játék hossza"
 
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer"]
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/Lorum"]
+visible = false
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_b4apk")
@@ -123,22 +183,91 @@ popup/item_2/id = 5
 popup/item_3/text = "10 kör"
 popup/item_3/id = 10
 
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/Lorum"]
+layout_mode = 2
+alignment = 1
+
+[node name="CheckBox" type="CheckBox" parent="VBoxContainer/Lorum/HBoxContainer2"]
+layout_mode = 2
+button_group = ExtResource("8_ci0ph")
+text = "Amíg elfogynak a pontjai valakinek"
+metadata/game_length = -1
+
+[node name="CheckBox2" type="CheckBox" parent="VBoxContainer/Lorum/HBoxContainer2"]
+layout_mode = 2
+button_group = ExtResource("8_ci0ph")
+text = "3 kör"
+metadata/game_length = 3
+
+[node name="CheckBox3" type="CheckBox" parent="VBoxContainer/Lorum/HBoxContainer2"]
+layout_mode = 2
+button_group = ExtResource("8_ci0ph")
+text = "5 kör"
+metadata/game_length = 5
+
+[node name="CheckBox4" type="CheckBox" parent="VBoxContainer/Lorum/HBoxContainer2"]
+layout_mode = 2
+button_group = ExtResource("8_ci0ph")
+text = "10 kör"
+metadata/game_length = 10
+
 [node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 theme_override_styles/separator = SubResource("StyleBoxLine_okdie")
 
-[node name="Label" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 75.0
-grow_horizontal = 2
+[node name="21" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="VBoxContainer/21"]
+layout_mode = 2
 theme_override_fonts/font = ExtResource("4_ygfwu")
-theme_override_font_sizes/font_size = 60
-text = "BEÁLLÍTÁSOK"
+theme_override_font_sizes/font_size = 74
+text = "21"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Label4" type="Label" parent="VBoxContainer/21"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_ygfwu")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = ExtResource("3_5p68s")
+text = "Kezdő pontszám"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/21"]
+layout_mode = 2
+alignment = 1
+
+[node name="CheckBox" type="CheckBox" parent="VBoxContainer/21/HBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("7_wupaj")
+text = "10"
+metadata/starter_money = 10
+
+[node name="CheckBox2" type="CheckBox" parent="VBoxContainer/21/HBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("7_wupaj")
+text = "20"
+metadata/starter_money = 20
+
+[node name="CheckBox3" type="CheckBox" parent="VBoxContainer/21/HBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("7_wupaj")
+text = "50"
+metadata/starter_money = 50
+
+[node name="CheckBox4" type="CheckBox" parent="VBoxContainer/21/HBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("7_wupaj")
+text = "100"
+metadata/starter_money = 100
+
+[node name="CheckBox5" type="CheckBox" parent="VBoxContainer/21/HBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("7_wupaj")
+text = "200"
+metadata/starter_money = 200
 
 [node name="SaveButton" type="Button" parent="."]
 custom_minimum_size = Vector2(100, 60)

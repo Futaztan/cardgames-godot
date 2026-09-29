@@ -8,11 +8,11 @@ namespace cardgames.Games._21.Scripts;
 
 public class _21GameLogic
 {
-    private List<EntityBase> _allPlayers;
-    private Player _humanPlayer;
-    private Bot _bot;
-    private Dealer _dealer;
-    private int _originalMoney;
+    private readonly List<EntityBase> _allPlayers;
+    private readonly Player _humanPlayer;
+    private readonly Bot _bot;
+    private readonly Dealer _dealer;
+    private readonly int _originalMoney;
     private int _wager = 10;
     public int PlayerCardsValue => _humanPlayer.CardsValueInHand;
     

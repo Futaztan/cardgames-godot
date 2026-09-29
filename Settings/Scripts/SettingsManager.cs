@@ -1,3 +1,4 @@
+using cardgames.Settings.Scripts.Models;
 using Godot;
 
 namespace cardgames.Settings.Scripts;
@@ -14,18 +15,23 @@ public class SettingsManager
     {
         _configFile.Load(Path);
         string globalName = (string)_configFile.GetValue("Global", "Name", "Játékos");
-        int lorumPoints = (int)_configFile.GetValue("Lorum", "Points", 10);
-        int lorumLength = (int)_configFile.GetValue("Lorum", "GameLength", 0);
-        return new  SettingsValues(globalName, lorumPoints, lorumLength);
+        var globalSettings = new GlobalSettings(globalName);
+        int lorumPoints = (int)_configFile.GetValue("Lorum", "Points", 20);
+        int lorumLength = (int)_configFile.GetValue("Lorum", "GameLength", -1);
+        var lorumSettings = new LorumSettings(lorumPoints, lorumLength);
+        int _21Money = (int)_configFile.GetValue("21", "Money", 20);
+        var _21Settings = new _21Settings(_21Money);
+        return new  SettingsValues(globalSettings, lorumSettings, _21Settings);
     }
     
     
 
     public void SaveSettings(SettingsValues values)
     {
-        _configFile.SetValue("Global", "Name", values.GlobalName);
-        _configFile.SetValue("Lorum", "Points", values.LorumPoints);
-        _configFile.SetValue("Lorum", "GameLength", values.LorumLength);
+        _configFile.SetValue("Global", "Name", values.GlobalSettings.GlobalName);
+        _configFile.SetValue("Lorum", "Points", values.LorumSettings.Money);
+        _configFile.SetValue("Lorum", "GameLength", values.LorumSettings.Length);
+        _configFile.SetValue("21","Money", values._21Settings.Money);
         Error err = _configFile.Save(Path);
         if (err != Error.Ok)
         {

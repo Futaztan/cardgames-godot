@@ -70,13 +70,13 @@ public partial class Lorum : Control
     public async override void _Ready()
     {
         SettingsValues settingsValues = SettingsManager.Instance.LoadSettings();
-        int roundsLength = settingsValues.LorumLength;
+        int roundsLength = settingsValues.LorumSettings.Length;
         if (roundsLength == 0) roundsLength = -1;
-        _gameLogic = new LorumGameLogic { StartingScore = settingsValues.LorumPoints, RoundsUntilEnd = roundsLength };
+        _gameLogic = new LorumGameLogic { StartingScore = settingsValues.LorumSettings.Money, RoundsUntilEnd = roundsLength };
         CardDatabase.loadTextures();
         SetupNodesFromScene();
         SetupCellNodes();
-        CreatePlayers(settingsValues.GlobalName);
+        CreatePlayers(settingsValues.GlobalSettings.GlobalName);
         _gameLogic.OnRoundStarted += OnLogicRoundStarted;
         _gameLogic.OnGameOver += OnLogicGameOver;
         _gameLogic.OnPlayerTurnStarted += OnLogicPlayerTurnStarted;

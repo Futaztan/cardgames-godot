@@ -138,7 +138,6 @@ grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("8_5pcow")
 theme_override_font_sizes/font_size = 36
-text = "100"
 horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
@@ -196,7 +195,6 @@ grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("8_5pcow")
 theme_override_font_sizes/font_size = 36
-text = "100"
 horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
@@ -260,6 +258,7 @@ vertical_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Player/WagerMenu/PanelContainer/VBoxContainer"]
 layout_mode = 2
+alignment = 1
 
 [node name="Button" type="Button" parent="Player/WagerMenu/PanelContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(80, 80)
