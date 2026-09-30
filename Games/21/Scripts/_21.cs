@@ -2,10 +2,12 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using cardgames.Games._21.Scripts;
 using cardgames.Games._21.Scripts.Cards;
 using cardgames.Games._21.Scripts.Players;
+using cardgames.Games._21.Scripts.Saving;
 using cardgames.Settings.Scripts;
 
 
@@ -31,7 +33,53 @@ public partial class _21 : Control
         _gameLogic.OnContinueGameAfterDeal += OnLogicContinueGameAfterDeal;
         _gameLogic.OnStartBotRound += OnLogicStartBotRound;
         _gameLogic.OnGameOver += OnLogicGameOver;
-        _gameLogic.StartNewGame();
+        var savedData = LoadGame();
+        if (savedData != null)
+        {
+            GD.Print("Sikeres adat betöltés");
+            GetNode<ColorRect>("%ContinueOrNewGame").Visible = true;
+        }
+        else _gameLogic.StartNewGame();
+    }
+
+    public override void _Notification(int what)
+    {
+        if (what == NotificationApplicationPaused)
+        {
+            GD.Print("Az alkalmazás háttérbe került! Állapot mentése...");
+            SaveGame();
+        }
+        else if (what == NotificationWMCloseRequest)
+        {
+            GD.Print("Bezárás kérése! Utolsó mentés...");
+            SaveGame();
+            GetTree().Quit(); 
+        }
+    }
+
+    private void SaveGame()
+    {
+        SaveData data = _gameLogic.GetSaveData();
+        string jsonString = JsonSerializer.Serialize(data);
+        using var file = FileAccess.Open("user://21_savegame.json", FileAccess.ModeFlags.Write);
+        file.StoreString(jsonString);
+        GD.Print("Játékállapot sikeresen elmentve!");
+    }
+    private SaveData LoadGame()
+    {
+        if (!FileAccess.FileExists("user://21_savegame.json")) return null;
+
+        try
+        {
+            using var file = FileAccess.Open("user://21_savegame.json", FileAccess.ModeFlags.Read);
+            string jsonString = file.GetAsText();
+            return JsonSerializer.Deserialize<SaveData>(jsonString);
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr($"Hiba a betöltéskor: {e.Message}");
+            return null;
+        }
     }
 
     private void OnLogicGameOver(EntityBase winner)
@@ -135,6 +183,7 @@ public partial class _21 : Control
 
     private void OnNewRoundButtonPressed()
     {
+     
         _gameLogic.StartNewRound();
     }
 
@@ -205,11 +254,20 @@ public partial class _21 : Control
     private void OnNewGameButtonPressed()
     {
         GetNode<ColorRect>("%GameOverMenu").Visible = false;
+        GetNode<ColorRect>("%ContinueOrNewGame").Visible = false;
         _gameLogic.StartNewGame();
     }
 
     private void OnBackToMenuButtonPressed()
     {
         GetTree().ChangeSceneToPacked(MainMenuScene);
+    }
+
+    private void OnContinueLoadedGameButtonPressed()
+    {
+        GetNode<ColorRect>("%ContinueOrNewGame").Visible = false;
+        var savedData = LoadGame();
+        _gameLogic.LoadState(savedData.PlayerMoney,savedData.BotMoney, savedData.CurrentWager);
+        _gameLogic.StartNewRound();
     }
 }

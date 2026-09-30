@@ -10,7 +10,7 @@ public abstract partial class CardBase : Control
     protected TextureRect FrontFace { get; set; }
     public int ScoreValue { get; private set; }
 
-    public void SetDatas(int value,int score, Texture2D text)
+    public void SetData(int value,int score, Texture2D text)
     {
         Value = value;
         ScoreValue = score;

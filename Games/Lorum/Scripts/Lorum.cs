@@ -1,8 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using cardgames.Games._21.Scripts.Saving;
 using cardgames.Games.Lorum.Scripts.Cards;
 using cardgames.Games.Lorum.Scripts.Players;
+using cardgames.Games.Lorum.Scripts.Saving;
 using cardgames.Lorum.Scripts.Cards;
 using cardgames.Lorum.Scripts.UI;
 
@@ -86,9 +90,33 @@ public partial class Lorum : Control
         _gameLogic.OnRoundOver += OnLogicRoundOver;
         _gameLogic.AfterCardsDealed += AfterLogicCardsDealed;
         await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
-        _gameLogic.StartNewRound();
+        var savedData = LoadGame();
+        if (savedData != null)
+        {
+            GD.Print("Sikeres adat betöltés");
+            GetNode<ColorRect>("%ContinueOrNewGame").Visible = true;
+        }
+        else _gameLogic.StartNewRound();
     }
 
+    private GameSaveData LoadGame()
+    {
+        if (!FileAccess.FileExists("user://lorum_savegame.json")) return null;
+
+        try
+        {
+            using var file = FileAccess.Open("user://lorum_savegame.json", FileAccess.ModeFlags.Read);
+            string jsonString = file.GetAsText();
+            return JsonSerializer.Deserialize<GameSaveData>(jsonString);
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr($"Hiba a betöltéskor: {e.Message}");
+            return null;
+        }
+    }
+
+    
     private void AfterLogicCardsDealed()
     {
         _gameLogic.HumanPlayer.DisableCards();
@@ -189,12 +217,8 @@ public partial class Lorum : Control
 
     private void OnNewRoundButtonPressed()
     {
-        //ToggleUiVisibilityOnGameOver(false);
-       /* foreach (EntityBase item in _gameLogic.AllPlayers)
-        {
-            item.UpdateLabel();
-        }*/
         ToggleNewRoundButtonVisibility(false);
+        GetNode<ColorRect>("%ContinueOrNewGame").Visible = false;
         _gameLogic.StartNewRound();
     }
 
@@ -250,18 +274,6 @@ public partial class Lorum : Control
   
 
     }
-
-    /*private void ToggleUiVisibilityOnGameOver(bool isGameOver)
-    {
-        bool toHide = !isGameOver;
-        VBoxContainer center = GetNode<VBoxContainer>("%Center");
-        Control gameResults = GetNode<Control>("%GameResults");
-        _pointLabels.ForEach(p => p.Visible = toHide );
-        this.GetChildren().OfType<Container>().ToList().ForEach(c => c.Visible = toHide);
-        center.Visible = toHide;
-        gameResults.Visible = !toHide;
-        ToggleExitButtonVisibility(!toHide);
-    }*/
     
     private void AddRowToGrid(int position, string name, int score)
     {
@@ -289,5 +301,12 @@ public partial class Lorum : Control
     {
         GetTree().ChangeSceneToPacked(MainMenuScene);
         //QueueFree();
+    }
+
+    private void OnContinueLoadedGameButtonPressed()
+    {
+        GetNode<ColorRect>("%ContinueOrNewGame").Visible = false;
+        var savedData = LoadGame();
+        _gameLogic.StartNewRoundWithLoadedState(savedData);
     }
 }

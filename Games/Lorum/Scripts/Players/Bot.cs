@@ -24,7 +24,7 @@ namespace cardgames.Games.Lorum.Scripts.Players
                 whichCard = random.Next(0, 8); //TODO OUTOFINDEX? hiba volt 2x
                 BackCard playedCard = (BackCard)CardsInHand[whichCard];
                 await PlayCard(playedCard);
-                return playedCard.getValue();
+                return playedCard.GetValue();
             }
             catch (Exception e)
             {

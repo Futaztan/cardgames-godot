@@ -124,7 +124,7 @@ public class EntityBase
         CardsInHands.Add(newcard);
         // int rnd = gameLogic.DrawCardIndex();
         CardsInHands.Last()
-            .SetDatas(CardDatabase.CardDatas[random].Item1,CardDatabase.CardDatas[random].ScoreValue , CardDatabase.CardDatas[random].Item3);
+            .SetData(CardDatabase.CardDatas[random].Item1,CardDatabase.CardDatas[random].ScoreValue , CardDatabase.CardDatas[random].Item3);
 
         GD.Print("-------------");
         GD.Print(Name);

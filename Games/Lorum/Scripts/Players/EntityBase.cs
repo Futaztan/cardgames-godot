@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using cardgames.Games.Lorum.Scripts.Cards;
+using cardgames.Games.Lorum.Scripts.Saving;
 using cardgames.Lorum.Scripts.Cards;
 using cardgames.Lorum.Scripts.UI;
 using Godot;
@@ -41,6 +42,17 @@ namespace cardgames.Games.Lorum.Scripts.Players
             _soundPlayer.Stream = _cardPlaceSound;
             _cardContainer.AddChild(_soundPlayer);    
             UpdateLabel();
+        }
+
+        public EntitySaveData GetSaveData()
+        {
+            List<CardSaveData> cardSaveDatas = new();
+            foreach (var cardBase in CardsInHand)
+            {
+                cardSaveDatas.Add(new CardSaveData(){Value = cardBase.GetValue(), TexturePath = cardBase.GetTexture().ResourcePath});
+            }
+
+            return new EntitySaveData() { CardsInHand = cardSaveDatas, Score = Score };
         }
         
         private void PlayCardSound()
@@ -88,7 +100,7 @@ namespace cardgames.Games.Lorum.Scripts.Players
 
         protected bool IsPlaceable(CardBase card)
         {
-            int value = card.getValue();
+            int value = card.GetValue();
             Cell cell = Lorum.CenterCells[WhichCell(value)];
             return value % 10 == LorumGameLogic.StartingCardValueMod || value == cell.getValue() + 1 ||
                    value % 10 == 1 && cell.getValue() % 10 == 8;
@@ -133,7 +145,7 @@ namespace cardgames.Games.Lorum.Scripts.Players
             CardBase newcard = (CardBase)_cardContainer.CardScene.Instantiate();
             _cardContainer.AddChild(newcard);
             CardsInHand.Add(newcard);
-            CardsInHand.Last().setDatas(CardDatabase.CardDatas[rnd].Item1, CardDatabase.CardDatas[rnd].Item2);
+            CardsInHand.Last().SetData(CardDatabase.CardDatas[rnd].Item1, CardDatabase.CardDatas[rnd].Item2);
 
             GD.Print("-------------");
             GD.Print(Name);
@@ -142,24 +154,34 @@ namespace cardgames.Games.Lorum.Scripts.Players
                 _cardContainer.RemoveChild(item);
             }
 
-            CardsInHand = CardsInHand.OrderBy(node => node.getValue()).ToList();
+            CardsInHand = CardsInHand.OrderBy(node => node.GetValue()).ToList();
             foreach (var item in CardsInHand)
             {
-                GD.Print(item.getValue() + " " + item.getTexture());
+                GD.Print(item.GetValue() + " " + item.GetTexture());
                 _cardContainer.AddChild(item);
             }
         }
         
         protected async Task PlayCard(CardBase playedCard)
         {
-            Cell cell = Lorum.CenterCells[WhichCell(playedCard.getValue())];
+            Cell cell = Lorum.CenterCells[WhichCell(playedCard.GetValue())];
             PlayCardSound();
             Tween tween = playedCard.Animate(_name, cell);
             await cell.ToSignal(tween, Tween.SignalName.Finished);
-            cell.setDatas(playedCard.getValue(), playedCard.getTexture());
+            cell.setDatas(playedCard.GetValue(), playedCard.GetTexture());
             CardsInHand.Remove(playedCard);
-            playedCard.deleteCard();
+            playedCard.DeleteCard();
             await Task.Delay(WaitMillisAfterCardPlace);
+        }
+
+        public void LoadSaveData(EntitySaveData saveData)
+        {
+            _score = saveData.Score;
+            foreach (var cardSaveData in saveData.CardsInHand)
+            {
+                int rnd = CardDatabase.GetIndexByTexturePath(cardSaveData.TexturePath);
+                this.NewCardToHand(rnd);
+            }
         }
     }
 }

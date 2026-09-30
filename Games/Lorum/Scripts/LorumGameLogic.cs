@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using cardgames.Games.Lorum.Scripts.Cards;
 using cardgames.Games.Lorum.Scripts.Players;
+using cardgames.Games.Lorum.Scripts.Saving;
 using Godot;
 
 namespace cardgames.Games.Lorum.Scripts;
@@ -43,6 +45,29 @@ public class LorumGameLogic
         _dealer = new  Dealer(AllPlayers);
     }
 
+    public async void StartNewRoundWithLoadedState(GameSaveData saveData)
+    {
+        ResetRoundState();
+        
+        AllPlayers.ForEach(player => player.ResetState());
+        OnReset?.Invoke();
+        for (int i = 0; i < AllPlayers.Count; i++)
+        {
+            AllPlayers[i].LoadSaveData(saveData.AllPlayers[i]);
+        }
+        AfterCardsDealed?.Invoke();
+
+        WhoStarted = saveData.WhoStarted;
+        
+        if (WhoStarted == 0) OnPlayerTurnStarted?.Invoke(true);
+        else
+        {
+            GD.Print(WhoStarted + ". bot kezd");
+            StartingCardValue = await Bots[WhoStarted - 1].StartRound();
+            OnRoundStarted?.Invoke(StartingCardValue);
+            NextPlayerLoop(WhoStarted);
+        }
+    }
     public async void StartNewRound()
     {
         ResetRoundState();
@@ -51,9 +76,6 @@ public class LorumGameLogic
         OnReset?.Invoke();
         await _dealer.DealCardsToPlayers();
         AfterCardsDealed?.Invoke();
-
-        //Task.Delay(1400);
-
         int whoStarts;
         if (WhoStarted == -1)
         {
@@ -68,7 +90,7 @@ public class LorumGameLogic
 
         WhoStarted = whoStarts;
 
-
+        SaveGameState();
         if (WhoStarted == 0) OnPlayerTurnStarted?.Invoke(true);
         else
         {
@@ -77,6 +99,23 @@ public class LorumGameLogic
             OnRoundStarted?.Invoke(StartingCardValue);
             NextPlayerLoop(WhoStarted);
         }
+    }
+
+    private void SaveGameState()
+    {
+        List<EntitySaveData> entitySaveDatas = new();
+        foreach (var entity in AllPlayers)
+        {
+            entitySaveDatas.Add(entity.GetSaveData());
+        }
+        var save = new GameSaveData()
+        {
+            WhoStarted = WhoStarted, AllPlayers = entitySaveDatas
+        };
+        string jsonString = JsonSerializer.Serialize(save);
+        using var file = FileAccess.Open("user://lorum_savegame.json", FileAccess.ModeFlags.Write);
+        file.StoreString(jsonString);
+        GD.Print("Játékállapot sikeresen elmentve!");
     }
 
     private void ResetRoundState()

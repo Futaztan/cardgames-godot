@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using cardgames.Games._21.Scripts.Players;
+using cardgames.Games._21.Scripts.Saving;
 using Godot;
 
 namespace cardgames.Games._21.Scripts;
@@ -74,6 +75,18 @@ public class _21GameLogic
   
         OnSelectWager?.Invoke(Wager, MaxWager);
         
+    }
+
+    public void LoadState(int playerMoney, int botMoney, int wager)
+    {
+        _humanPlayer.Money = playerMoney;
+        _bot.Money = botMoney;
+        Wager = wager;
+    }
+
+    public SaveData GetSaveData()
+    {
+        return new SaveData() { BotMoney = _bot.Money, PlayerMoney = _humanPlayer.Money, CurrentWager = Wager};
     }
 
     public async Task SecondDeal()

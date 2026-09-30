@@ -23,7 +23,7 @@ public class Player : EntityBase
     {
         DisableCards();
         await PlayCard(clickedCard);
-        return clickedCard.getValue();
+        return clickedCard.GetValue();
     }
 
     public void EnableAllCards()

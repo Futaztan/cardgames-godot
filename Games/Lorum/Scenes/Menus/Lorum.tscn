@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://3aq5ia7a6f64"]
+[gd_scene load_steps=28 format=3 uid="uid://3aq5ia7a6f64"]
 
 [ext_resource type="Script" uid="uid://b40kp5xrwfdjo" path="res://Games/Lorum/Scripts/Lorum.cs" id="1_hncss"]
 [ext_resource type="PackedScene" uid="uid://r6lsr54m66g8" path="res://Games/Lorum/Scenes/Utils/PointLabel.tscn" id="2_84vkp"]
@@ -21,6 +21,9 @@
 [ext_resource type="StyleBox" uid="uid://k28ubpjt1mv5" path="res://Assets/Themes/normal/green/button_hover.tres" id="12_hdhpy"]
 [ext_resource type="StyleBox" uid="uid://ccbwuqog67eph" path="res://Assets/Themes/normal/green/button_pressed.tres" id="13_7c4o1"]
 [ext_resource type="StyleBox" uid="uid://isefq5hdrpkw" path="res://Assets/Themes/normal/green/button_normal.tres" id="14_j50xc"]
+[ext_resource type="StyleBox" uid="uid://b2yy7lqaur1q1" path="res://Assets/Themes/rounded/green/rounded_button_hover.tres" id="22_kwlql"]
+[ext_resource type="StyleBox" uid="uid://otdvwyld4038" path="res://Assets/Themes/rounded/green/rounded_button_pressed.tres" id="23_xtexh"]
+[ext_resource type="StyleBox" uid="uid://clnw2e1qi03ox" path="res://Assets/Themes/rounded/green/rounded_button_normal.tres" id="24_kwgqa"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7c4o1"]
 bg_color = Color(0.490196, 0.639216, 0.572549, 1)
@@ -29,6 +32,18 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 shadow_size = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_towt6"]
+bg_color = Color(0.874403, 0.952582, 0.943749, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+shadow_color = Color(0, 0, 0, 0.568627)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tpkaf"]
+bg_color = Color(0.362953, 0.681131, 0.513311, 1)
 
 [node name="Lorum" type="Control" node_paths=PackedStringArray("StartingValueLabel", "PassIcon")]
 layout_mode = 3
@@ -560,5 +575,83 @@ text = "Te következel!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="ContinueOrNewGame" type="ColorRect" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.392157)
+
+[node name="PanelContainer" type="PanelContainer" parent="ContinueOrNewGame"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -354.0
+offset_top = -208.0
+offset_right = 354.0
+offset_bottom = 132.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_towt6")
+
+[node name="Label" type="Label" parent="ContinueOrNewGame/PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_fonts/font = ExtResource("6_j50xc")
+theme_override_font_sizes/font_size = 72
+theme_override_styles/normal = SubResource("StyleBoxFlat_tpkaf")
+text = "FOLYTATOD?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ContinueOrNewGame/PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 10
+
+[node name="Label2" type="Label" parent="ContinueOrNewGame/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_j50xc")
+theme_override_font_sizes/font_size = 40
+text = "Folytatod a korábbi játékot vagy új játékot kezdesz?"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ContinueOrNewGame/PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 12
+alignment = 1
+
+[node name="Button" type="Button" parent="ContinueOrNewGame/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_lcmnm")
+theme_override_font_sizes/font_size = 45
+theme_override_styles/hover = ExtResource("22_kwlql")
+theme_override_styles/pressed = ExtResource("23_xtexh")
+theme_override_styles/normal = ExtResource("24_kwgqa")
+text = "Új játék"
+
+[node name="Button2" type="Button" parent="ContinueOrNewGame/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_lcmnm")
+theme_override_font_sizes/font_size = 45
+theme_override_styles/hover = ExtResource("22_kwlql")
+theme_override_styles/pressed = ExtResource("23_xtexh")
+theme_override_styles/normal = ExtResource("24_kwgqa")
+text = "Folytatás"
+
 [connection signal="pressed" from="ButtonsContainer/ExitButton" to="." method="OnExitButtonPressed"]
 [connection signal="pressed" from="ButtonsContainer/NewRoundButton" to="." method="OnNewRoundButtonPressed"]
+[connection signal="pressed" from="ContinueOrNewGame/PanelContainer/HBoxContainer/Button" to="." method="OnNewRoundButtonPressed"]
+[connection signal="pressed" from="ContinueOrNewGame/PanelContainer/HBoxContainer/Button2" to="." method="OnContinueLoadedGameButtonPressed"]

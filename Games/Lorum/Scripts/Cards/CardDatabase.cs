@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 namespace cardgames.Lorum.Scripts.Cards;
@@ -54,5 +55,10 @@ public static class CardDatabase
             Texture2D texture = GD.Load<Texture2D>(card.Path);
             CardDatas.Add((card.Value, texture));
         }
+    }
+
+    public static int GetIndexByTexturePath(string path)
+    {
+        return CardValuesPaths.FindIndex(p => p.Path == path);
     }
 }
